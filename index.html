@@ -696,6 +696,45 @@ section{padding-block:clamp(64px,9vw,120px)}
 }
 .ingx-note{margin-top:20px;font-size:.78rem;line-height:1.62;color:var(--slate);max-width:58ch}
 
+/* ---------- founding story: lead + animated beats ---------- */
+.story-lead{
+  font-family:"Newsreader",Georgia,serif;font-size:clamp(1.15rem,2.4vw,1.34rem);
+  line-height:1.55;color:var(--ink);max-width:46ch;margin:0;
+}
+.story-beats{
+  display:grid;grid-template-columns:repeat(3,1fr);gap:clamp(16px,2.4vw,24px);
+  margin-top:clamp(26px,4vw,38px);
+}
+@media (max-width:760px){ .story-beats{grid-template-columns:1fr} }
+.beat{
+  display:flex;flex-direction:column;gap:13px;padding:24px 22px;
+  border:1px solid var(--rule);border-radius:10px;background:var(--paper);
+  transition:border-color .2s ease,transform .2s ease,box-shadow .2s ease;
+}
+.beat:hover{border-color:var(--teal);transform:translateY(-3px);box-shadow:var(--shadow)}
+.beat h3{
+  font-size:.68rem;letter-spacing:.17em;text-transform:uppercase;font-weight:600;
+  color:var(--slate);margin:0;
+}
+.beat p{font-size:.92rem;line-height:1.6;color:var(--ink-soft);margin:0}
+.beat-icon{width:42px;height:42px;color:var(--ink);flex:none}
+.beat-icon svg{width:100%;height:100%;display:block;overflow:visible}
+
+@keyframes bob{0%,100%{transform:translateY(0)}50%{transform:translateY(-3px)}}
+@keyframes glint{0%,100%{opacity:.15}50%{opacity:1}}
+@keyframes swing{0%,100%{transform:rotate(-7deg)}50%{transform:rotate(7deg)}}
+@keyframes draw{0%{stroke-dashoffset:30}18%{stroke-dashoffset:0}100%{stroke-dashoffset:0}}
+@keyframes fizz{0%,100%{transform:translateY(0);opacity:.9}50%{transform:translateY(-3px);opacity:.35}}
+
+.beat-search svg{animation:bob 3.6s ease-in-out infinite}
+.beat-search .glint{animation:glint 2.2s ease-in-out infinite}
+.beat-missing .slash{stroke-dasharray:30;animation:draw 4.6s ease-in-out infinite}
+.beat-missing .fizz{animation:fizz 2.4s ease-in-out infinite}
+.beat-missing .fizz:nth-of-type(2){animation-delay:.5s}
+.beat-missing .fizz:nth-of-type(3){animation-delay:1s}
+.beat-build .swing{transform-box:fill-box;transform-origin:50% 8%;animation:swing 3.8s ease-in-out infinite}
+.beat:hover .beat-icon{color:var(--teal-ink)}
+
 /* ---------- reveal ---------- */
 .rv{opacity:0;transform:translateY(22px);transition:opacity .7s ease,transform .7s cubic-bezier(.2,.7,.2,1)}
 .rv.in{opacity:1;transform:none}
@@ -704,6 +743,9 @@ section{padding-block:clamp(64px,9vw,120px)}
   *,*::before,*::after{animation-duration:.001ms!important;animation-iteration-count:1!important;transition-duration:.001ms!important}
   .rv{opacity:1;transform:none}
   .hero-stroke.painting::before{animation:none}
+  .beat-search svg,.beat-search .glint,.beat-missing .slash,
+  .beat-missing .fizz,.beat-build .swing{animation:none}
+  .beat-search .glint{opacity:1}
 }
 </style>
 
@@ -1015,25 +1057,55 @@ section{padding-block:clamp(64px,9vw,120px)}
         <span class="tag">Founding story</span>
       </div>
       <div>
-        <div class="founder-body">
-          <p class="lead">
-            As a 17-year-old athlete in Bethesda, Maryland, I was looking for a sports drink
-            to support recovery after practice.
-          </p>
-          <p>
-            When I learned that most options were high in sugar, full of additives, and expensive,
-            I realized something bigger: they focused on hydration, not recovery. As sports science
-            increasingly points to recovery as essential, I wondered why ingredients like tart cherry
-            and pomegranate &mdash; known for their antioxidant and recovery-supporting properties &mdash;
-            were readily available, yet rarely used in meaningful amounts.
-          </p>
-          <p>So I started working.</p>
-          <p>
-            Hydraco Restore was created to support recovery as a daily practice, with low sugar,
-            a gentle electrolyte profile, and clinically relevant amounts of tart cherry and
-            pomegranate extracts.
-          </p>
+        <p class="story-lead">
+          I was seventeen, training in Bethesda, Maryland, and looking for something to
+          drink after practice that actually helped me recover.
+        </p>
+
+        <div class="story-beats">
+          <div class="beat beat-search">
+            <span class="beat-icon" aria-hidden="true">
+              <svg viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round">
+                <circle cx="21" cy="21" r="12"/>
+                <line x1="30" y1="30" x2="41" y2="41"/>
+                <path class="glint" d="M15 17 A8 8 0 0 1 21 13"/>
+              </svg>
+            </span>
+            <h3>The search</h3>
+            <p>Everything on the shelf was built to hydrate you <em>during</em> a workout. I wanted the opposite &mdash; something for the hours <em>after</em>.</p>
+          </div>
+
+          <div class="beat beat-missing">
+            <span class="beat-icon" aria-hidden="true">
+              <svg viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round">
+                <circle cx="24" cy="26" r="13"/>
+                <line class="slash" x1="15" y1="17" x2="33" y2="35" stroke="var(--pink-ink)"/>
+                <circle class="fizz" cx="24" cy="8" r="1.6" fill="currentColor" stroke="none"/>
+                <circle class="fizz" cx="34" cy="10" r="1.4" fill="currentColor" stroke="none"/>
+                <circle class="fizz" cx="14" cy="10" r="1.4" fill="currentColor" stroke="none"/>
+              </svg>
+            </span>
+            <h3>What was missing</h3>
+            <p>The options were high in sugar, full of additives, and expensive &mdash; and the fruits with real recovery research, tart cherry and pomegranate, were barely in any of them.</p>
+          </div>
+
+          <div class="beat beat-build">
+            <span class="beat-icon" aria-hidden="true">
+              <svg viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M24 6 q 5 -3 10 0" />
+                <g class="swing">
+                  <path d="M24 7 C 22 16, 17 22, 15 29"/>
+                  <path d="M24 7 C 27 16, 31 21, 34 28"/>
+                  <circle cx="14" cy="34" r="6" fill="var(--pink-ink)" stroke="none"/>
+                  <circle cx="34" cy="33" r="6" fill="var(--pink-ink)" stroke="none"/>
+                </g>
+              </svg>
+            </span>
+            <h3>The build</h3>
+            <p>So I made Restore: low sugar, a gentle electrolyte base, and meaningful amounts of both fruits. Recovery as a daily habit, not an afterthought.</p>
+          </div>
         </div>
+
         <div class="sig">
           <b>Luca Bayan Morano</b>
           <span>Hydraco founder</span>
