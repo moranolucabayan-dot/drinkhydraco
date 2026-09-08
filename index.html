@@ -660,8 +660,12 @@ section{padding-block:clamp(64px,9vw,120px)}
 @media (max-width:900px){ .formula-viz{position:static} }
 .formula-viz svg{width:100%;height:auto;max-width:420px;color:var(--line);display:block}
 .formula-flavor{margin:24px 0 0}
+.formula-pure{
+  margin-top:18px;font-size:1.05rem;letter-spacing:.14em;text-transform:uppercase;
+  font-weight:500;color:var(--ink);line-height:1.4;
+}
 .formula-cap{
-  margin-top:15px;font-family:"Newsreader",Georgia,serif;font-size:1rem;
+  margin-top:13px;font-family:"Newsreader",Georgia,serif;font-size:1rem;
   line-height:1.62;color:var(--ink-soft);max-width:42ch;
 }
 
@@ -671,8 +675,9 @@ section{padding-block:clamp(64px,9vw,120px)}
 .ingx-head{display:flex;justify-content:space-between;align-items:baseline;gap:16px}
 .ingx-name{font-size:.78rem;letter-spacing:.15em;text-transform:uppercase;font-weight:500;color:var(--ink)}
 .ingx-pct{
-  font-size:1.15rem;font-weight:300;color:var(--ink);
-  font-variant-numeric:tabular-nums;white-space:nowrap;
+  flex:none;font-size:.82rem;letter-spacing:.1em;text-transform:uppercase;
+  font-weight:500;color:var(--slate);white-space:nowrap;
+  font-variant-numeric:tabular-nums;
 }
 .ingx-bar{
   position:relative;height:6px;margin:13px 0 15px;border-radius:999px;
@@ -796,10 +801,11 @@ section{padding-block:clamp(64px,9vw,120px)}
         </g>
       </svg>
         <p class="formula-flavor"><span class="tag">Strawberry Lemonade</span></p>
+        <p class="formula-pure">No chemicals. Pure ingredients.</p>
         <p class="formula-cap">
-          One 14.4&nbsp;g stick into 12&ndash;16&nbsp;oz of cold water. It&rsquo;s a powder, not a
-          bottle &mdash; nothing to keep cold, nothing to leak in a bag. The cherry, pomegranate
-          and apple read as strawberry; the lemon does the rest. No colours added.
+          One stick into 12&ndash;16&nbsp;oz of cold water. It&rsquo;s a powder, not a bottle &mdash;
+          nothing to keep cold, nothing to leak in a bag. The cherry, pomegranate and apple
+          read as strawberry; the lemon does the rest. No colours, no artificial sweeteners.
         </p>
       </div>
 
@@ -808,75 +814,69 @@ section{padding-block:clamp(64px,9vw,120px)}
           <span class="tag">The formula</span>
           <h2>What&rsquo;s in the powder, and why</h2>
           <p class="sec-lede">
-            Nine ingredients, plus the carriers that hold the fruit extracts. Shares are
-            approximate, by weight of the stick &mdash; rounded, and the exact formula is on the pack.
+            Nine real ingredients &mdash; fruit, coconut water and salt. Nothing artificial,
+            nothing you can&rsquo;t pronounce. Here&rsquo;s roughly how much of each, and what it&rsquo;s for.
           </p>
         </div>
         <ol class="ingx">
         <li class="ingx-row">
-          <div class="ingx-head"><span class="ingx-name">Coconut water powder</span><span class="ingx-pct">~33%</span></div>
+          <div class="ingx-head"><span class="ingx-name">Coconut water powder</span><span class="ingx-pct">About a third</span></div>
           <div class="ingx-bar"><span style="width:33%"></span></div>
-          <p class="ingx-role"><b>Purpose</b>The electrolyte base of the mix.</p>
-          <p class="ingx-why"><b>Why it helps</b>Naturally high in potassium &mdash; 400&nbsp;mg per stick &mdash; the mineral that works with sodium to move water into cells and keep nerve-to-muscle signalling steady.</p>
+          <p class="ingx-role"><b>What it&rsquo;s for</b>The base of the mix.</p>
+          <p class="ingx-why"><b>Why it helps</b>Coconut water is naturally rich in potassium, which helps your body hold on to the water you drink instead of passing straight through.</p>
         </li>
         <li class="ingx-row">
-          <div class="ingx-head"><span class="ingx-name">Organic cane sugar</span><span class="ingx-pct">~14%</span></div>
-          <div class="ingx-bar"><span style="width:14%"></span></div>
-          <p class="ingx-role"><b>Purpose</b>A small, deliberate dose of glucose &mdash; 2&nbsp;g.</p>
-          <p class="ingx-why"><b>Why it helps</b>Glucose switches on the gut&rsquo;s sodium&ndash;glucose co-transporter (SGLT1), the pump that carries sodium and water across the intestinal wall faster than water alone.</p>
+          <div class="ingx-head"><span class="ingx-name">Organic cane sugar</span><span class="ingx-pct">10&ndash;15%</span></div>
+          <div class="ingx-bar"><span style="width:13%"></span></div>
+          <p class="ingx-role"><b>What it&rsquo;s for</b>A small amount of real sugar &mdash; 2&nbsp;g.</p>
+          <p class="ingx-why"><b>Why it helps</b>A little sugar helps your body absorb the water and salts faster than plain water does. Just enough to do that, not enough to taste like a soda.</p>
         </li>
         <li class="ingx-row">
-          <div class="ingx-head"><span class="ingx-name">Tart cherry powder</span><span class="ingx-pct">~12%</span></div>
-          <div class="ingx-bar"><span style="width:12%"></span></div>
-          <p class="ingx-role"><b>Purpose</b>First of the two recovery actives &mdash; 1,800&nbsp;mg.</p>
-          <p class="ingx-why"><b>Why it helps</b>Montmorency cherries are dense in anthocyanins, plant polyphenols studied for easing exercise-induced muscle soreness and oxidative stress.</p>
+          <div class="ingx-head"><span class="ingx-name">Tart cherry powder</span><span class="ingx-pct">10&ndash;15%</span></div>
+          <div class="ingx-bar"><span style="width:13%"></span></div>
+          <p class="ingx-role"><b>What it&rsquo;s for</b>The first of the two recovery fruits.</p>
+          <p class="ingx-why"><b>Why it helps</b>Tart cherries are one of the most studied fruits for recovery &mdash; they&rsquo;re rich in natural antioxidants and are linked to less muscle soreness after hard exercise.</p>
         </li>
         <li class="ingx-row">
-          <div class="ingx-head"><span class="ingx-name">Apple powder</span><span class="ingx-pct">~11%</span></div>
-          <div class="ingx-bar"><span style="width:11%"></span></div>
-          <p class="ingx-role"><b>Purpose</b>Flavour body and natural fruit acid.</p>
-          <p class="ingx-why"><b>Why it helps</b>Malic acid gives a rounded tartness and carries a little pectin and potassium with it.</p>
-        </li>
-        <li class="ingx-row">
-          <div class="ingx-head"><span class="ingx-name">Pomegranate extract powder</span><span class="ingx-pct">~10%</span></div>
+          <div class="ingx-head"><span class="ingx-name">Apple powder</span><span class="ingx-pct">5&ndash;15%</span></div>
           <div class="ingx-bar"><span style="width:10%"></span></div>
-          <p class="ingx-role"><b>Purpose</b>Second recovery active &mdash; 1,400&nbsp;mg.</p>
-          <p class="ingx-why"><b>Why it helps</b>Concentrated in ellagitannins (punicalagins), polyphenols linked in trials to quicker strength recovery and lower inflammation markers after hard training.</p>
+          <p class="ingx-role"><b>What it&rsquo;s for</b>Flavour and natural fruit tartness.</p>
+          <p class="ingx-why"><b>Why it helps</b>Rounds out the taste so the drink isn&rsquo;t sharp, and brings a little more potassium with it.</p>
         </li>
         <li class="ingx-row">
-          <div class="ingx-head"><span class="ingx-name">Lemon juice powder</span><span class="ingx-pct">~9%</span></div>
-          <div class="ingx-bar"><span style="width:9%"></span></div>
-          <p class="ingx-role"><b>Purpose</b>The &ldquo;lemonade&rdquo; side of the taste.</p>
-          <p class="ingx-why"><b>Why it helps</b>Citric acid for brightness, plus vitamin&nbsp;C (9&nbsp;mg) &mdash; an antioxidant the body also uses to build collagen.</p>
+          <div class="ingx-head"><span class="ingx-name">Pomegranate extract powder</span><span class="ingx-pct">5&ndash;15%</span></div>
+          <div class="ingx-bar"><span style="width:10%"></span></div>
+          <p class="ingx-role"><b>What it&rsquo;s for</b>The second recovery fruit.</p>
+          <p class="ingx-why"><b>Why it helps</b>Another fruit packed with natural antioxidants, studied alongside tart cherry for helping muscles bounce back after training.</p>
         </li>
         <li class="ingx-row">
-          <div class="ingx-head"><span class="ingx-name">Pink Himalayan salt</span><span class="ingx-pct">~4%</span></div>
+          <div class="ingx-head"><span class="ingx-name">Lemon juice powder</span><span class="ingx-pct">5&ndash;10%</span></div>
+          <div class="ingx-bar"><span style="width:8%"></span></div>
+          <p class="ingx-role"><b>What it&rsquo;s for</b>The lemonade side of the flavour.</p>
+          <p class="ingx-why"><b>Why it helps</b>Keeps the drink bright and fresh rather than sweet, and it&rsquo;s a natural source of vitamin&nbsp;C.</p>
+        </li>
+        <li class="ingx-row">
+          <div class="ingx-head"><span class="ingx-name">Pink Himalayan salt</span><span class="ingx-pct">Under 5%</span></div>
           <div class="ingx-bar"><span style="width:4%"></span></div>
-          <p class="ingx-role"><b>Purpose</b>The primary electrolyte, sodium &mdash; 200&nbsp;mg.</p>
-          <p class="ingx-why"><b>Why it helps</b>Sodium is what you lose most of in sweat; the rock salt also brings trace magnesium, calcium and potassium.</p>
+          <p class="ingx-role"><b>What it&rsquo;s for</b>Where the sodium comes from.</p>
+          <p class="ingx-why"><b>Why it helps</b>Salt is what you lose most of when you sweat. Putting it back is what actually rehydrates you &mdash; but a gentle amount, not a salt bomb.</p>
         </li>
         <li class="ingx-row">
-          <div class="ingx-head"><span class="ingx-name">Pumpkin seed extract powder</span><span class="ingx-pct">~3%</span></div>
-          <div class="ingx-bar"><span style="width:3%"></span></div>
-          <p class="ingx-role"><b>Purpose</b>A plant source of magnesium &mdash; 15&nbsp;mg.</p>
-          <p class="ingx-why"><b>Why it helps</b>Magnesium is a cofactor in hundreds of enzyme reactions, including the ones that contract and then relax a muscle.</p>
+          <div class="ingx-head"><span class="ingx-name">Pumpkin seed extract powder</span><span class="ingx-pct">Under 5%</span></div>
+          <div class="ingx-bar"><span style="width:4%"></span></div>
+          <p class="ingx-role"><b>What it&rsquo;s for</b>A plant source of magnesium.</p>
+          <p class="ingx-why"><b>Why it helps</b>Magnesium is the mineral muscles need to relax again after they&rsquo;ve worked &mdash; and most people don&rsquo;t get enough of it.</p>
         </li>
         <li class="ingx-row">
-          <div class="ingx-head"><span class="ingx-name">Monk fruit extract</span><span class="ingx-pct">~1.5%</span></div>
-          <div class="ingx-bar"><span style="width:1.5%"></span></div>
-          <p class="ingx-role"><b>Purpose</b>Sweetness without sugar.</p>
-          <p class="ingx-why"><b>Why it helps</b>Its mogrosides are 150&ndash;200&times; sweeter than sugar, so a few milligrams stand in for grams &mdash; no artificial sweeteners, no added calories.</p>
-        </li>
-        <li class="ingx-row">
-          <div class="ingx-head"><span class="ingx-name">Extract carriers &amp; anti-caking</span><span class="ingx-pct">~2%</span></div>
+          <div class="ingx-head"><span class="ingx-name">Monk fruit extract</span><span class="ingx-pct">A pinch</span></div>
           <div class="ingx-bar"><span style="width:2%"></span></div>
-          <p class="ingx-role"><b>Purpose</b>Keep the powder pourable.</p>
-          <p class="ingx-why"><b>Why it helps</b>Tiny amounts of maltodextrin and dextrin carry the fruit extracts and stop the stick clumping in humidity.</p>
+          <p class="ingx-role"><b>What it&rsquo;s for</b>Sweetness without the sugar.</p>
+          <p class="ingx-why"><b>Why it helps</b>Monk fruit is a fruit sweetener that&rsquo;s hundreds of times sweeter than sugar, so a tiny amount is enough &mdash; which is why we don&rsquo;t need any artificial sweeteners.</p>
         </li>
         </ol>
         <p class="ingx-note">
-          Percentages are estimates from ingredient-level data, for orientation only. Milligram
-          figures (sodium, potassium, magnesium, vitamin&nbsp;C) are the label values per serving.
+          Amounts are rounded and shown as ranges &mdash; the full recipe is ours, but nothing in it
+          is a secret ingredient. Every one is on the pack.
         </p>
       </div>
     </div>
@@ -885,10 +885,12 @@ section{padding-block:clamp(64px,9vw,120px)}
   <!-- ============ STRIP ============ -->
   <div class="strip" aria-hidden="true">
     <div class="strip-track">
-      <span>Low sugar</span><span>No artificial sweeteners</span><span>Tart cherry</span><span>Pomegranate</span>
-      <span>Coconut water</span><span>Pink Himalayan salt</span><span>Monk fruit</span><span>30 calories</span>
-      <span>Low sugar</span><span>No artificial sweeteners</span><span>Tart cherry</span><span>Pomegranate</span>
-      <span>Coconut water</span><span>Pink Himalayan salt</span><span>Monk fruit</span><span>30 calories</span>
+      <span>No chemicals</span><span>Pure ingredients</span><span>Low sugar</span><span>No artificial sweeteners</span>
+      <span>Tart cherry</span><span>Pomegranate</span><span>Coconut water</span><span>Pink Himalayan salt</span>
+      <span>Monk fruit</span><span>30 calories</span>
+      <span>No chemicals</span><span>Pure ingredients</span><span>Low sugar</span><span>No artificial sweeteners</span>
+      <span>Tart cherry</span><span>Pomegranate</span><span>Coconut water</span><span>Pink Himalayan salt</span>
+      <span>Monk fruit</span><span>30 calories</span>
     </div>
   </div>
 
@@ -916,7 +918,7 @@ section{padding-block:clamp(64px,9vw,120px)}
       <div class="benefit">
         <span class="n">Inflammation</span>
         <h3>Post-exercise management</h3>
-        <p>Polyphenol-rich fruit extracts to help manage the inflammatory response that follows hard training.</p>
+        <p>Real fruit extracts, rich in natural antioxidants, to help your body settle after hard training.</p>
       </div>
       <div class="benefit">
         <span class="n">Function</span>
@@ -1621,7 +1623,7 @@ const EXPLORER = {
     caption: "Tart cherry and pomegranate are the two fruits most consistently studied around post-exercise recovery. A typical electrolyte or sports drink carries neither.",
     rows: [
       { name: "Tart cherry powder",   value: 1800, ref: false, blurb: "Carried at 1,800&nbsp;mg per stick &mdash; a concentration you can taste, not a trace for the label." },
-      { name: "Pomegranate extract",  value: 1400, ref: false, blurb: "1,400&nbsp;mg of a polyphenol-rich extract &mdash; the second recovery fruit in the formula." },
+      { name: "Pomegranate extract",  value: 1400, ref: false, blurb: "1,400&nbsp;mg of real fruit extract &mdash; the second recovery fruit in the formula." },
       { name: "Typical sports drink", value: 0,    ref: true,  blurb: "Electrolytes and sugar, but none of the recovery fruit that Restore is built around." }
     ]
   },
@@ -1714,11 +1716,11 @@ function drawExplorer(key){
 /* ---------- ingredient explorer ---------- */
 const INGREDIENTS = [
   { n: "Coconut water powder",        hero: false, t: "Electrolyte base",          d: "The base of the mix and a natural source of potassium — 400 mg in every stick." },
-  { n: "Organic cane sugar",          hero: false, t: "2 g per stick",             d: "A small amount of glucose helps the water and electrolytes absorb. Two grams of added sugar in total." },
+  { n: "Organic cane sugar",          hero: false, t: "2 g per stick",             d: "A little real sugar helps your body take in the water and salts faster. Two grams in total." },
   { n: "Apple powder",                hero: false, t: "Flavour",                   d: "Rounds out the taste and brings a little natural fruit acidity." },
   { n: "Tart cherry powder",          hero: true,  t: "1,800 mg · recovery fruit", d: "One of the two fruits most consistently studied around post-exercise recovery, at a level you can actually taste." },
   { n: "Lemon juice powder",          hero: false, t: "Flavour",                   d: "Brightens the mix and balances the sweetness." },
-  { n: "Pomegranate extract powder",  hero: true,  t: "1,400 mg · recovery fruit", d: "A polyphenol-rich fruit extract — the second recovery fruit in the formula." },
+  { n: "Pomegranate extract powder",  hero: true,  t: "1,400 mg · recovery fruit", d: "Real fruit extract, rich in natural antioxidants — the second recovery fruit in the formula." },
   { n: "Monk fruit extract powder",   hero: false, t: "Sweetener",                 d: "Natural sweetness with no added sugar and no artificial sweeteners." },
   { n: "Pumpkin seed extract powder", hero: false, t: "Magnesium source",          d: "A plant source of magnesium, one of the minerals listed on the panel — 15 mg per stick." },
   { n: "Pink Himalayan salt",         hero: false, t: "200 mg sodium",             d: "Provides sodium, the main electrolyte lost in sweat. A gentle amount — not a salt bomb." }
