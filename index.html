@@ -1151,7 +1151,7 @@ section{padding-block:clamp(64px,9vw,120px)}
         </button>
       </div>
 
-      <form class='order-panel' id='orderForm' method='POST' name='hydraco-order' novalidate>
+      <form class='order-panel' id='orderForm' method='POST' name='hydraco-order' data-netlify="true" netlify-honeypot="company-website" novalidate>
         <input type="hidden" name="form-name" value="hydraco-order">
         <p hidden><label>Leave this empty: <input name="company-website"></label></p>
         <input type="hidden" name="order_ref"  id="hOrderRef">
@@ -1269,7 +1269,7 @@ section{padding-block:clamp(64px,9vw,120px)}
 
   <canvas id="confetti" aria-hidden="true"></canvas>
 
-  <form hidden method='post' name='hydraco-payment-claim'>
+  <form hidden method='post' name='hydraco-payment-claim' data-netlify="true">
     <input type="hidden" name="form-name" value="hydraco-payment-claim">
     <input name="order_ref"><input name="name"><input name="email"><input name="amount">
   </form>
