@@ -591,6 +591,10 @@ section{padding-block:clamp(64px,9vw,120px)}
   background:transparent;
   background-image:repeating-linear-gradient(135deg,var(--rule) 0 2px,transparent 2px 8px);
 }
+/* pull a comparison row up tight against the Hydraco row it sits under */
+.bar-row.is-ref{margin-top:-6px;padding-top:6px}
+.bar-row.is-ref + .bar-row:not(.is-ref){margin-top:14px}
+.bar-row.is-ref .bar-name{color:var(--slate)}
 .bar-dv{
   display:inline-block;margin-top:11px;font-size:.62rem;letter-spacing:.16em;
   text-transform:uppercase;color:var(--slate);font-variant-numeric:tabular-nums;
@@ -1027,23 +1031,18 @@ section{padding-block:clamp(64px,9vw,120px)}
           <div class="med"></div>
           <p class="nf-dv">% Daily Value*</p>
           <div class="nf-row"><b>Total Fat 0g</b><b>0%</b></div>
-          <div class="nf-row"><span class="in1">Saturated Fat 0g</span><b>0%</b></div>
-          <div class="nf-row"><span class="in1"><i>Trans</i> Fat 0g</span><span></span></div>
-          <div class="nf-row"><b>Cholesterol 0mg</b><b>0%</b></div>
           <div class="nf-row"><b>Sodium 230mg</b><b>10%</b></div>
           <div class="nf-row"><b>Total Carbohydrate 7g</b><b>3%</b></div>
-          <div class="nf-row"><span class="in1">Dietary Fiber 0g</span><b>0%</b></div>
           <div class="nf-row"><span class="in1">Total Sugars 2g</span><span></span></div>
           <div class="nf-row"><span class="in2">Includes 2g Added Sugars</span><b>4%</b></div>
-          <div class="nf-row"><b>Protein 0g</b><b>0%</b></div>
+          <div class="nf-row"><b>Protein 0g</b><span></span></div>
           <div class="med"></div>
-          <div class="nf-row plain"><span>Vitamin D 0mcg</span><span>0%</span></div>
-          <div class="nf-row"><span>Calcium 20mg</span><span>2%</span></div>
-          <div class="nf-row"><span>Iron 0mg</span><span>0%</span></div>
+          <div class="nf-row plain"><span>Calcium 20mg</span><span>2%</span></div>
           <div class="nf-row"><span>Potassium 400mg</span><span>8%</span></div>
           <div class="nf-row"><span>Vitamin C 9mg</span><span>10%</span></div>
           <div class="nf-row"><span>Magnesium 15mg</span><span>4%</span></div>
-          <p class="nf-foot">* The % Daily Value (DV) tells you how much a nutrient in a serving of food contributes to a daily diet. 2,000 calories a day is used for general nutrition advice.</p>
+          <p class="nf-foot">Not a significant source of saturated fat, trans fat, cholesterol, dietary fiber, vitamin D and iron.</p>
+          <p class="nf-foot" style="border-top:none;padding-top:2px">* The % Daily Value (DV) tells you how much a nutrient in a serving of food contributes to a daily diet. 2,000 calories a day is used for general nutrition advice.</p>
         </div>
         <p class="nf-note">Nutritional values are estimates derived from ingredient-level data and analysis.</p>
       </div>
@@ -1700,12 +1699,15 @@ const EXPLORER = {
     ]
   },
   lyte: {
-    unit: "mg", max: 450,
-    caption: "A gentle electrolyte profile — enough to matter after a session, not a salt bomb. The share of a daily value is shown under each bar.",
+    unit: "mg",
+    caption: "Each electrolyte next to a leading 20&nbsp;oz sports drink. Restore brings magnesium the big brands leave out, far more potassium, and keeps sodium a touch lower &mdash; a gentle profile, not a salt bomb.",
     rows: [
-      { name: "Potassium", value: 400, dv: "8% Daily Value", ref: false, blurb: "From coconut water powder. The electrolyte most sports drinks skimp on." },
-      { name: "Sodium",    value: 230, dv: "10% Daily Value", ref: false, blurb: "From pink Himalayan salt &mdash; recently increased for better hydration. The main electrolyte lost in sweat." },
-      { name: "Magnesium", value: 15,  dv: "4% Daily Value", ref: false, blurb: "From pumpkin seed extract powder." }
+      { name: "Magnesium",           value: 15,  barMax: 15,  dv: "4% Daily Value",  ref: false, blurb: "From pumpkin seed extract. Most sports drinks carry none at all &mdash; it&rsquo;s the mineral muscles need to relax again after they&rsquo;ve worked." },
+      { name: "Leading sports drink", value: 0,   barMax: 15,  ref: true,  blurb: "A typical 20&nbsp;oz sports drink has no magnesium." },
+      { name: "Potassium",           value: 400, barMax: 400, dv: "8% Daily Value",  ref: false, blurb: "From coconut water powder &mdash; the electrolyte the big brands skimp on. Works with sodium to move water into cells." },
+      { name: "Leading sports drink", value: 75,  barMax: 400, ref: true,  blurb: "Around 75&nbsp;mg of potassium in a 20&nbsp;oz bottle." },
+      { name: "Sodium",              value: 230, barMax: 270, dv: "10% Daily Value", ref: false, blurb: "From pink Himalayan salt. Enough to replace what you sweat out, without the salt-bomb load." },
+      { name: "Leading sports drink", value: 270, barMax: 270, ref: true,  blurb: "Around 270&nbsp;mg of sodium in a 20&nbsp;oz bottle &mdash; a little more than Restore." }
     ]
   },
   sugar: {
@@ -1725,7 +1727,7 @@ function drawExplorer(key){
   if (!chart) { return; }
 
   chart.innerHTML = v.rows.map((r) => {
-    const pct = r.value > 0 ? Math.max(r.value / v.max * 100, 2) : 0;
+    const pct = r.value > 0 ? Math.max(r.value / (r.barMax || v.max) * 100, 2) : 0;
     const dv  = r.dv ? '<span class="bar-dv">' + r.dv + '</span>' : "";
     return '<div class="bar-row' + (r.ref ? " is-ref" : "") + '" tabindex="0"' +
              ' data-name="' + r.name + '" data-blurb="' + r.blurb + '">' +
