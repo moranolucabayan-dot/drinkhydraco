@@ -1535,18 +1535,23 @@ $("#orderForm").addEventListener("submit", async (e) => {
      Orders sheet whether or not the customer has a mail app, and regardless
      of which platform hosts this page. mailto is only the fallback.
 
-     mode:"no-cors" is deliberate: Apps Script web apps don't return CORS
-     headers the browser will accept, so the response comes back "opaque"
-     and unreadable either way. We can't read res.ok - nothing can, from a
-     browser - so a fetch that doesn't throw (no offline error, no blocked
-     request) is the success signal here. The script itself still runs and
-     appends the row; we just can't see its reply. */
+     The body is JSON text sent as Content-Type: text/plain, not the more
+     obvious application/x-www-form-urlencoded - two things forced that:
+       1. text/plain (like x-www-form-urlencoded) is one of the few content
+          types the browser will send in mode:"no-cors" without a CORS
+          preflight, which Apps Script wouldn't answer anyway.
+       2. Verified against this exact deployment: a JSON body arrives at
+          doPost() and runs; a application/x-www-form-urlencoded body gets
+          a 404 from Google's own front door before the script ever sees it.
+     mode:"no-cors" also means the response comes back opaque and unreadable
+     either way, so a fetch that doesn't throw (no offline error, nothing
+     blocked) is the best success signal a browser can give us here. */
   try {
     await fetch(CONFIG.sheetEndpoint, {
       method:  "POST",
       mode:    "no-cors",
-      headers: { "Content-Type": "application/x-www-form-urlencoded" },
-      body:    new URLSearchParams(new FormData(form)).toString()
+      headers: { "Content-Type": "text/plain;charset=utf-8" },
+      body:    JSON.stringify(Object.fromEntries(new FormData(form)))
     });
     msg.className   = "order-msg";
     msg.textContent = "Order " + orderCode + " received. To complete the transaction, "
@@ -1664,18 +1669,18 @@ $("#paidBtn").addEventListener("click", () => {
   $("#stepDone").hidden = false;
   confetti();
 
-  const claim = new URLSearchParams({
+  const claim = {
     action:      "paid_claim",
     order_ref:   orderCode,
     name:       ($("#fName").value  || "").trim(),
     email:      ($("#fEmail").value || "").trim(),
     amount:      $("#mAmt").textContent
-  });
-  fetch(CONFIG.sheetEndpoint + "&action=paid_claim", {
+  };
+  fetch(CONFIG.sheetEndpoint, {
     method:  "POST",
     mode:    "no-cors",
-    headers: { "Content-Type": "application/x-www-form-urlencoded" },
-    body:    claim.toString()
+    headers: { "Content-Type": "text/plain;charset=utf-8" },
+    body:    JSON.stringify(claim)
   }).catch(() => {});   // best-effort: the order itself is already recorded; this
                          // just flips its row to Paid so it doesn't need typing in by hand
 
