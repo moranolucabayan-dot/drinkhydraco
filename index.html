@@ -1396,7 +1396,13 @@ const CONFIG = {
 
   // Delivery is free inside the service area. Orders to addresses outside it
   // are quoted and confirmed by email before any payment is sent.
-  deliveryFee: 0
+  deliveryFee: 0,
+
+  // The Google Apps Script that appends each order to the Orders sheet.
+  // Host-independent by design: works the same whether the site is on
+  // Netlify, Vercel, or anywhere else, because it bypasses that platform's
+  // own form handling and posts straight to Google.
+  sheetEndpoint: "https://script.google.com/macros/s/AKfycbyVxq_y7h4Jem3gB3N4gI2QZjj2Y6r-QVBPozPO0bVDZo7JffwgRVP64l3W_n1x9b1A/exec?key=ICEJJFISH"
 };
 
 /* ---------- helpers ---------- */
@@ -1525,15 +1531,23 @@ $("#orderForm").addEventListener("submit", async (e) => {
   msg.textContent = "Sending your order\u2026";
   if (btn) { btn.disabled = true; }
 
-  /* Posts straight to Netlify Forms, so the order reaches us whether or not
-     the customer has a mail app. mailto is only the fallback. */
+  /* Posts straight to the Google Apps Script, so the order lands in the
+     Orders sheet whether or not the customer has a mail app, and regardless
+     of which platform hosts this page. mailto is only the fallback.
+
+     mode:"no-cors" is deliberate: Apps Script web apps don't return CORS
+     headers the browser will accept, so the response comes back "opaque"
+     and unreadable either way. We can't read res.ok - nothing can, from a
+     browser - so a fetch that doesn't throw (no offline error, no blocked
+     request) is the success signal here. The script itself still runs and
+     appends the row; we just can't see its reply. */
   try {
-    const res = await fetch("/", {
+    await fetch(CONFIG.sheetEndpoint, {
       method:  "POST",
+      mode:    "no-cors",
       headers: { "Content-Type": "application/x-www-form-urlencoded" },
       body:    new URLSearchParams(new FormData(form)).toString()
     });
-    if (!res.ok) { throw new Error("HTTP " + res.status); }
     msg.className   = "order-msg";
     msg.textContent = "Order " + orderCode + " received. To complete the transaction, "
                     + "send the Zelle \u2014 details are on screen.";
@@ -1651,17 +1665,19 @@ $("#paidBtn").addEventListener("click", () => {
   confetti();
 
   const claim = new URLSearchParams({
-    "form-name": "hydraco-payment-claim",
+    action:      "paid_claim",
     order_ref:   orderCode,
     name:       ($("#fName").value  || "").trim(),
     email:      ($("#fEmail").value || "").trim(),
     amount:      $("#mAmt").textContent
   });
-  fetch("/", {
+  fetch(CONFIG.sheetEndpoint + "&action=paid_claim", {
     method:  "POST",
+    mode:    "no-cors",
     headers: { "Content-Type": "application/x-www-form-urlencoded" },
     body:    claim.toString()
-  }).catch(() => {});   // best-effort: the order itself is already recorded
+  }).catch(() => {});   // best-effort: the order itself is already recorded; this
+                         // just flips its row to Paid so it doesn't need typing in by hand
 
   const msg = $("#orderMsg");
   msg.className   = "order-msg";
