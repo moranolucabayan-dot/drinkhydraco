@@ -608,29 +608,6 @@ section{padding-block:clamp(64px,9vw,120px)}
   letter-spacing:.16em;text-transform:uppercase;font-weight:600;color:var(--pink-ink);
 }
 
-.inside-sub{margin-top:clamp(44px,6vw,64px)}
-
-.ing-explore{display:flex;flex-wrap:wrap;gap:9px;margin-top:26px}
-.ing-chip{
-  appearance:none;cursor:pointer;font-family:inherit;
-  border:1px solid var(--rule);background:var(--paper);border-radius:999px;
-  padding:.62em 1.05em;font-size:.79rem;letter-spacing:.09em;text-transform:uppercase;
-  color:var(--ink-soft);transition:border-color .2s,color .2s,background .2s;
-}
-.ing-chip:hover{border-color:var(--teal);color:var(--teal-ink)}
-.ing-chip.hero{border-color:var(--pink);color:var(--pink-ink)}
-.ing-chip[aria-pressed="true"]{background:var(--ink);border-color:var(--ink);color:var(--paper)}
-.ing-detail{
-  margin-top:20px;padding:22px 24px 24px;border:1px solid var(--rule);border-radius:6px;
-  background:var(--paper);box-shadow:var(--shadow);
-}
-.ing-detail h4{margin:0;font-size:.9rem;letter-spacing:.16em;text-transform:uppercase;font-weight:500;color:var(--ink)}
-.ing-detail p{
-  margin:13px 0 0;font-family:"Newsreader",Georgia,serif;font-size:1.04rem;line-height:1.6;
-  color:var(--ink-soft);max-width:56ch;
-}
-.ing-detail .tag{margin-top:16px}
-
 /* ============================================================
    Formula section + pure-black H logo mark.
    The top-left brand mark is pure #000 in every theme, by request.
@@ -663,6 +640,8 @@ section{padding-block:clamp(64px,9vw,120px)}
 .formula-viz{position:sticky;top:96px}
 @media (max-width:900px){ .formula-viz{position:static} }
 .formula-viz svg{width:100%;height:auto;max-width:420px;color:var(--line);display:block}
+@keyframes dotDrift{0%,100%{transform:translateY(-1.5px);opacity:.55}50%{transform:translateY(2px);opacity:1}}
+.pdot{transform-box:fill-box;transform-origin:center;animation:dotDrift 2.6s ease-in-out infinite}
 .formula-flavor{margin:24px 0 0}
 .formula-pure{
   margin-top:18px;font-size:1.05rem;letter-spacing:.14em;text-transform:uppercase;
@@ -674,21 +653,29 @@ section{padding-block:clamp(64px,9vw,120px)}
 }
 
 .ingx{list-style:none;margin:clamp(26px,4vw,38px) 0 0;padding:0}
-.ingx-row{padding:22px 0;border-top:1px solid var(--rule)}
+.ingx-row{border-top:1px solid var(--rule)}
 .ingx-row:last-child{border-bottom:1px solid var(--rule)}
-.ingx-head{display:flex;justify-content:space-between;align-items:baseline;gap:16px}
+.ingx-row details{padding:16px 2px}
+.ingx-row summary{
+  cursor:pointer;list-style:none;display:flex;flex-wrap:wrap;
+  align-items:center;column-gap:14px;
+}
+.ingx-row summary::-webkit-details-marker{display:none}
+.ingx-sumhead{flex:1 1 auto;min-width:0;display:flex;justify-content:space-between;align-items:baseline;gap:16px}
 .ingx-name{font-size:.78rem;letter-spacing:.15em;text-transform:uppercase;font-weight:500;color:var(--ink)}
 .ingx-pct{
   flex:none;font-size:.82rem;letter-spacing:.1em;text-transform:uppercase;
   font-weight:500;color:var(--slate);white-space:nowrap;
   font-variant-numeric:tabular-nums;
 }
+.ingx-plus{flex:none;color:var(--teal);font-size:1.2rem;line-height:1;transition:transform .2s}
+.ingx-row details[open] .ingx-plus{transform:rotate(45deg)}
 .ingx-bar{
-  position:relative;height:6px;margin:13px 0 15px;border-radius:999px;
+  flex:0 0 100%;position:relative;height:6px;margin-top:12px;border-radius:999px;
   background:var(--panel-2);overflow:hidden;
 }
 .ingx-bar span{position:absolute;left:0;top:0;bottom:0;border-radius:999px;background:var(--line)}
-.ingx-role{font-size:.92rem;line-height:1.62;color:var(--ink-soft);max-width:62ch}
+.ingx-role{margin-top:14px;font-size:.92rem;line-height:1.62;color:var(--ink-soft);max-width:62ch}
 .ingx-why{
   margin-top:7px;font-family:"Newsreader",Georgia,serif;font-size:1rem;
   line-height:1.62;color:var(--ink-soft);max-width:62ch;
@@ -782,11 +769,7 @@ section{padding-block:clamp(64px,9vw,120px)}
       <p class="hero-kicker">Hydraco Restore &nbsp;·&nbsp; Daily electrolyte recovery mix</p>
       <h1><span class="hero-stroke">Restore</span></h1>
       <p class="hero-sub">Designed for recovery, not stimulation</p>
-      <p class="hero-lede">
-        Most sports drinks are built to hydrate you mid-effort. Restore is built for
-        what happens after &mdash; a low-sugar electrolyte base carrying meaningful
-        amounts of tart cherry and pomegranate, in one 14.4&nbsp;g stick pack.
-      </p>
+      <p class="hero-lede">Built for the hours after, not the minutes during.</p>
       <div class="hero-actions">
         <a href="#order" class="btn btn-solid">Pre-order a pack</a>
         <a href="#inside" class="btn btn-ghost">See what's inside</a>
@@ -816,113 +799,202 @@ section{padding-block:clamp(64px,9vw,120px)}
     <div class="wrap formula-grid rv">
       <div class="formula-viz">
         <svg viewBox="0 0 520 460" role="img" aria-label="A Hydraco stick pouch pouring pink powder into a glass of strawberry lemonade" xmlns="http://www.w3.org/2000/svg">
-        <g fill="none" stroke="currentColor" stroke-width="2.4" stroke-linejoin="round" stroke-linecap="round">
+        <defs>
+          <linearGradient id="glassGrad" x1="0" y1="0" x2="1" y2="1">
+            <stop offset="0" stop-color="var(--paper)" stop-opacity="0.55"/>
+            <stop offset="0.55" stop-color="currentColor" stop-opacity="0.05"/>
+            <stop offset="1" stop-color="currentColor" stop-opacity="0.16"/>
+          </linearGradient>
+          <linearGradient id="liquidGrad" x1="0" y1="0" x2="0.15" y2="1">
+            <stop offset="0" stop-color="var(--pink-soft)" stop-opacity="0.92"/>
+            <stop offset="1" stop-color="var(--pink-ink)" stop-opacity="0.58"/>
+          </linearGradient>
+          <linearGradient id="pouchGrad" x1="0" y1="0" x2="1" y2="1">
+            <stop offset="0" stop-color="var(--paper)"/>
+            <stop offset="1" stop-color="var(--panel)"/>
+          </linearGradient>
+          <radialGradient id="streamGlow" cx="0.28" cy="0.12" r="0.9">
+            <stop offset="0" stop-color="currentColor" stop-opacity="0.09"/>
+            <stop offset="1" stop-color="currentColor" stop-opacity="0"/>
+          </radialGradient>
+          <filter id="softShadow" x="-40%" y="-40%" width="180%" height="180%">
+            <feDropShadow dx="0" dy="9" stdDeviation="7" flood-color="#0e1414" flood-opacity="0.16"/>
+          </filter>
+        </defs>
+        <g fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round" stroke-linecap="round">
+          <!-- contact shadow -->
+          <ellipse cx="344" cy="438" rx="92" ry="9" fill="currentColor" stroke="none" opacity="0.08"/>
           <!-- glass -->
-          <path d="M250 176 L438 176 L412 424 Q411 432 403 432 L285 432 Q277 432 276 424 Z"/>
-          <ellipse cx="344" cy="176" rx="94" ry="14"/>
+          <path d="M250 176 L438 176 L412 424 Q411 432 403 432 L285 432 Q277 432 276 424 Z"
+                fill="url(#glassGrad)" filter="url(#softShadow)"/>
+          <ellipse cx="344" cy="176" rx="94" ry="14" fill="url(#glassGrad)"/>
+          <!-- glass shine -->
+          <path d="M271 190 L285 190 L262 412 L250 410 Z" fill="var(--paper)" stroke="none" opacity="0.3"/>
           <!-- liquid -->
-          <path d="M330 262 L432 262 L413 420 Q412 426 406 426 L292 426 Q286 426 285 420 Z" fill="var(--pink-soft)" stroke="none" opacity="0.55"/>
-          <ellipse cx="359" cy="262" rx="72" ry="10" fill="var(--pink-soft)" stroke="none" opacity="0.9"/>
-          <ellipse cx="359" cy="262" rx="72" ry="10"/>
-          <circle cx="336" cy="330" r="4.5" fill="var(--pink-ink)" stroke="none"/>
-          <circle cx="384" cy="360" r="3.5" fill="var(--pink-ink)" stroke="none"/>
-          <circle cx="352" cy="392" r="3" fill="var(--pink-ink)" stroke="none"/>
+          <path d="M330 262 L432 262 L413 420 Q412 426 406 426 L292 426 Q286 426 285 420 Z"
+                fill="url(#liquidGrad)" stroke="none"/>
+          <ellipse cx="359" cy="262" rx="72" ry="10" fill="var(--pink-soft)" stroke="none" opacity="0.92"/>
+          <ellipse cx="359" cy="262" rx="72" ry="10" stroke-opacity="0.4" stroke-width="1.6"/>
+          <ellipse cx="333" cy="259" rx="17" ry="3.6" fill="var(--paper)" stroke="none" opacity="0.55"/>
+          <circle cx="336" cy="330" r="4.2" fill="var(--pink-ink)" stroke="none" opacity="0.8"/>
+          <circle cx="384" cy="360" r="3.2" fill="var(--pink-ink)" stroke="none" opacity="0.65"/>
+          <circle cx="352" cy="392" r="2.8" fill="var(--pink-ink)" stroke="none" opacity="0.55"/>
           <!-- pouch -->
           <g transform="rotate(34 168 150)">
-            <path d="M132 60 h72 a10 10 0 0 1 10 10 v168 a10 10 0 0 1 -10 10 h-72 a10 10 0 0 1 -10 -10 v-168 a10 10 0 0 1 10 -10 Z"/>
-            <path d="M124 66 l12 -8 l12 8 l12 -8 l12 8 l12 -8 l12 8 l12 -8" />
+            <path d="M132 60 h72 a10 10 0 0 1 10 10 v168 a10 10 0 0 1 -10 10 h-72 a10 10 0 0 1 -10 -10 v-168 a10 10 0 0 1 10 -10 Z"
+                  fill="url(#pouchGrad)" filter="url(#softShadow)"/>
+            <path d="M124 66 l12 -8 l12 8 l12 -8 l12 8 l12 -8 l12 8 l12 -8"/>
             <line x1="122" y1="92" x2="214" y2="92"/>
+            <line x1="168" y1="104" x2="168" y2="224" stroke-opacity="0.15" stroke-width="1.4"/>
             <text x="168" y="152" text-anchor="middle" transform="rotate(-90 168 150)" font-family="Jost, Futura, 'Century Gothic', sans-serif" font-size="12" letter-spacing="6" fill="currentColor" stroke="none">HYDRACO</text>
           </g>
           <!-- powder stream -->
           <g stroke="none">
-            <path d="M214 96 C 250 130, 300 150, 340 176 C 320 150, 268 120, 224 100 Z" fill="var(--panel-2)"/>
-            <rect x="220" y="98" width="8" height="8" rx="2" transform="rotate(18 224 102)" fill="currentColor"/>
-            <rect x="238" y="110" width="7" height="7" rx="2" transform="rotate(-12 241 113)" fill="var(--pink-ink)"/>
-            <rect x="252" y="122" width="9" height="9" rx="2" transform="rotate(24 256 126)" fill="currentColor"/>
-            <rect x="270" y="132" width="6" height="6" rx="2" fill="currentColor"/>
-            <rect x="282" y="142" width="8" height="8" rx="2" transform="rotate(-18 286 146)" fill="var(--pink-ink)"/>
-            <rect x="298" y="150" width="7" height="7" rx="2" transform="rotate(14 301 153)" fill="currentColor"/>
-            <rect x="312" y="160" width="9" height="9" rx="2" transform="rotate(-8 316 164)" fill="currentColor"/>
-            <rect x="328" y="168" width="6" height="6" rx="2" fill="var(--pink-ink)"/>
-            <circle cx="246" cy="128" r="2.6" fill="currentColor"/>
-            <circle cx="288" cy="128" r="2.2" fill="currentColor"/>
-            <circle cx="320" cy="150" r="2.4" fill="currentColor"/>
+            <path d="M214 98 C 252 128, 302 150, 342 178 C 320 152, 268 122, 220 100 Z" fill="url(#streamGlow)"/>
+            <g class="pour-dots">
+              <circle class="pdot" cx="220.4" cy="102.8" r="1.72" fill="var(--pink-ink)" fill-opacity="0.76" style="animation-delay:0.1s"/>
+              <circle class="pdot" cx="223.6" cy="106.4" r="1.7" fill="currentColor" fill-opacity="0.58" style="animation-delay:1.49s"/>
+              <circle class="pdot" cx="230.9" cy="107.3" r="3.38" fill="var(--pink-ink)" fill-opacity="0.77" style="animation-delay:1.76s"/>
+              <circle class="pdot" cx="238.7" cy="108.1" r="1.81" fill="var(--pink-ink)" fill-opacity="0.58" style="animation-delay:1.47s"/>
+              <circle class="pdot" cx="241.7" cy="113.5" r="2.22" fill="var(--pink-ink)" fill-opacity="0.74" style="animation-delay:0.11s"/>
+              <circle class="pdot" cx="246.8" cy="115.7" r="2.09" fill="currentColor" fill-opacity="0.76" style="animation-delay:0.54s"/>
+              <circle class="pdot" cx="247.7" cy="124.4" r="2.55" fill="currentColor" fill-opacity="0.73" style="animation-delay:1.31s"/>
+              <circle class="pdot" cx="257.4" cy="120.9" r="2.24" fill="var(--pink-ink)" fill-opacity="0.81" style="animation-delay:0.88s"/>
+              <circle class="pdot" cx="263.1" cy="123.0" r="2.5" fill="var(--pink-ink)" fill-opacity="0.85" style="animation-delay:1.25s"/>
+              <circle class="pdot" cx="263.3" cy="132.1" r="2.95" fill="currentColor" fill-opacity="0.87" style="animation-delay:1.2s"/>
+              <circle class="pdot" cx="273.4" cy="127.8" r="3.2" fill="var(--pink-ink)" fill-opacity="0.82" style="animation-delay:0.69s"/>
+              <circle class="pdot" cx="270.3" cy="139.3" r="1.71" fill="var(--pink-ink)" fill-opacity="0.55" style="animation-delay:1.38s"/>
+              <circle class="pdot" cx="281.3" cy="133.0" r="2.92" fill="currentColor" fill-opacity="0.54" style="animation-delay:0.99s"/>
+              <circle class="pdot" cx="281.2" cy="150.7" r="1.86" fill="var(--pink-ink)" fill-opacity="0.66" style="animation-delay:1.59s"/>
+              <circle class="pdot" cx="282.6" cy="152.5" r="1.76" fill="currentColor" fill-opacity="0.59" style="animation-delay:1.06s"/>
+              <circle class="pdot" cx="294.4" cy="143.3" r="1.97" fill="currentColor" fill-opacity="0.7" style="animation-delay:1.24s"/>
+              <circle class="pdot" cx="299.1" cy="152.1" r="1.43" fill="currentColor" fill-opacity="0.82" style="animation-delay:1.57s"/>
+              <circle class="pdot" cx="299.7" cy="159.8" r="1.49" fill="var(--pink-ink)" fill-opacity="0.72" style="animation-delay:0.12s"/>
+              <circle class="pdot" cx="311.1" cy="149.9" r="1.39" fill="var(--pink-ink)" fill-opacity="0.49" style="animation-delay:0.18s"/>
+              <circle class="pdot" cx="313.6" cy="158.2" r="2.28" fill="var(--pink-ink)" fill-opacity="0.54" style="animation-delay:0.63s"/>
+              <circle class="pdot" cx="318.9" cy="161.0" r="2.86" fill="currentColor" fill-opacity="0.65" style="animation-delay:0.15s"/>
+              <circle class="pdot" cx="328.6" cy="155.3" r="2.57" fill="var(--pink-ink)" fill-opacity="0.54" style="animation-delay:1.71s"/>
+              <circle class="pdot" cx="326.3" cy="169.6" r="1.29" fill="currentColor" fill-opacity="0.66" style="animation-delay:1.55s"/>
+              <circle class="pdot" cx="328.6" cy="176.2" r="1.49" fill="currentColor" fill-opacity="0.74" style="animation-delay:1.4s"/>
+              <circle class="pdot" cx="339.3" cy="171.7" r="2.71" fill="currentColor" fill-opacity="0.76" style="animation-delay:1.47s"/>
+              <circle class="pdot" cx="336.5" cy="184.4" r="1.73" fill="var(--pink-ink)" fill-opacity="0.48" style="animation-delay:0.5s"/>
+            </g>
           </g>
         </g>
       </svg>
         <p class="formula-flavor"><span class="tag">Strawberry Lemonade</span></p>
         <p class="formula-pure">No chemicals. Pure ingredients.</p>
         <p class="formula-cap">
-          One stick into 16&ndash;32&nbsp;oz of cold water. It&rsquo;s a powder, not a bottle &mdash;
-          nothing to keep cold, nothing to leak in a bag. The cherry, pomegranate and apple
-          read as strawberry; the lemon does the rest. No colours, no artificial sweeteners.
+          One stick into 16&ndash;32&nbsp;oz of cold water. A powder, not a bottle &mdash;
+          nothing to keep cold, nothing to leak.
         </p>
       </div>
 
       <div class="formula-body">
         <div class="sec-head" style="margin-bottom:0">
           <span class="tag">The formula</span>
-          <h2>What&rsquo;s in the powder, and why</h2>
-          <p class="sec-lede">
-            Nine real ingredients &mdash; fruit, coconut water and salt. Nothing artificial,
-            nothing you can&rsquo;t pronounce. Here&rsquo;s roughly how much of each, and what it&rsquo;s for.
-          </p>
+          <h2>What&rsquo;s in the powder</h2>
+          <p class="sec-lede">Nine real ingredients. Tap any one.</p>
         </div>
         <ol class="ingx">
         <li class="ingx-row">
-          <div class="ingx-head"><span class="ingx-name">Coconut water powder</span><span class="ingx-pct">The largest share</span></div>
-          <div class="ingx-bar"><span style="width:22%"></span></div>
-          <p class="ingx-role"><b>What it&rsquo;s for</b>The base of the mix.</p>
-          <p class="ingx-why"><b>Why it helps</b>Coconut water is naturally rich in potassium, which helps your body hold on to the water you drink instead of passing straight through.</p>
+          <details>
+            <summary>
+              <span class="ingx-sumhead"><span class="ingx-name">Coconut water powder</span><span class="ingx-pct">The largest share</span></span>
+              <span class="ingx-plus" aria-hidden="true">+</span>
+              <span class="ingx-bar"><span style="width:22%"></span></span>
+            </summary>
+            <p class="ingx-role"><b>What it&rsquo;s for</b>The base of the mix.</p>
+            <p class="ingx-why"><b>Why it helps</b>Coconut water is naturally rich in potassium, which helps your body hold on to the water you drink instead of passing straight through.</p>
+          </details>
         </li>
         <li class="ingx-row">
-          <div class="ingx-head"><span class="ingx-name">Organic cane sugar</span><span class="ingx-pct">10&ndash;15%</span></div>
-          <div class="ingx-bar"><span style="width:14%"></span></div>
-          <p class="ingx-role"><b>What it&rsquo;s for</b>A small amount of real sugar &mdash; 2&nbsp;g.</p>
-          <p class="ingx-why"><b>Why it helps</b>A little sugar helps your body absorb the water and salts faster than plain water does. Just enough to do that, not enough to taste like a soda.</p>
+          <details>
+            <summary>
+              <span class="ingx-sumhead"><span class="ingx-name">Organic cane sugar</span><span class="ingx-pct">10&ndash;15%</span></span>
+              <span class="ingx-plus" aria-hidden="true">+</span>
+              <span class="ingx-bar"><span style="width:14%"></span></span>
+            </summary>
+            <p class="ingx-role"><b>What it&rsquo;s for</b>A small amount of real sugar &mdash; 2&nbsp;g.</p>
+            <p class="ingx-why"><b>Why it helps</b>A little sugar helps your body absorb the water and salts faster than plain water does. Just enough to do that, not enough to taste like a soda.</p>
+          </details>
         </li>
         <li class="ingx-row">
-          <div class="ingx-head"><span class="ingx-name">Apple powder</span><span class="ingx-pct">10&ndash;15%</span></div>
-          <div class="ingx-bar"><span style="width:13%"></span></div>
-          <p class="ingx-role"><b>What it&rsquo;s for</b>Flavour and natural fruit tartness.</p>
-          <p class="ingx-why"><b>Why it helps</b>Rounds out the taste so the drink isn&rsquo;t sharp, and brings a little more potassium with it.</p>
+          <details>
+            <summary>
+              <span class="ingx-sumhead"><span class="ingx-name">Apple powder</span><span class="ingx-pct">10&ndash;15%</span></span>
+              <span class="ingx-plus" aria-hidden="true">+</span>
+              <span class="ingx-bar"><span style="width:13%"></span></span>
+            </summary>
+            <p class="ingx-role"><b>What it&rsquo;s for</b>Flavour and natural fruit tartness.</p>
+            <p class="ingx-why"><b>Why it helps</b>Rounds out the taste so the drink isn&rsquo;t sharp, and brings a little more potassium with it.</p>
+          </details>
         </li>
         <li class="ingx-row">
-          <div class="ingx-head"><span class="ingx-name">Tart cherry powder</span><span class="ingx-pct">10&ndash;15%</span></div>
-          <div class="ingx-bar"><span style="width:13%"></span></div>
-          <p class="ingx-role"><b>What it&rsquo;s for</b>The first of the two recovery fruits.</p>
-          <p class="ingx-why"><b>Why it helps</b>Tart cherries are one of the most studied fruits for recovery &mdash; they&rsquo;re rich in natural antioxidants and are linked to less muscle soreness after hard exercise.</p>
+          <details>
+            <summary>
+              <span class="ingx-sumhead"><span class="ingx-name">Tart cherry powder</span><span class="ingx-pct">10&ndash;15%</span></span>
+              <span class="ingx-plus" aria-hidden="true">+</span>
+              <span class="ingx-bar"><span style="width:13%"></span></span>
+            </summary>
+            <p class="ingx-role"><b>What it&rsquo;s for</b>The first of the two recovery fruits.</p>
+            <p class="ingx-why"><b>Why it helps</b>Tart cherries are one of the most studied fruits for recovery &mdash; they&rsquo;re rich in natural antioxidants and are linked to less muscle soreness after hard exercise.</p>
+          </details>
         </li>
         <li class="ingx-row">
-          <div class="ingx-head"><span class="ingx-name">Lemon juice powder</span><span class="ingx-pct">10&ndash;15%</span></div>
-          <div class="ingx-bar"><span style="width:13%"></span></div>
-          <p class="ingx-role"><b>What it&rsquo;s for</b>The lemonade side of the flavour.</p>
-          <p class="ingx-why"><b>Why it helps</b>Keeps the drink bright and fresh rather than sweet, and it&rsquo;s a natural source of vitamin&nbsp;C.</p>
+          <details>
+            <summary>
+              <span class="ingx-sumhead"><span class="ingx-name">Lemon juice powder</span><span class="ingx-pct">10&ndash;15%</span></span>
+              <span class="ingx-plus" aria-hidden="true">+</span>
+              <span class="ingx-bar"><span style="width:13%"></span></span>
+            </summary>
+            <p class="ingx-role"><b>What it&rsquo;s for</b>The lemonade side of the flavour.</p>
+            <p class="ingx-why"><b>Why it helps</b>Keeps the drink bright and fresh rather than sweet, and it&rsquo;s a natural source of vitamin&nbsp;C.</p>
+          </details>
         </li>
         <li class="ingx-row">
-          <div class="ingx-head"><span class="ingx-name">Pomegranate extract powder</span><span class="ingx-pct">5&ndash;10%</span></div>
-          <div class="ingx-bar"><span style="width:10%"></span></div>
-          <p class="ingx-role"><b>What it&rsquo;s for</b>The second recovery fruit.</p>
-          <p class="ingx-why"><b>Why it helps</b>Another fruit packed with natural antioxidants, studied alongside tart cherry for helping muscles bounce back after training.</p>
+          <details>
+            <summary>
+              <span class="ingx-sumhead"><span class="ingx-name">Pomegranate extract powder</span><span class="ingx-pct">5&ndash;10%</span></span>
+              <span class="ingx-plus" aria-hidden="true">+</span>
+              <span class="ingx-bar"><span style="width:10%"></span></span>
+            </summary>
+            <p class="ingx-role"><b>What it&rsquo;s for</b>The second recovery fruit.</p>
+            <p class="ingx-why"><b>Why it helps</b>Another fruit packed with natural antioxidants, studied alongside tart cherry for helping muscles bounce back after training.</p>
+          </details>
         </li>
         <li class="ingx-row">
-          <div class="ingx-head"><span class="ingx-name">Monk fruit extract</span><span class="ingx-pct">5&ndash;10%</span></div>
-          <div class="ingx-bar"><span style="width:8%"></span></div>
-          <p class="ingx-role"><b>What it&rsquo;s for</b>Sweetness without the sugar.</p>
-          <p class="ingx-why"><b>Why it helps</b>Monk fruit is a natural fruit sweetener &mdash; it&rsquo;s how the drink tastes sweet with only 2&nbsp;g of real sugar and no artificial sweeteners.</p>
+          <details>
+            <summary>
+              <span class="ingx-sumhead"><span class="ingx-name">Monk fruit extract</span><span class="ingx-pct">5&ndash;10%</span></span>
+              <span class="ingx-plus" aria-hidden="true">+</span>
+              <span class="ingx-bar"><span style="width:8%"></span></span>
+            </summary>
+            <p class="ingx-role"><b>What it&rsquo;s for</b>Sweetness without the sugar.</p>
+            <p class="ingx-why"><b>Why it helps</b>Monk fruit is a natural fruit sweetener &mdash; it&rsquo;s how the drink tastes sweet with only 2&nbsp;g of real sugar and no artificial sweeteners.</p>
+          </details>
         </li>
         <li class="ingx-row">
-          <div class="ingx-head"><span class="ingx-name">Pumpkin seed extract powder</span><span class="ingx-pct">Under 5%</span></div>
-          <div class="ingx-bar"><span style="width:4%"></span></div>
-          <p class="ingx-role"><b>What it&rsquo;s for</b>A plant source of magnesium.</p>
-          <p class="ingx-why"><b>Why it helps</b>Magnesium is the mineral muscles need to relax again after they&rsquo;ve worked &mdash; and most people don&rsquo;t get enough of it.</p>
+          <details>
+            <summary>
+              <span class="ingx-sumhead"><span class="ingx-name">Pumpkin seed extract powder</span><span class="ingx-pct">Under 5%</span></span>
+              <span class="ingx-plus" aria-hidden="true">+</span>
+              <span class="ingx-bar"><span style="width:4%"></span></span>
+            </summary>
+            <p class="ingx-role"><b>What it&rsquo;s for</b>A plant source of magnesium.</p>
+            <p class="ingx-why"><b>Why it helps</b>Magnesium is the mineral muscles need to relax again after they&rsquo;ve worked &mdash; and most people don&rsquo;t get enough of it.</p>
+          </details>
         </li>
         <li class="ingx-row">
-          <div class="ingx-head"><span class="ingx-name">Pink Himalayan salt</span><span class="ingx-pct">Under 5%</span></div>
-          <div class="ingx-bar"><span style="width:4%"></span></div>
-          <p class="ingx-role"><b>What it&rsquo;s for</b>Where the sodium comes from.</p>
-          <p class="ingx-why"><b>Why it helps</b>Salt is what you lose most of when you sweat &mdash; we&rsquo;ve bumped it up a little so each stick puts back more of it. Still a gentle amount, not a salt bomb.</p>
+          <details>
+            <summary>
+              <span class="ingx-sumhead"><span class="ingx-name">Pink Himalayan salt</span><span class="ingx-pct">Under 5%</span></span>
+              <span class="ingx-plus" aria-hidden="true">+</span>
+              <span class="ingx-bar"><span style="width:4%"></span></span>
+            </summary>
+            <p class="ingx-role"><b>What it&rsquo;s for</b>Where the sodium comes from.</p>
+            <p class="ingx-why"><b>Why it helps</b>Salt is what you lose most of when you sweat &mdash; we&rsquo;ve bumped it up a little so each stick puts back more of it. Still a gentle amount, not a salt bomb.</p>
+          </details>
         </li>
         </ol>
         <p class="ingx-note">
@@ -951,8 +1023,7 @@ section{padding-block:clamp(64px,9vw,120px)}
       <span class="tag">Key benefits</span>
       <h2>Recovery is the workout you skip</h2>
       <p style="color:var(--ink-soft);font-family:Newsreader,Georgia,serif;font-size:1.14rem;line-height:1.62">
-        Sports science keeps pointing at what happens in the hours after training. Restore
-        puts four things to work in that window &mdash; nothing more, in amounts that matter.
+        Four things, in amounts that matter.
       </p>
     </div>
     <div class="benefits">
@@ -985,10 +1056,7 @@ section{padding-block:clamp(64px,9vw,120px)}
       <div class="sec-head">
         <span class="tag">Explore</span>
         <h2>See what one stick carries</h2>
-        <p class="sec-lede">
-          Every figure is per 14.4&nbsp;g stick pack. Pick a view, hover any bar for
-          what it&rsquo;s doing, and see how it lines up against a typical 12&nbsp;oz sports drink.
-        </p>
+        <p class="sec-lede">Per stick, versus a typical sports drink.</p>
       </div>
 
       <div class="exp-wrap">
@@ -1004,25 +1072,8 @@ section{padding-block:clamp(64px,9vw,120px)}
       </div>
     </div>
 
-    <div class="wrap inside-grid rv">
-      <div>
-        <div class="sec-head" style="margin-bottom:0">
-          <span class="tag">Ingredients</span>
-          <h2 class="inside-sub" style="margin-top:0">Nine things. Tap any one.</h2>
-        </div>
-        <div class="ing-explore" id="ingExplore" role="group" aria-label="Ingredients"></div>
-        <div class="ing-detail" id="ingDetail" aria-live="polite"></div>
-        <p class="fineprint" style="margin-top:24px">
-          Contains trace amounts of dextrin, maltodextrin and organic maltodextrin,
-          used as carriers for the fruit extracts.
-        </p>
-        <p class="fineprint">
-          <strong style="color:var(--ink);font-weight:500">Allergen information.</strong>
-          Manufactured in a facility that may also process nuts, dairy or soy.
-        </p>
-      </div>
-
-      <div>
+    <div class="wrap rv" style="display:flex;justify-content:center">
+      <div style="width:min(340px,100%)">
         <div class="nf">
           <p class="nf-title">Nutrition Facts</p>
           <hr>
@@ -1050,6 +1101,7 @@ section{padding-block:clamp(64px,9vw,120px)}
           <p class="nf-foot" style="border-top:none;padding-top:2px">* The % Daily Value (DV) tells you how much a nutrient in a serving of food contributes to a daily diet. 2,000 calories a day is used for general nutrition advice.</p>
         </div>
         <p class="nf-note">Nutritional values are estimates derived from ingredient-level data and analysis.</p>
+        <p class="nf-note"><strong style="color:var(--ink);font-weight:500">Allergens.</strong> Made in a facility that may also process nuts, dairy or soy.</p>
       </div>
     </div>
   </section>
@@ -1125,10 +1177,8 @@ section{padding-block:clamp(64px,9vw,120px)}
         <span class="tag">Pre-order</span>
         <h2>Choose your pack</h2>
         <p style="color:var(--ink-soft);font-family:Newsreader,Georgia,serif;font-size:1.14rem;line-height:1.62">
-          Restore is made in small batches, so every order is placed as a pre-order.
-          Delivery is free in New York City and across the Maryland, D.C. and Virginia
-          area within about an hour of our office. Payment is by Zelle &mdash; no card
-          details are collected or stored on this site.
+          Made in small batches &mdash; every order is a pre-order. Free delivery in NYC,
+          MD, D.C. &amp; VA. Paid by Zelle &mdash; no card details touch this site.
         </p>
       </div>
 
@@ -1811,44 +1861,6 @@ function drawExplorer(key){
     });
   });
   select(0);
-})();
-
-/* ---------- ingredient explorer ---------- */
-const INGREDIENTS = [
-  { n: "Coconut water powder",        hero: false, t: "Electrolyte base",          d: "The base of the mix and a natural source of potassium — 400 mg in every stick." },
-  { n: "Organic cane sugar",          hero: false, t: "2 g per stick",             d: "A little real sugar helps your body take in the water and salts faster. Two grams in total." },
-  { n: "Apple powder",                hero: false, t: "Flavour",                   d: "Rounds out the taste and brings a little natural fruit acidity." },
-  { n: "Tart cherry powder",          hero: true,  t: "1,800 mg · recovery fruit", d: "One of the two fruits most consistently studied around post-exercise recovery, at a level you can actually taste." },
-  { n: "Lemon juice powder",          hero: false, t: "Flavour",                   d: "Brightens the mix and balances the sweetness." },
-  { n: "Pomegranate extract powder",  hero: true,  t: "1,400 mg · recovery fruit", d: "Real fruit extract, rich in natural antioxidants — the second recovery fruit in the formula." },
-  { n: "Monk fruit extract powder",   hero: false, t: "Sweetener",                 d: "Natural sweetness with no added sugar and no artificial sweeteners." },
-  { n: "Pumpkin seed extract powder", hero: false, t: "Magnesium source",          d: "A plant source of magnesium, one of the minerals listed on the panel — 15 mg per stick." },
-  { n: "Pink Himalayan salt",         hero: false, t: "230 mg sodium",             d: "Where the sodium comes from — bumped up a little for better hydration. Still a gentle amount, not a salt bomb." }
-];
-
-(function initIngredients(){
-  const wrap   = document.getElementById("ingExplore");
-  const detail = document.getElementById("ingDetail");
-  if (!wrap || !detail) { return; }
-
-  wrap.innerHTML = INGREDIENTS.map((ing, i) =>
-    '<button class="ing-chip' + (ing.hero ? " hero" : "") + '" type="button"' +
-    ' aria-pressed="false" data-i="' + i + '">' + ing.n + '</button>'
-  ).join("");
-
-  const chips = Array.from(wrap.querySelectorAll(".ing-chip"));
-
-  function pick(i){
-    chips.forEach((c, j) => c.setAttribute("aria-pressed", j === i ? "true" : "false"));
-    const ing = INGREDIENTS[i];
-    detail.innerHTML =
-      "<h4>" + ing.n + "</h4>" +
-      "<p>" + ing.d + "</p>" +
-      '<span class="tag">' + ing.t + "</span>";
-  }
-
-  chips.forEach((c) => c.addEventListener("click", () => pick(+c.dataset.i)));
-  pick(3); // open on a recovery fruit
 })();
 
 </script>
