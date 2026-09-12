@@ -814,11 +814,15 @@ section{padding-block:clamp(64px,9vw,120px)}
             <stop offset="1" stop-color="var(--panel)"/>
           </linearGradient>
           <radialGradient id="streamGlow" cx="0.28" cy="0.12" r="0.9">
-            <stop offset="0" stop-color="currentColor" stop-opacity="0.09"/>
+            <stop offset="0" stop-color="currentColor" stop-opacity="0.14"/>
+            <stop offset="0.7" stop-color="currentColor" stop-opacity="0.05"/>
             <stop offset="1" stop-color="currentColor" stop-opacity="0"/>
           </radialGradient>
           <filter id="softShadow" x="-40%" y="-40%" width="180%" height="180%">
             <feDropShadow dx="0" dy="9" stdDeviation="7" flood-color="#0e1414" flood-opacity="0.16"/>
+          </filter>
+          <filter id="dustBlur" x="-60%" y="-60%" width="220%" height="220%">
+            <feGaussianBlur stdDeviation="0.55"/>
           </filter>
         </defs>
         <g fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round" stroke-linecap="round">
@@ -848,36 +852,120 @@ section{padding-block:clamp(64px,9vw,120px)}
             <line x1="168" y1="104" x2="168" y2="224" stroke-opacity="0.15" stroke-width="1.4"/>
             <text x="168" y="152" text-anchor="middle" transform="rotate(-90 168 150)" font-family="Jost, Futura, 'Century Gothic', sans-serif" font-size="12" letter-spacing="6" fill="currentColor" stroke="none">HYDRACO</text>
           </g>
-          <!-- powder stream -->
+          <!-- powder stream: dense fine-grain dust (blurred) + a few sparkle flecks on top -->
           <g stroke="none">
             <path d="M214 98 C 252 128, 302 150, 342 178 C 320 152, 268 122, 220 100 Z" fill="url(#streamGlow)"/>
-            <g class="pour-dots">
-              <circle class="pdot" cx="220.4" cy="102.8" r="1.72" fill="var(--pink-ink)" fill-opacity="0.76" style="animation-delay:0.1s"/>
-              <circle class="pdot" cx="223.6" cy="106.4" r="1.7" fill="currentColor" fill-opacity="0.58" style="animation-delay:1.49s"/>
-              <circle class="pdot" cx="230.9" cy="107.3" r="3.38" fill="var(--pink-ink)" fill-opacity="0.77" style="animation-delay:1.76s"/>
-              <circle class="pdot" cx="238.7" cy="108.1" r="1.81" fill="var(--pink-ink)" fill-opacity="0.58" style="animation-delay:1.47s"/>
-              <circle class="pdot" cx="241.7" cy="113.5" r="2.22" fill="var(--pink-ink)" fill-opacity="0.74" style="animation-delay:0.11s"/>
-              <circle class="pdot" cx="246.8" cy="115.7" r="2.09" fill="currentColor" fill-opacity="0.76" style="animation-delay:0.54s"/>
-              <circle class="pdot" cx="247.7" cy="124.4" r="2.55" fill="currentColor" fill-opacity="0.73" style="animation-delay:1.31s"/>
-              <circle class="pdot" cx="257.4" cy="120.9" r="2.24" fill="var(--pink-ink)" fill-opacity="0.81" style="animation-delay:0.88s"/>
-              <circle class="pdot" cx="263.1" cy="123.0" r="2.5" fill="var(--pink-ink)" fill-opacity="0.85" style="animation-delay:1.25s"/>
-              <circle class="pdot" cx="263.3" cy="132.1" r="2.95" fill="currentColor" fill-opacity="0.87" style="animation-delay:1.2s"/>
-              <circle class="pdot" cx="273.4" cy="127.8" r="3.2" fill="var(--pink-ink)" fill-opacity="0.82" style="animation-delay:0.69s"/>
-              <circle class="pdot" cx="270.3" cy="139.3" r="1.71" fill="var(--pink-ink)" fill-opacity="0.55" style="animation-delay:1.38s"/>
-              <circle class="pdot" cx="281.3" cy="133.0" r="2.92" fill="currentColor" fill-opacity="0.54" style="animation-delay:0.99s"/>
-              <circle class="pdot" cx="281.2" cy="150.7" r="1.86" fill="var(--pink-ink)" fill-opacity="0.66" style="animation-delay:1.59s"/>
-              <circle class="pdot" cx="282.6" cy="152.5" r="1.76" fill="currentColor" fill-opacity="0.59" style="animation-delay:1.06s"/>
-              <circle class="pdot" cx="294.4" cy="143.3" r="1.97" fill="currentColor" fill-opacity="0.7" style="animation-delay:1.24s"/>
-              <circle class="pdot" cx="299.1" cy="152.1" r="1.43" fill="currentColor" fill-opacity="0.82" style="animation-delay:1.57s"/>
-              <circle class="pdot" cx="299.7" cy="159.8" r="1.49" fill="var(--pink-ink)" fill-opacity="0.72" style="animation-delay:0.12s"/>
-              <circle class="pdot" cx="311.1" cy="149.9" r="1.39" fill="var(--pink-ink)" fill-opacity="0.49" style="animation-delay:0.18s"/>
-              <circle class="pdot" cx="313.6" cy="158.2" r="2.28" fill="var(--pink-ink)" fill-opacity="0.54" style="animation-delay:0.63s"/>
-              <circle class="pdot" cx="318.9" cy="161.0" r="2.86" fill="currentColor" fill-opacity="0.65" style="animation-delay:0.15s"/>
-              <circle class="pdot" cx="328.6" cy="155.3" r="2.57" fill="var(--pink-ink)" fill-opacity="0.54" style="animation-delay:1.71s"/>
-              <circle class="pdot" cx="326.3" cy="169.6" r="1.29" fill="currentColor" fill-opacity="0.66" style="animation-delay:1.55s"/>
-              <circle class="pdot" cx="328.6" cy="176.2" r="1.49" fill="currentColor" fill-opacity="0.74" style="animation-delay:1.4s"/>
-              <circle class="pdot" cx="339.3" cy="171.7" r="2.71" fill="currentColor" fill-opacity="0.76" style="animation-delay:1.47s"/>
-              <circle class="pdot" cx="336.5" cy="184.4" r="1.73" fill="var(--pink-ink)" fill-opacity="0.48" style="animation-delay:0.5s"/>
+            <g class="pour-dust" filter="url(#dustBlur)">
+              <circle class="pdot" cx="218.2" cy="102.4" r="0.68" fill="currentColor" fill-opacity="0.55" style="animation-delay:1.13s"/>
+              <circle class="pdot" cx="218.5" cy="103.3" r="0.55" fill="currentColor" fill-opacity="0.41" style="animation-delay:0.15s"/>
+              <circle class="pdot" cx="219.9" cy="102.3" r="1.15" fill="currentColor" fill-opacity="0.53" style="animation-delay:1.35s"/>
+              <circle class="pdot" cx="221.3" cy="102.6" r="0.85" fill="currentColor" fill-opacity="0.33" style="animation-delay:0.81s"/>
+              <circle class="pdot" cx="221.0" cy="106.9" r="0.82" fill="var(--pink-ink)" fill-opacity="0.47" style="animation-delay:1.07s"/>
+              <circle class="pdot" cx="221.7" cy="106.4" r="1.07" fill="currentColor" fill-opacity="0.37" style="animation-delay:0.46s"/>
+              <circle class="pdot" cx="223.4" cy="109.6" r="0.9" fill="var(--pink-ink)" fill-opacity="0.52" style="animation-delay:1.05s"/>
+              <circle class="pdot" cx="227.1" cy="105.7" r="1.1" fill="var(--pink-ink)" fill-opacity="0.57" style="animation-delay:0.8s"/>
+              <circle class="pdot" cx="229.1" cy="106.0" r="0.57" fill="currentColor" fill-opacity="0.32" style="animation-delay:2.18s"/>
+              <circle class="pdot" cx="227.8" cy="108.8" r="0.88" fill="var(--pink-ink)" fill-opacity="0.53" style="animation-delay:1.34s"/>
+              <circle class="pdot" cx="229.8" cy="106.4" r="0.76" fill="var(--pink-ink)" fill-opacity="0.58" style="animation-delay:1.31s"/>
+              <circle class="pdot" cx="230.3" cy="108.3" r="0.59" fill="currentColor" fill-opacity="0.55" style="animation-delay:0.82s"/>
+              <circle class="pdot" cx="232.9" cy="110.7" r="0.79" fill="currentColor" fill-opacity="0.6" style="animation-delay:1.3s"/>
+              <circle class="pdot" cx="234.8" cy="109.1" r="0.78" fill="currentColor" fill-opacity="0.37" style="animation-delay:0.36s"/>
+              <circle class="pdot" cx="232.2" cy="114.9" r="1.05" fill="var(--pink-ink)" fill-opacity="0.31" style="animation-delay:0.64s"/>
+              <circle class="pdot" cx="233.5" cy="113.5" r="0.59" fill="currentColor" fill-opacity="0.39" style="animation-delay:2.16s"/>
+              <circle class="pdot" cx="235.2" cy="114.5" r="0.87" fill="var(--pink-ink)" fill-opacity="0.51" style="animation-delay:0.47s"/>
+              <circle class="pdot" cx="238.9" cy="112.9" r="1.08" fill="var(--pink-ink)" fill-opacity="0.47" style="animation-delay:1.28s"/>
+              <circle class="pdot" cx="237.3" cy="115.5" r="1.01" fill="currentColor" fill-opacity="0.29" style="animation-delay:2.1s"/>
+              <circle class="pdot" cx="238.8" cy="114.6" r="0.94" fill="currentColor" fill-opacity="0.55" style="animation-delay:0.57s"/>
+              <circle class="pdot" cx="243.6" cy="111.6" r="0.61" fill="var(--pink-ink)" fill-opacity="0.32" style="animation-delay:0.98s"/>
+              <circle class="pdot" cx="238.6" cy="120.8" r="0.94" fill="var(--pink-ink)" fill-opacity="0.33" style="animation-delay:0.71s"/>
+              <circle class="pdot" cx="242.5" cy="115.8" r="0.78" fill="currentColor" fill-opacity="0.5" style="animation-delay:0.1s"/>
+              <circle class="pdot" cx="243.9" cy="119.5" r="1.01" fill="var(--pink-ink)" fill-opacity="0.53" style="animation-delay:1.02s"/>
+              <circle class="pdot" cx="241.8" cy="123.1" r="0.7" fill="var(--pink-ink)" fill-opacity="0.5" style="animation-delay:0.09s"/>
+              <circle class="pdot" cx="244.6" cy="121.1" r="1.09" fill="var(--pink-ink)" fill-opacity="0.37" style="animation-delay:1.21s"/>
+              <circle class="pdot" cx="246.5" cy="121.7" r="0.99" fill="var(--pink-ink)" fill-opacity="0.58" style="animation-delay:1.54s"/>
+              <circle class="pdot" cx="248.2" cy="121.3" r="0.59" fill="currentColor" fill-opacity="0.53" style="animation-delay:0.78s"/>
+              <circle class="pdot" cx="250.1" cy="118.2" r="0.59" fill="currentColor" fill-opacity="0.53" style="animation-delay:0.99s"/>
+              <circle class="pdot" cx="246.4" cy="128.5" r="0.94" fill="var(--pink-ink)" fill-opacity="0.42" style="animation-delay:0.86s"/>
+              <circle class="pdot" cx="251.3" cy="122.0" r="0.7" fill="currentColor" fill-opacity="0.49" style="animation-delay:1.59s"/>
+              <circle class="pdot" cx="251.8" cy="124.7" r="0.78" fill="currentColor" fill-opacity="0.43" style="animation-delay:2.12s"/>
+              <circle class="pdot" cx="252.2" cy="127.9" r="1.08" fill="currentColor" fill-opacity="0.51" style="animation-delay:1.67s"/>
+              <circle class="pdot" cx="254.3" cy="127.9" r="0.97" fill="var(--pink-ink)" fill-opacity="0.48" style="animation-delay:2.02s"/>
+              <circle class="pdot" cx="258.3" cy="124.7" r="1.14" fill="var(--pink-ink)" fill-opacity="0.28" style="animation-delay:0.69s"/>
+              <circle class="pdot" cx="255.5" cy="128.6" r="0.88" fill="var(--pink-ink)" fill-opacity="0.3" style="animation-delay:2.08s"/>
+              <circle class="pdot" cx="257.5" cy="128.6" r="0.97" fill="var(--pink-ink)" fill-opacity="0.34" style="animation-delay:1.41s"/>
+              <circle class="pdot" cx="261.6" cy="124.9" r="1.12" fill="var(--pink-ink)" fill-opacity="0.37" style="animation-delay:1.86s"/>
+              <circle class="pdot" cx="258.6" cy="131.7" r="0.72" fill="currentColor" fill-opacity="0.39" style="animation-delay:1.03s"/>
+              <circle class="pdot" cx="259.6" cy="133.5" r="0.72" fill="var(--pink-ink)" fill-opacity="0.33" style="animation-delay:0.6s"/>
+              <circle class="pdot" cx="260.3" cy="133.8" r="1.11" fill="var(--pink-ink)" fill-opacity="0.48" style="animation-delay:1.1s"/>
+              <circle class="pdot" cx="259.1" cy="138.1" r="0.97" fill="var(--pink-ink)" fill-opacity="0.35" style="animation-delay:1.2s"/>
+              <circle class="pdot" cx="264.0" cy="134.8" r="0.77" fill="currentColor" fill-opacity="0.32" style="animation-delay:1.81s"/>
+              <circle class="pdot" cx="265.7" cy="132.9" r="0.66" fill="currentColor" fill-opacity="0.39" style="animation-delay:0.5s"/>
+              <circle class="pdot" cx="267.5" cy="135.9" r="0.56" fill="var(--pink-ink)" fill-opacity="0.44" style="animation-delay:1.98s"/>
+              <circle class="pdot" cx="272.5" cy="128.9" r="0.66" fill="currentColor" fill-opacity="0.29" style="animation-delay:1.33s"/>
+              <circle class="pdot" cx="272.1" cy="131.7" r="0.71" fill="var(--pink-ink)" fill-opacity="0.38" style="animation-delay:1.38s"/>
+              <circle class="pdot" cx="273.4" cy="131.9" r="0.59" fill="currentColor" fill-opacity="0.42" style="animation-delay:0.42s"/>
+              <circle class="pdot" cx="271.3" cy="135.7" r="0.96" fill="var(--pink-ink)" fill-opacity="0.46" style="animation-delay:0.23s"/>
+              <circle class="pdot" cx="273.8" cy="137.8" r="0.8" fill="currentColor" fill-opacity="0.47" style="animation-delay:1.15s"/>
+              <circle class="pdot" cx="270.9" cy="141.6" r="0.76" fill="currentColor" fill-opacity="0.43" style="animation-delay:0.38s"/>
+              <circle class="pdot" cx="274.6" cy="140.8" r="0.65" fill="currentColor" fill-opacity="0.52" style="animation-delay:1.99s"/>
+              <circle class="pdot" cx="278.2" cy="138.5" r="0.87" fill="currentColor" fill-opacity="0.53" style="animation-delay:0.86s"/>
+              <circle class="pdot" cx="280.3" cy="138.1" r="1.03" fill="var(--pink-ink)" fill-opacity="0.27" style="animation-delay:1.35s"/>
+              <circle class="pdot" cx="282.2" cy="134.8" r="1.11" fill="currentColor" fill-opacity="0.42" style="animation-delay:0.46s"/>
+              <circle class="pdot" cx="283.7" cy="137.1" r="1.02" fill="currentColor" fill-opacity="0.48" style="animation-delay:0.8s"/>
+              <circle class="pdot" cx="279.2" cy="144.4" r="1.04" fill="var(--pink-ink)" fill-opacity="0.37" style="animation-delay:0.06s"/>
+              <circle class="pdot" cx="281.7" cy="143.9" r="0.57" fill="var(--pink-ink)" fill-opacity="0.46" style="animation-delay:0.24s"/>
+              <circle class="pdot" cx="282.7" cy="146.5" r="0.62" fill="var(--pink-ink)" fill-opacity="0.34" style="animation-delay:1.41s"/>
+              <circle class="pdot" cx="286.9" cy="141.9" r="0.94" fill="var(--pink-ink)" fill-opacity="0.34" style="animation-delay:0.83s"/>
+              <circle class="pdot" cx="288.1" cy="141.0" r="0.57" fill="currentColor" fill-opacity="0.5" style="animation-delay:1.77s"/>
+              <circle class="pdot" cx="288.0" cy="145.3" r="1.15" fill="var(--pink-ink)" fill-opacity="0.37" style="animation-delay:0.01s"/>
+              <circle class="pdot" cx="290.3" cy="143.9" r="0.67" fill="currentColor" fill-opacity="0.33" style="animation-delay:1.79s"/>
+              <circle class="pdot" cx="292.3" cy="140.8" r="0.77" fill="var(--pink-ink)" fill-opacity="0.5" style="animation-delay:1.02s"/>
+              <circle class="pdot" cx="293.7" cy="143.0" r="1.07" fill="var(--pink-ink)" fill-opacity="0.48" style="animation-delay:0.55s"/>
+              <circle class="pdot" cx="290.9" cy="151.4" r="1.11" fill="currentColor" fill-opacity="0.32" style="animation-delay:1.96s"/>
+              <circle class="pdot" cx="292.1" cy="150.2" r="1.05" fill="currentColor" fill-opacity="0.34" style="animation-delay:0.65s"/>
+              <circle class="pdot" cx="293.1" cy="149.6" r="0.85" fill="var(--pink-ink)" fill-opacity="0.46" style="animation-delay:1.51s"/>
+              <circle class="pdot" cx="297.2" cy="145.8" r="0.63" fill="currentColor" fill-opacity="0.28" style="animation-delay:0.91s"/>
+              <circle class="pdot" cx="293.3" cy="155.8" r="0.94" fill="currentColor" fill-opacity="0.27" style="animation-delay:1.31s"/>
+              <circle class="pdot" cx="301.7" cy="146.0" r="0.93" fill="var(--pink-ink)" fill-opacity="0.44" style="animation-delay:0.76s"/>
+              <circle class="pdot" cx="298.9" cy="153.3" r="0.82" fill="var(--pink-ink)" fill-opacity="0.4" style="animation-delay:1.74s"/>
+              <circle class="pdot" cx="297.0" cy="157.3" r="0.9" fill="var(--pink-ink)" fill-opacity="0.42" style="animation-delay:1.08s"/>
+              <circle class="pdot" cx="300.5" cy="154.1" r="0.75" fill="var(--pink-ink)" fill-opacity="0.35" style="animation-delay:0.11s"/>
+              <circle class="pdot" cx="302.5" cy="155.1" r="0.68" fill="var(--pink-ink)" fill-opacity="0.29" style="animation-delay:0.25s"/>
+              <circle class="pdot" cx="302.5" cy="156.9" r="0.67" fill="var(--pink-ink)" fill-opacity="0.45" style="animation-delay:0.19s"/>
+              <circle class="pdot" cx="304.1" cy="154.4" r="0.9" fill="var(--pink-ink)" fill-opacity="0.48" style="animation-delay:1.46s"/>
+              <circle class="pdot" cx="301.8" cy="160.8" r="0.74" fill="var(--pink-ink)" fill-opacity="0.51" style="animation-delay:1.73s"/>
+              <circle class="pdot" cx="305.4" cy="161.7" r="0.9" fill="currentColor" fill-opacity="0.31" style="animation-delay:0.18s"/>
+              <circle class="pdot" cx="309.0" cy="158.5" r="0.98" fill="var(--pink-ink)" fill-opacity="0.4" style="animation-delay:0.75s"/>
+              <circle class="pdot" cx="311.5" cy="154.8" r="0.58" fill="var(--pink-ink)" fill-opacity="0.33" style="animation-delay:0.71s"/>
+              <circle class="pdot" cx="314.8" cy="153.2" r="0.64" fill="var(--pink-ink)" fill-opacity="0.34" style="animation-delay:1.46s"/>
+              <circle class="pdot" cx="313.6" cy="156.6" r="0.81" fill="currentColor" fill-opacity="0.44" style="animation-delay:1.04s"/>
+              <circle class="pdot" cx="312.6" cy="160.4" r="0.67" fill="var(--pink-ink)" fill-opacity="0.39" style="animation-delay:0.73s"/>
+              <circle class="pdot" cx="311.9" cy="163.5" r="0.57" fill="currentColor" fill-opacity="0.31" style="animation-delay:0.74s"/>
+              <circle class="pdot" cx="310.3" cy="169.6" r="0.94" fill="currentColor" fill-opacity="0.37" style="animation-delay:1.16s"/>
+              <circle class="pdot" cx="318.5" cy="159.7" r="0.96" fill="var(--pink-ink)" fill-opacity="0.38" style="animation-delay:1.96s"/>
+              <circle class="pdot" cx="316.9" cy="164.2" r="0.96" fill="currentColor" fill-opacity="0.46" style="animation-delay:2.12s"/>
+              <circle class="pdot" cx="318.5" cy="165.2" r="0.78" fill="var(--pink-ink)" fill-opacity="0.51" style="animation-delay:0.87s"/>
+              <circle class="pdot" cx="321.8" cy="160.8" r="0.71" fill="currentColor" fill-opacity="0.46" style="animation-delay:1.64s"/>
+              <circle class="pdot" cx="320.6" cy="167.5" r="1.14" fill="currentColor" fill-opacity="0.38" style="animation-delay:1.13s"/>
+              <circle class="pdot" cx="329.2" cy="156.1" r="0.81" fill="var(--pink-ink)" fill-opacity="0.43" style="animation-delay:0.28s"/>
+              <circle class="pdot" cx="323.6" cy="162.9" r="0.82" fill="var(--pink-ink)" fill-opacity="0.45" style="animation-delay:1.4s"/>
+              <circle class="pdot" cx="322.6" cy="168.2" r="0.73" fill="currentColor" fill-opacity="0.37" style="animation-delay:0.91s"/>
+              <circle class="pdot" cx="328.7" cy="160.8" r="0.97" fill="currentColor" fill-opacity="0.47" style="animation-delay:0.57s"/>
+              <circle class="pdot" cx="323.9" cy="172.4" r="0.97" fill="var(--pink-ink)" fill-opacity="0.47" style="animation-delay:0.76s"/>
+              <circle class="pdot" cx="325.5" cy="173.5" r="0.72" fill="var(--pink-ink)" fill-opacity="0.45" style="animation-delay:0.75s"/>
+              <circle class="pdot" cx="329.4" cy="167.2" r="0.68" fill="currentColor" fill-opacity="0.25" style="animation-delay:0.38s"/>
+              <circle class="pdot" cx="334.5" cy="165.1" r="0.92" fill="currentColor" fill-opacity="0.29" style="animation-delay:0.21s"/>
+              <circle class="pdot" cx="334.0" cy="167.5" r="0.7" fill="var(--pink-ink)" fill-opacity="0.3" style="animation-delay:1.74s"/>
+              <circle class="pdot" cx="329.5" cy="176.0" r="0.74" fill="var(--pink-ink)" fill-opacity="0.32" style="animation-delay:1.92s"/>
+              <circle class="pdot" cx="338.9" cy="164.6" r="1.13" fill="var(--pink-ink)" fill-opacity="0.48" style="animation-delay:1.52s"/>
+              <circle class="pdot" cx="334.3" cy="174.7" r="1.08" fill="var(--pink-ink)" fill-opacity="0.48" style="animation-delay:1.57s"/>
+              <circle class="pdot" cx="337.7" cy="171.3" r="0.65" fill="var(--pink-ink)" fill-opacity="0.39" style="animation-delay:1.77s"/>
+              <circle class="pdot" cx="336.4" cy="173.3" r="0.93" fill="var(--pink-ink)" fill-opacity="0.41" style="animation-delay:2.09s"/>
+              <circle class="pdot" cx="339.6" cy="173.6" r="0.89" fill="currentColor" fill-opacity="0.34" style="animation-delay:0.88s"/>
+              <circle class="pdot" cx="343.6" cy="167.3" r="1.01" fill="var(--pink-ink)" fill-opacity="0.3" style="animation-delay:2.01s"/>
+              <circle class="pdot" cx="336.9" cy="179.5" r="0.74" fill="var(--pink-ink)" fill-opacity="0.31" style="animation-delay:1.18s"/>
+              <circle class="pdot" cx="336.6" cy="181.2" r="0.67" fill="var(--pink-ink)" fill-opacity="0.3" style="animation-delay:0.64s"/>
+              <circle class="pdot" cx="339.7" cy="182.7" r="0.83" fill="currentColor" fill-opacity="0.44" style="animation-delay:0.69s"/>
             </g>
           </g>
         </g>
