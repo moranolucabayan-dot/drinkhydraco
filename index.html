@@ -236,24 +236,23 @@ section{padding-block:clamp(64px,9vw,120px)}
   100%{box-shadow:0 0 0 0 transparent}
 }
 
-/* ---------- the stick pack, drawn in CSS ---------- */
-.pack-stage{display:flex;justify-content:center;perspective:1400px}
+/* ---------- the stick pack, a real sealed sachet ---------- */
+.pack-stage{
+  display:flex;justify-content:center;position:relative;
+  width:min(268px,72vw);margin-inline:auto;padding:20px 0;
+}
 .pack{
   width:min(268px,72vw);aspect-ratio:268/470;
-  background:#fff;border-radius:5px;
+  background:#fff;border-radius:4px;
   box-shadow:var(--pack-shadow);
   display:flex;flex-direction:column;align-items:center;
-  padding:26px 18px 20px;position:relative;overflow:hidden;
-  transform:rotateY(-11deg) rotateX(3deg);
-  transition:transform .7s cubic-bezier(.2,.7,.2,1);
+  padding:36px 18px 22px;position:relative;overflow:hidden;
+  transform:rotate(-1.6deg);
+  transition:transform .35s cubic-bezier(.2,.7,.2,1),box-shadow .35s;
 }
-.pack:hover{transform:rotateY(0deg) rotateX(0deg) translateY(-6px)}
-.pack::after{ /* foil sheen */
-  content:"";position:absolute;inset:0;pointer-events:none;
-  background:linear-gradient(104deg,rgba(255,255,255,0) 30%,rgba(255,255,255,.2) 44%,rgba(255,255,255,0) 58%);
-}
-.pack-notch{position:absolute;top:0;right:26px;width:14px;height:9px;background:var(--paper);
-  clip-path:polygon(0 0,100% 0,50% 100%)}
+.pack:hover{transform:rotate(0deg) translateY(-5px)}
+.pack-crimp{position:absolute;top:0;left:0;width:100%;height:20px;color:#0e1414;opacity:.9}
+.pack-seal{position:absolute;bottom:15px;left:9%;width:82%;height:1px;background:#0e1414;opacity:.13}
 .pack-name{font-size:.62rem;letter-spacing:.42em;text-transform:uppercase;color:#0e1414;font-weight:500}
 .pack-mark{
   width:26px;height:40px;margin:22px 0 26px;
@@ -274,6 +273,15 @@ section{padding-block:clamp(64px,9vw,120px)}
 .pack-foot{margin-top:auto;text-align:center;color:#0e1414}
 .pack-foot b{display:block;font-size:.52rem;letter-spacing:.13em;text-transform:uppercase;font-weight:600}
 .pack-foot span{display:block;margin-top:12px;font-size:.5rem;letter-spacing:.05em;color:#3d4a4a}
+
+/* ---------- floating fruit, orbiting the pack ---------- */
+.hero-fruit{position:absolute;width:44px;height:44px;color:var(--ink);opacity:.92}
+.hero-fruit svg{width:100%;height:100%;display:block}
+.fruit-cherry{top:1%;left:-13%;animation:fruitBob 4.2s ease-in-out infinite}
+.fruit-lemon{top:42%;right:-15%;animation:fruitBob 4.7s ease-in-out infinite;animation-delay:.7s}
+.fruit-pom{bottom:3%;left:-16%;width:48px;height:48px;animation:fruitBob 5.1s ease-in-out infinite;animation-delay:1.4s}
+@keyframes fruitBob{0%,100%{transform:translateY(0) rotate(-4deg)}50%{transform:translateY(-9px) rotate(4deg)}}
+@media (max-width:640px){ .hero-fruit{display:none} }
 
 /* ---------- marquee strip ---------- */
 .strip{
@@ -776,8 +784,40 @@ section{padding-block:clamp(64px,9vw,120px)}
     </div>
 
     <div class="pack-stage">
+      <span class="hero-fruit fruit-cherry" aria-hidden="true">
+        <svg viewBox="0 0 40 40" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M20 5 q4 -2 8 0"/>
+          <path d="M20 6 C18 13,14 18,12 24"/>
+          <path d="M20 6 C22 13,26 17,29 23"/>
+          <circle cx="11" cy="28" r="5" fill="var(--pink-ink)" stroke="none"/>
+          <circle cx="29" cy="27" r="5" fill="var(--pink-ink)" stroke="none"/>
+        </svg>
+      </span>
+      <span class="hero-fruit fruit-lemon" aria-hidden="true">
+        <svg viewBox="0 0 40 40" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <circle cx="20" cy="20" r="15" fill="var(--pink-soft)" fill-opacity="0.5"/>
+          <circle cx="20" cy="20" r="15"/>
+          <circle cx="20" cy="20" r="9" stroke-opacity="0.55"/>
+          <path d="M20 11 L20 29 M11.5 20 L28.5 20 M13.6 13.6 L26.4 26.4 M26.4 13.6 L13.6 26.4" stroke-width="1.4" stroke-opacity="0.55"/>
+        </svg>
+      </span>
+      <span class="hero-fruit fruit-pom" aria-hidden="true">
+        <svg viewBox="0 0 40 40" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M17 8 L20 4 L23 8"/>
+          <path d="M15 8 h10"/>
+          <path d="M14 10 C9 14,8 24,13 30 C16 34,24 34,27 30 C32 24,31 14,26 10 C22 7,18 7,14 10 Z"/>
+          <circle cx="17" cy="20" r="1.6" fill="var(--pink-ink)" stroke="none"/>
+          <circle cx="22" cy="18" r="1.6" fill="var(--pink-ink)" stroke="none"/>
+          <circle cx="19" cy="25" r="1.6" fill="var(--pink-ink)" stroke="none"/>
+          <circle cx="24" cy="24" r="1.6" fill="var(--pink-ink)" stroke="none"/>
+        </svg>
+      </span>
+
       <div class="pack" role="img" aria-label="Hydraco Restore stick pack, 14.4 grams, post-workout electrolyte recovery mix">
-        <span class="pack-notch" aria-hidden="true"></span>
+        <svg class="pack-crimp" viewBox="0 0 268 20" preserveAspectRatio="none" aria-hidden="true">
+          <path d="M 0.0 12.0 L 33.5 5.0 L 67.0 19.0 L 100.5 5.0 L 134.0 19.0 L 167.5 5.0 L 201.0 19.0 L 234.5 5.0 L 268.0 12.0"
+                fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
         <span class="pack-name">Hydraco</span>
         <span class="pack-mark" aria-hidden="true"></span>
         <div class="pack-band">
@@ -788,6 +828,7 @@ section{padding-block:clamp(64px,9vw,120px)}
           <b>Low sugar. No artificial sweeteners.</b>
           <span>NET WT. 14.4g (0.51 oz) per pouch</span>
         </div>
+        <span class="pack-seal" aria-hidden="true"></span>
       </div>
     </div>
   </header>
