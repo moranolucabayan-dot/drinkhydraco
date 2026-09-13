@@ -243,16 +243,26 @@ section{padding-block:clamp(64px,9vw,120px)}
 }
 .pack{
   width:min(268px,72vw);aspect-ratio:268/470;
-  background:#fff;border-radius:4px;
+  /* brushed aluminum foil - a few soft grey bands, no gloss/glare */
+  background:linear-gradient(158deg,
+    #eceeef 0%, #d2d6d8 24%, #f1f2f3 46%, #cbcfd1 68%, #e3e5e6 86%, #cdd1d3 100%);
+  border-radius:4px;
   box-shadow:var(--pack-shadow);
   display:flex;flex-direction:column;align-items:center;
-  padding:36px 18px 22px;position:relative;overflow:hidden;
+  padding:38px 14px 22px;position:relative;overflow:hidden;
   transform:rotate(-1.6deg);
   transition:transform .35s cubic-bezier(.2,.7,.2,1),box-shadow .35s;
 }
 .pack:hover{transform:rotate(0deg) translateY(-5px)}
-.pack-crimp{position:absolute;top:0;left:0;width:100%;height:20px;color:#0e1414;opacity:.9}
-.pack-seal{position:absolute;bottom:15px;left:9%;width:82%;height:1px;background:#0e1414;opacity:.13}
+.pack-crimp{position:absolute;top:0;left:0;width:100%;height:20px;color:#0e1414;opacity:.55}
+.pack-seal{position:absolute;bottom:14px;left:9%;width:82%;height:1px;background:#0e1414;opacity:.16}
+/* the printed label, stuck onto the foil */
+.pack-sticker{
+  width:100%;flex:1;border-radius:4px;background:#fff;
+  box-shadow:0 3px 10px rgba(14,20,20,.16);
+  display:flex;flex-direction:column;align-items:center;overflow:hidden;
+  padding:20px 14px 16px;
+}
 .pack-name{font-size:.62rem;letter-spacing:.42em;text-transform:uppercase;color:#0e1414;font-weight:500}
 .pack-mark{
   width:26px;height:40px;margin:22px 0 26px;
@@ -261,7 +271,7 @@ section{padding-block:clamp(64px,9vw,120px)}
   -webkit-mask-size:contain;mask-size:contain;-webkit-mask-repeat:no-repeat;mask-repeat:no-repeat;
 }
 .pack-band{
-  width:calc(100% + 36px);margin-inline:-18px;padding:30px 12px 34px;
+  width:calc(100% + 28px);margin-inline:-14px;padding:30px 12px 34px;
   background-image:var(--brush-wide);background-size:100% 100%;background-repeat:no-repeat;
   text-align:center;
 }
@@ -818,15 +828,17 @@ section{padding-block:clamp(64px,9vw,120px)}
           <path d="M 0.0 12.0 L 33.5 5.0 L 67.0 19.0 L 100.5 5.0 L 134.0 19.0 L 167.5 5.0 L 201.0 19.0 L 234.5 5.0 L 268.0 12.0"
                 fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
         </svg>
-        <span class="pack-name">Hydraco</span>
-        <span class="pack-mark" aria-hidden="true"></span>
-        <div class="pack-band">
-          <strong>RESTORE</strong>
-          <em>Post-workout electrolyte recovery mix</em>
-        </div>
-        <div class="pack-foot">
-          <b>Low sugar. No artificial sweeteners.</b>
-          <span>NET WT. 14.4g (0.51 oz) per pouch</span>
+        <div class="pack-sticker">
+          <span class="pack-name">Hydraco</span>
+          <span class="pack-mark" aria-hidden="true"></span>
+          <div class="pack-band">
+            <strong>RESTORE</strong>
+            <em>Post-workout electrolyte recovery mix</em>
+          </div>
+          <div class="pack-foot">
+            <b>Low sugar. No artificial sweeteners.</b>
+            <span>NET WT. 14.4g (0.51 oz) per pouch</span>
+          </div>
         </div>
         <span class="pack-seal" aria-hidden="true"></span>
       </div>
