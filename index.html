@@ -530,7 +530,19 @@ section{padding-block:clamp(64px,9vw,120px)}
 }
 .legal p{font-size:.74rem;line-height:1.6;color:var(--slate)}
 .legal b{display:block;font-size:.63rem;letter-spacing:.2em;text-transform:uppercase;color:var(--ink-soft);margin-bottom:8px;font-weight:500}
-.foot-contact{display:flex;flex-direction:column;gap:9px}
+.foot-contact{
+  display:flex;flex-direction:column;gap:9px;
+  border-radius:6px;padding:10px 12px;margin:-10px -12px;
+  transition:background .5s,box-shadow .5s;
+}
+.foot-contact:target{
+  background:var(--paper);box-shadow:0 0 0 1.5px var(--teal);
+  animation:contactPing 1.8s ease-out 1;
+}
+@keyframes contactPing{
+  0%{box-shadow:0 0 0 1.5px var(--teal),0 0 0 0 color-mix(in srgb,var(--teal) 35%,transparent)}
+  100%{box-shadow:0 0 0 1.5px var(--teal),0 0 0 14px color-mix(in srgb,var(--teal) 0%,transparent)}
+}
 .foot-contact-label{
   font-size:.66rem;letter-spacing:.2em;text-transform:uppercase;font-weight:500;
   color:var(--ink-soft);margin-bottom:2px;
@@ -1362,7 +1374,7 @@ section{padding-block:clamp(64px,9vw,120px)}
         Designed for recovery, not stimulation. Made in small batches in Bethesda, Maryland.
         Free local delivery across the D.C. area and New York City.
       </p>
-      <div class="foot-contact">
+      <div class="foot-contact" id="contact" tabindex="-1">
         <span class="foot-contact-label">Get in touch</span>
         <a href="mailto:hydracompanymd@gmail.com">hydracompanymd@gmail.com</a>
         <a href="https://www.instagram.com/hydracofficial" target="_blank" rel="noopener noreferrer">@hydracofficial</a>
@@ -1378,7 +1390,7 @@ section{padding-block:clamp(64px,9vw,120px)}
 
     <div class="foot-end">
       <span>&copy; <span id="yr">2026</span> Hydraco &nbsp;·&nbsp; drinkhydraco.com</span>
-      <span><a href="#order">Pre-order</a> &nbsp;·&nbsp; <a href="mailto:hydracompanymd@gmail.com" id="mailLink">Contact</a></span>
+      <span><a href="#order">Pre-order</a> &nbsp;·&nbsp; <a href="#contact" id="mailLink">Contact</a></span>
     </div>
   </div>
 </footer>
@@ -1594,7 +1606,6 @@ $("#copyBtn").addEventListener("click", async () => {
 $("#zPhone").textContent = CONFIG.zellePhone;
 newOrderCode();
 $("#yr").textContent     = new Date().getFullYear();
-$("#mailLink").href      = "mailto:" + CONFIG.orderEmail;
 render();
 
 /* ---------- confetti, in the brand palette ---------- */
