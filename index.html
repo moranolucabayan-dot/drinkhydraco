@@ -801,23 +801,26 @@ section{padding-block:clamp(64px,9vw,120px)}
     <div class="wrap formula-grid rv">
       <div class="formula-viz">
         <svg viewBox="0 0 520 460" role="img" aria-label="A Hydraco stick pouch pouring pink powder into a glass of strawberry lemonade" xmlns="http://www.w3.org/2000/svg">
-        <g fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round" stroke-linecap="round">
+        <g fill="none" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round" stroke-linecap="round">
           <!-- glass -->
           <path d="M250 176 L438 176 L412 424 Q411 432 403 432 L285 432 Q277 432 276 424 Z" fill="currentColor" fill-opacity="0.045"/>
           <ellipse cx="344" cy="176" rx="94" ry="14" fill="currentColor" fill-opacity="0.045"/>
-          <!-- liquid -->
-          <path d="M330 262 L432 262 L413 420 Q412 426 406 426 L292 426 Q286 426 285 420 Z" fill="var(--pink-soft)" stroke="none"/>
-          <ellipse cx="359" cy="262" rx="72" ry="10" fill="var(--pink-soft)" stroke="none"/>
-          <ellipse cx="359" cy="262" rx="72" ry="10" stroke-opacity="0.4" stroke-width="1.6"/>
+          <!-- liquid: fitted to the glass's actual taper at the fill line -->
+          <path d="M 263.1 272 L 421.5 272 L 409 424 Q 408 432 400 432 L 288 432 Q 280 432 279 424 Z"
+                fill="var(--pink-soft)" stroke="none"/>
+          <ellipse cx="342.3" cy="272" rx="79.2" ry="10" fill="var(--pink-soft)" stroke="none"/>
+          <ellipse cx="342.3" cy="272" rx="79.2" ry="10" stroke-opacity="0.4" stroke-width="1.3"/>
+          <ellipse cx="318" cy="269" rx="16" ry="3.4" fill="var(--paper)" stroke="none" opacity="0.5"/>
           <circle cx="336" cy="330" r="4" fill="var(--pink-ink)" stroke="none"/>
           <circle cx="384" cy="360" r="3" fill="var(--pink-ink)" stroke="none"/>
           <circle cx="352" cy="392" r="2.6" fill="var(--pink-ink)" stroke="none"/>
           <!-- pouch -->
           <g transform="rotate(34 168 150)">
             <path d="M132 60 h72 a10 10 0 0 1 10 10 v168 a10 10 0 0 1 -10 10 h-72 a10 10 0 0 1 -10 -10 v-168 a10 10 0 0 1 10 -10 Z" fill="var(--paper)"/>
-            <path d="M124 66 l12 -8 l12 8 l12 -8 l12 8 l12 -8 l12 8 l12 -8"/>
-            <line x1="122" y1="92" x2="214" y2="92"/>
-            <text x="168" y="152" text-anchor="middle" transform="rotate(-90 168 150)" font-family="Jost, Futura, 'Century Gothic', sans-serif" font-size="12" letter-spacing="6" fill="currentColor" stroke="none">HYDRACO</text>
+            <line x1="122" y1="86" x2="214" y2="86"/>
+            <text x="168" y="76" text-anchor="middle" transform="rotate(-90 168 74)" font-family="Jost, Futura, 'Century Gothic', sans-serif" font-size="8" letter-spacing="3" fill="currentColor" stroke="none">HYDRACO</text>
+            <rect x="132" y="128" width="72" height="58" fill="var(--pink)" stroke="none"/>
+            <text x="168" y="165" text-anchor="middle" transform="rotate(-90 168 163)" font-family="Jost, Futura, 'Century Gothic', sans-serif" font-weight="700" font-size="13" letter-spacing="2" fill="#0e1414" stroke="none">RESTORE</text>
           </g>
           <!-- powder stream: gravity arc - shallow leaving the spout, curving
                steeper as it falls, narrowing as it accelerates -->
