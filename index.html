@@ -730,6 +730,16 @@ section{padding-block:clamp(64px,9vw,120px)}
 @media (max-width:900px){ .formula-grid{grid-template-columns:1fr;gap:44px} }
 
 .formula-viz{position:sticky;top:96px}
+.formula-art{position:relative}
+.formula-art::before{
+  content:"";position:absolute;z-index:-1;inset:8% -6% -2% -4%;
+  background-color:var(--pink-soft);
+  background-image:var(--brush-wide);
+  background-size:100% 100%;background-repeat:no-repeat;
+  mix-blend-mode:var(--brush-blend);
+  opacity:.4;border-radius:3%;
+  transform:rotate(-2.5deg) scale(1.05);
+}
 @media (max-width:900px){ .formula-viz{position:static} }
 .formula-viz svg{width:100%;height:auto;max-width:420px;color:var(--line);display:block}
 .formula-flavor{margin:24px 0 0}
@@ -805,7 +815,18 @@ section{padding-block:clamp(64px,9vw,120px)}
   color:var(--slate);margin:0;
 }
 .beat p{font-size:.92rem;line-height:1.6;color:var(--ink-soft);margin:0}
-.beat-icon{width:42px;height:42px;color:var(--ink);flex:none}
+.beat-icon{width:42px;height:42px;color:var(--ink);flex:none;position:relative}
+.beat-icon::before{
+  content:"";position:absolute;z-index:-1;inset:-36%;
+  background-color:var(--pink-soft);
+  background-image:var(--brush-wide);
+  background-size:100% 100%;background-repeat:no-repeat;
+  mix-blend-mode:var(--brush-blend);
+  opacity:.42;border-radius:38%;
+}
+.beat-search .beat-icon::before{transform:rotate(-7deg)}
+.beat-missing .beat-icon::before{transform:rotate(6deg) scaleX(-1)}
+.beat-build .beat-icon::before{transform:rotate(-3deg) scale(1.06)}
 .beat-icon svg{width:100%;height:100%;display:block;overflow:visible}
 
 @keyframes bob{0%,100%{transform:translateY(0)}50%{transform:translateY(-3px)}}
@@ -844,6 +865,25 @@ section{padding-block:clamp(64px,9vw,120px)}
 
 </head>
 <body>
+
+<!-- Shared hand-drawn wobble, used by every illustration on the page so the
+     cup, the pouch, the pour and the story icons all read as one hand-sketched
+     family instead of clean vector line art. Two variants: #sketch for the
+     larger formula illustration, #sketch-sm (higher-frequency, gentler
+     displacement) so small 42px icons wobble convincingly without turning
+     to noise. -->
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <defs>
+    <filter id="sketch" x="-20%" y="-20%" width="140%" height="140%">
+      <feTurbulence type="fractalNoise" baseFrequency="0.018 0.028" numOctaves="2" seed="7" result="n"/>
+      <feDisplacementMap in="SourceGraphic" in2="n" scale="3" xChannelSelector="R" yChannelSelector="G"/>
+    </filter>
+    <filter id="sketch-sm" x="-35%" y="-35%" width="170%" height="170%">
+      <feTurbulence type="fractalNoise" baseFrequency="0.13 0.17" numOctaves="2" seed="11" result="n"/>
+      <feDisplacementMap in="SourceGraphic" in2="n" scale="1.3" xChannelSelector="R" yChannelSelector="G"/>
+    </filter>
+  </defs>
+</svg>
 
 <div class="scroll-progress" id="scrollProgress" aria-hidden="true"><span></span></div>
 
@@ -934,7 +974,8 @@ section{padding-block:clamp(64px,9vw,120px)}
   <section id="formula" class="formula">
     <div class="wrap formula-grid rv">
       <div class="formula-viz">
-        <svg viewBox="0 0 520 460" role="img" aria-label="A Hydraco stick pouch pouring pink powder into a glass" xmlns="http://www.w3.org/2000/svg">
+        <div class="formula-art">
+        <svg viewBox="0 0 520 460" role="img" aria-label="A hand-sketched Hydraco stick pouch pouring pink powder into a glass, in the same brush style as the Restore wordmark" xmlns="http://www.w3.org/2000/svg" filter="url(#sketch)">
         <g fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round" stroke-linecap="round">
           <!-- cup: outline only -->
           <path d="M250 176 L438 176 L412 424 Q411 432 403 432 L285 432 Q277 432 276 424 Z"/>
@@ -954,6 +995,7 @@ section{padding-block:clamp(64px,9vw,120px)}
                 fill="var(--pink)" stroke="none"/>
         </g>
       </svg>
+        </div>
         <p class="formula-flavor"><span class="tag">Strawberry Lemonade</span></p>
         <p class="formula-pure">No chemicals. Pure ingredients.</p>
         <p class="formula-cap">
@@ -1198,7 +1240,7 @@ section{padding-block:clamp(64px,9vw,120px)}
         <div class="story-beats">
           <div class="beat beat-search">
             <span class="beat-icon" aria-hidden="true">
-              <svg viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round">
+              <svg viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" filter="url(#sketch-sm)">
                 <circle cx="21" cy="21" r="12"/>
                 <line x1="30" y1="30" x2="41" y2="41"/>
                 <path class="glint" d="M15 17 A8 8 0 0 1 21 13"/>
@@ -1210,7 +1252,7 @@ section{padding-block:clamp(64px,9vw,120px)}
 
           <div class="beat beat-missing">
             <span class="beat-icon" aria-hidden="true">
-              <svg viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round">
+              <svg viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" filter="url(#sketch-sm)">
                 <circle cx="24" cy="26" r="13"/>
                 <line class="slash" x1="15" y1="17" x2="33" y2="35" stroke="var(--pink-ink)"/>
                 <circle class="fizz" cx="24" cy="8" r="1.6" fill="currentColor" stroke="none"/>
@@ -1224,7 +1266,7 @@ section{padding-block:clamp(64px,9vw,120px)}
 
           <div class="beat beat-build">
             <span class="beat-icon" aria-hidden="true">
-              <svg viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round">
+              <svg viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" filter="url(#sketch-sm)">
                 <path d="M24 6 q 5 -3 10 0" />
                 <g class="swing">
                   <path d="M24 7 C 22 16, 17 22, 15 29"/>
