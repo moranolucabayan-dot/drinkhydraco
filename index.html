@@ -389,28 +389,49 @@ section{padding-block:clamp(64px,9vw,120px)}
 .ing-list li.hero-ing{border-color:var(--pink);color:var(--pink-ink);font-weight:500}
 .fineprint{margin-top:22px;font-size:.8rem;color:var(--slate);line-height:1.6;max-width:60ch}
 
-/* FDA panel — set in Helvetica, as the real thing is */
+/* nutrition facts — same shape everyone recognizes, reset into the site's
+   own hand-drawn language: Jost instead of Helvetica, hairlines instead of
+   FDA-black bars, an italic Newsreader number for the calorie count, and
+   the same brush swatch that sits behind "Restore" and "RESTORE" now
+   behind this title too - so it reads as one more piece of the same
+   illustrated family instead of a pasted-in label. */
 .nf{
-  background:#fff;color:#000;border:1px solid #000;padding:7px 9px;
-  font-family:Helvetica,"Helvetica Neue",Arial,sans-serif;
-  font-size:12px;line-height:1.28;max-width:340px;
-  font-variant-numeric:tabular-nums;box-shadow:var(--shadow);
+  background:var(--paper);color:var(--ink);border:1px solid var(--rule);border-radius:4px;
+  padding:20px 20px 18px;
+  font-family:"Jost","Futura","Century Gothic",system-ui,sans-serif;
+  font-size:12.5px;line-height:1.32;max-width:340px;
+  font-variant-numeric:tabular-nums;
 }
 .nf *{margin:0}
-.nf-title{font-size:29px;font-weight:800;letter-spacing:-.03em;line-height:1}
-.nf hr{border:none;border-top:1px solid #000;margin:3px 0}
-.nf .thick{border-top:9px solid #000;margin:3px 0}
-.nf .med{border-top:5px solid #000;margin:3px 0}
-.nf-row{display:flex;justify-content:space-between;gap:10px;padding:2px 0;border-top:1px solid #000}
+.nf-title{
+  position:relative;display:inline-block;padding:.1em .22em .14em .18em;margin:0 0 0 -.16em;
+  font-size:26px;font-weight:700;letter-spacing:-.01em;text-transform:uppercase;line-height:1;
+}
+.nf-title::before{
+  content:"";position:absolute;inset:6% -2% 2% -2%;z-index:-1;
+  background-color:var(--pink-soft);
+  background-image:var(--brush-wide);
+  background-size:100% 100%;background-repeat:no-repeat;
+  mix-blend-mode:var(--brush-blend);
+}
+:root[data-theme="dark"] .nf-title,
+:root:not([data-theme="light"]) .nf-title{color:#0e1414}
+.nf hr{border:none;border-top:1px solid var(--rule);margin:8px 0 6px}
+.nf .thick{border-top:5px solid var(--ink);margin:8px 0 6px}
+.nf .med{border-top:3px solid var(--ink);margin:6px 0}
+.nf-row{display:flex;justify-content:space-between;gap:10px;padding:3px 0;border-top:1px solid var(--rule)}
 .nf-row.plain{border-top:none}
-.nf-row b{font-weight:700}
-.nf-row .in1{padding-left:14px;font-weight:400}
-.nf-row .in2{padding-left:28px;font-weight:400}
-.nf-cal{display:flex;align-items:flex-end;justify-content:space-between;border-top:5px solid #000;padding-top:2px}
-.nf-cal b{font-size:13px}
-.nf-cal .v{font-size:34px;font-weight:800;line-height:.94;letter-spacing:-.03em}
-.nf-dv{text-align:right;font-size:10px;font-weight:700;padding:2px 0}
-.nf-foot{font-size:9.5px;line-height:1.32;padding-top:4px;border-top:5px solid #000}
+.nf-row b{font-weight:600}
+.nf-row .in1{padding-left:14px;font-weight:400;color:var(--ink-soft)}
+.nf-row .in2{padding-left:28px;font-weight:400;color:var(--ink-soft)}
+.nf-cal{display:flex;align-items:flex-end;justify-content:space-between;border-top:3px solid var(--ink);padding-top:4px}
+.nf-cal b{font-size:13px;font-weight:600}
+.nf-cal .v{
+  font-size:32px;line-height:.94;letter-spacing:0;
+  font-family:"Newsreader",Georgia,serif;font-style:italic;font-weight:500;color:var(--pink-ink);
+}
+.nf-dv{text-align:right;font-size:10px;font-weight:600;color:var(--slate);padding:3px 0}
+.nf-foot{font-size:9.5px;line-height:1.35;padding-top:6px;border-top:1px solid var(--rule);color:var(--slate)}
 .nf-note{margin-top:14px;font-size:.74rem;font-style:italic;color:var(--slate);line-height:1.5;max-width:340px}
 
 /* ---------- founder ---------- */
