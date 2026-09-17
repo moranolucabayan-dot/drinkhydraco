@@ -320,7 +320,20 @@ section{padding-block:clamp(68px,9vw,132px)}
 }
 .pack{
   width:min(268px,72vw);aspect-ratio:268/470;
+  /* the crimped top and bottom 10% read as bare brushed aluminium - tight
+     alternating light/dark bands, not a smooth gradient, or it just looks
+     like grey plastic - the matte-white body prints between them */
   background:
+    linear-gradient(95deg,
+      #c3c5c5 0%, #eef1f1 8%, #adb1b1 16%, #f3f5f5 24%,
+      #c8caca 33%, #e6e9e9 42%, #a7abab 50%, #f6f7f7 58%,
+      #bfc1c1 67%, #dee1e1 75%, #b3b6b6 84%, #ebeded 92%, #c6c7c7 100%)
+      top / 100% 10% no-repeat,
+    linear-gradient(95deg,
+      #c3c5c5 0%, #eef1f1 8%, #adb1b1 16%, #f3f5f5 24%,
+      #c8caca 33%, #e6e9e9 42%, #a7abab 50%, #f6f7f7 58%,
+      #bfc1c1 67%, #dee1e1 75%, #b3b6b6 84%, #ebeded 92%, #c6c7c7 100%)
+      bottom / 100% 10% no-repeat,
     linear-gradient(200deg, #ffffff 0%, #f7f7f7 55%, #efeeee 100%);
   border:1.5px solid rgba(14,20,20,.88);border-radius:3px;
   box-shadow:
