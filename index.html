@@ -320,15 +320,30 @@ section{padding-block:clamp(68px,9vw,132px)}
 }
 .pack{
   width:min(268px,72vw);aspect-ratio:268/470;
-  background:#fff;border:1.5px solid #0e1414;border-radius:2px;
-  box-shadow:0 20px 44px -26px rgba(14,20,20,.32);
+  background:
+    linear-gradient(200deg, #ffffff 0%, #f7f7f7 55%, #efeeee 100%);
+  border:1.5px solid rgba(14,20,20,.88);border-radius:3px;
+  box-shadow:
+    0 26px 46px -24px rgba(14,20,20,.34),
+    0 6px 14px -9px rgba(14,20,20,.2),
+    inset 0 0 0 1px rgba(255,255,255,.6);
   display:flex;flex-direction:column;align-items:center;
   padding:28px 20px 26px;position:relative;overflow:hidden;
   transform:rotate(-1.2deg);
   transition:transform .35s cubic-bezier(.2,.7,.2,1),box-shadow .35s;
 }
+/* a soft diagonal sheen, like matte foil catching light - the one touch
+   that reads as "photographed object" rather than a flat vector cutout */
+.pack::after{
+  content:"";position:absolute;inset:0;pointer-events:none;z-index:1;
+  background:linear-gradient(112deg, transparent 34%, rgba(255,255,255,.5) 49%, transparent 64%);
+  mix-blend-mode:soft-light;
+}
 .pack:hover{transform:rotate(0deg) translateY(-5px)}
-.pack-seal{position:absolute;bottom:16px;left:9%;width:82%;height:1px;background:#0e1414;opacity:.15}
+.pack-seal{
+  position:absolute;bottom:16px;left:9%;width:82%;height:5px;border-radius:1px;
+  background:linear-gradient(180deg, rgba(14,20,20,.1) 0%, rgba(14,20,20,.24) 50%, rgba(14,20,20,.1) 100%);
+}
 .pack-name{font-size:.6rem;letter-spacing:.46em;text-transform:uppercase;color:#0e1414;font-weight:500}
 .pack-mark{
   width:24px;height:37px;margin:26px 0 30px;
