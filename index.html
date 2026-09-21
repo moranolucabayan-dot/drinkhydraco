@@ -2193,12 +2193,14 @@ if (!REDUCED){
     }
   }
 
-  function spill(){
-    hint?.classList.add("hidden");
-    pack.classList.add("torn");
+  function spillPowder(){
     if (REDUCED || !W || !H) { return; }
 
-    const ox = W * 0.5, oy = H * 0.42; // roughly where the canvas sits over the tear
+    // the tear sits at the very top of the pack, not the middle of the
+    // canvas - .powder-canvas is offset -52px above .pack-stage, whose own
+    // 20px top padding then leads into the pack, so the tear line lands
+    // about 13% down this canvas's own height
+    const ox = W * 0.5, oy = H * 0.13;
     for (let i = 0; i < 460; i++){
       const speed = (1.1 + Math.random() * 3.4) * dpr;
       // wide upward fan - mostly straight up, some fly off to either side
@@ -2216,6 +2218,18 @@ if (!REDUCED){
       });
     }
     if (!running){ running = true; requestAnimationFrame(frame); }
+  }
+
+  function spill(){
+    hint?.classList.add("hidden");
+    const firstTear = !pack.classList.contains("torn");
+    pack.classList.add("torn");
+    // on the very first click, let the flap actually finish peeling back
+    // (the .5s CSS transition on .pack-tear) before any powder appears -
+    // it should come out of the rip, not fly out before the rip happens.
+    // Every click after that, the top is already open, so it spills at once.
+    if (firstTear && !REDUCED){ setTimeout(spillPowder, 520); }
+    else { spillPowder(); }
   }
 
   pack.addEventListener("click", spill);
