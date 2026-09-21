@@ -1317,6 +1317,16 @@ section{padding-block:clamp(68px,9vw,132px)}
   .star-layer,.logo-star{animation:none;opacity:calc(var(--star-opacity) * .75)}
 }
 
+/* a couple of hand-drawn constellation lines among the stars - a dashed,
+   slightly wobbly connect-the-dots, like a star chart sketched by hand
+   rather than a perfect vector diagram */
+.constellation{
+  position:absolute;opacity:calc(var(--star-opacity) * .8);
+  animation:starTwinkle 7s ease-in-out infinite;animation-delay:1.6s;
+}
+@media (max-width:760px){ .constellation{display:none} }
+@media (prefers-reduced-motion:reduce){ .constellation{animation:none} }
+
 </style>
 
 <!-- Vercel Speed Insights - static-site install (no npm/build step here,
@@ -1350,6 +1360,20 @@ section{padding-block:clamp(68px,9vw,132px)}
   <div class="star-layer star-a"></div>
   <div class="star-layer star-b"></div>
   <div class="star-layer star-c"></div>
+  <svg class="constellation" style="top:6vh;left:64vw" viewBox="0 0 140 90" width="140" height="90" fill="none" stroke="#ffbf00" stroke-width="1" stroke-linecap="round" filter="url(#sketch-sm)" aria-hidden="true">
+    <path d="M8 70 L52 22 L98 40 L132 8" stroke-dasharray="1 5"/>
+    <circle cx="8" cy="70" r="1.6" fill="#ffbf00" stroke="none"/>
+    <circle cx="52" cy="22" r="1.6" fill="#ffbf00" stroke="none"/>
+    <circle cx="98" cy="40" r="1.6" fill="#ffbf00" stroke="none"/>
+    <circle cx="132" cy="8" r="1.6" fill="#ffbf00" stroke="none"/>
+  </svg>
+  <svg class="constellation" style="top:71vh;left:9vw" viewBox="0 0 110 70" width="110" height="70" fill="none" stroke="#cfd6d6" stroke-width="1" stroke-linecap="round" filter="url(#sketch-sm)" aria-hidden="true">
+    <path d="M6 10 L40 46 L70 30 L104 58" stroke-dasharray="1 5"/>
+    <circle cx="6" cy="10" r="1.5" fill="#cfd6d6" stroke="none"/>
+    <circle cx="40" cy="46" r="1.5" fill="#cfd6d6" stroke="none"/>
+    <circle cx="70" cy="30" r="1.5" fill="#cfd6d6" stroke="none"/>
+    <circle cx="104" cy="58" r="1.5" fill="#cfd6d6" stroke="none"/>
+  </svg>
   <span class="logo-star" aria-hidden="true" style="top:33.1%;left:17.0%;width:8px;height:12.3px;color:#ffbf00;animation-delay:4.93s;animation-duration:3.78s"></span>
   <span class="logo-star" aria-hidden="true" style="top:57.2%;left:87.6%;width:9px;height:13.9px;color:#ffbf00;animation-delay:0.52s;animation-duration:4.75s"></span>
   <span class="logo-star" aria-hidden="true" style="top:25.4%;left:54.2%;width:8px;height:12.3px;color:#cfd6d6;animation-delay:0.74s;animation-duration:4.17s"></span>
@@ -2740,6 +2764,7 @@ if (!REDUCED){
     // the detonation: the whole screen flashes white, and shakes
     const flash = document.createElement("div");
     flash.className = "nova-flash";
+    flash.setAttribute("aria-hidden", "true");
     flash.addEventListener("animationend", () => flash.remove());
     document.body.appendChild(flash);
 
@@ -2754,6 +2779,7 @@ if (!REDUCED){
       setTimeout(() => {
         const ring = document.createElement("div");
         ring.className = "flare-ring";
+        ring.setAttribute("aria-hidden", "true");
         const size = 100 + i * 70;
         ring.style.left = cx + "px";
         ring.style.top  = cy + "px";
@@ -2777,6 +2803,7 @@ if (!REDUCED){
       const size  = 8 + Math.random() * 11;
       const spark = document.createElement("div");
       spark.className = "flare-spark";
+      spark.setAttribute("aria-hidden", "true");
       spark.style.color = NOVA_COLORS[Math.floor(Math.random() * NOVA_COLORS.length)];
       spark.style.left = cx + "px";
       spark.style.top  = cy + "px";
@@ -2797,6 +2824,7 @@ if (!REDUCED){
       const reach = Math.max(innerWidth, innerHeight) * (0.35 + Math.random() * 0.45);
       const streak = document.createElement("div");
       streak.className = "nova-streak";
+      streak.setAttribute("aria-hidden", "true");
       streak.style.left  = cx + "px";
       streak.style.top   = cy + "px";
       streak.style.setProperty("--ang", angleDeg.toFixed(1) + "deg");
