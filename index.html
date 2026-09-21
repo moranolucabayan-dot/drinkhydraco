@@ -265,9 +265,26 @@ section{padding-block:clamp(68px,9vw,132px)}
 
 /* ---------- hero quick-pick buy box ---------- */
 .hero-buybox{
+  position:relative;
   margin-top:2rem;padding:18px 18px 20px;border:1px solid var(--rule);
   border-radius:14px;background:var(--panel);max-width:460px;
 }
+
+/* ---------- doodles ----------
+   Small hand-drawn accents in the same wobble style as the illustrations
+   (filter="url(#sketch-sm)"), used sparingly - a pointer, a couple of
+   underline scribbles, a signature flourish. Never intercept clicks. */
+.doodle-arrow{position:absolute;pointer-events:none;color:var(--pink-ink)}
+.doodle-underline{position:relative;display:inline-block}
+.doodle-underline .doodle-svg{
+  position:absolute;left:-3%;bottom:-.4em;width:106%;height:.6em;
+  pointer-events:none;overflow:visible;
+}
+.doodle-sig{
+  display:inline-block;margin-left:.35em;width:15px;height:13px;
+  vertical-align:-.05em;color:var(--pink-ink);pointer-events:none;
+}
+@media (prefers-reduced-motion:reduce){ .doodle-arrow,.doodle-underline .doodle-svg{transition:none} }
 .hero-buybox-opts{display:flex;gap:8px;flex-wrap:wrap}
 .hero-pack-opt{
   flex:1 1 0;min-width:100px;text-align:left;cursor:pointer;font-family:inherit;
@@ -997,6 +1014,10 @@ section{padding-block:clamp(68px,9vw,132px)}
           </button>
         </div>
         <a href="#order" class="btn btn-solid hero-buy-cta" id="heroBuyBtn">Pre-order &mdash; <span id="heroBuyPrice">$39.71</span></a>
+        <svg class="doodle-arrow" viewBox="0 0 60 46" width="44" height="34" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" filter="url(#sketch-sm)" style="top:-28px;right:8px;transform:rotate(6deg)">
+          <path d="M8 6 C 22 5, 42 12, 50 30"/>
+          <path d="M39 25 L50 30 L47 18"/>
+        </svg>
       </div>
 
       <div class="hero-actions">
@@ -1062,7 +1083,7 @@ section{padding-block:clamp(68px,9vw,132px)}
         <div class="sec-head" style="margin-bottom:0">
           <span class="tag">Active formula</span>
           <h2>What&rsquo;s in the powder &mdash; and what it delivers</h2>
-          <p class="sec-lede">Nine real ingredients, each earning its place. Tap any one for the mechanism behind it, then scroll down for exactly what one stick delivers.</p>
+          <p class="sec-lede">Nine real ingredients, each earning its place. <span class="doodle-underline">Tap any one<svg class="doodle-svg" viewBox="0 0 120 18" fill="none" stroke="var(--pink-ink)" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" filter="url(#sketch-sm)"><path d="M3 10 C 25 2, 50 15, 75 6 C 92 1, 108 12, 117 8"/></svg></span> for the mechanism behind it, then scroll down for exactly what one stick delivers.</p>
         </div>
         <ol class="ingx">
         <li class="ingx-row">
@@ -1250,7 +1271,7 @@ section{padding-block:clamp(68px,9vw,132px)}
   <section id="why" class="wrap rv">
     <div class="sec-head">
       <span class="tag">Key benefits</span>
-      <h2>Recovery is the workout you skip</h2>
+      <h2>Recovery is the workout you <span class="doodle-underline">skip<svg class="doodle-svg" viewBox="0 0 120 18" fill="none" stroke="var(--pink-ink)" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" filter="url(#sketch-sm)"><path d="M3 10 C 25 2, 50 15, 75 6 C 92 1, 108 12, 117 8"/></svg></span></h2>
       <p style="color:var(--ink-soft);font-family:Newsreader,Georgia,serif;font-size:1.14rem;line-height:1.68">
         Four things, in amounts that matter.
       </p>
@@ -1336,7 +1357,7 @@ section{padding-block:clamp(68px,9vw,132px)}
         </div>
 
         <div class="sig">
-          <b>Luca Bayan Morano</b>
+          <b>Luca Bayan Morano<svg class="doodle-sig" viewBox="0 0 28 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" filter="url(#sketch-sm)"><path d="M14 21 C 4 13, 2 6, 8 3 C 12 1, 14 5, 14 7 C 14 5, 16 1, 20 3 C 26 6, 24 13, 14 21 Z"/></svg></b>
           <span>Hydraco founder</span>
         </div>
       </div>
@@ -1348,7 +1369,7 @@ section{padding-block:clamp(68px,9vw,132px)}
     <div class="wrap rv">
       <div class="sec-head">
         <span class="tag">Pre-order</span>
-        <h2>Choose your pack</h2>
+        <h2>Choose <span class="doodle-underline">your pack<svg class="doodle-svg" viewBox="0 0 120 18" fill="none" stroke="var(--pink-ink)" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" filter="url(#sketch-sm)"><path d="M3 10 C 25 2, 50 15, 75 6 C 92 1, 108 12, 117 8"/></svg></span></h2>
         <p style="color:var(--ink-soft);font-family:Newsreader,Georgia,serif;font-size:1.14rem;line-height:1.68">
           Made in small batches &mdash; every order is a pre-order. Free delivery in NYC,
           MD, D.C. &amp; VA. Paid by Zelle &mdash; no card details touch this site.
