@@ -530,6 +530,22 @@ section{padding-block:clamp(68px,9vw,132px)}
   100%{box-shadow:0 0 0 0 transparent}
 }
 
+/* featured quotes, pulled up from the Quotes tab - Luca's own pick, not
+   a "most viewed" ranking (there's nothing tracking views). Hidden until
+   real ones load; never shows placeholder text in the hero. */
+.hero-quotes{margin-top:1.8rem;max-width:40ch;display:flex;flex-direction:column;gap:14px}
+.hero-quote{display:flex;gap:10px;align-items:flex-start}
+.hero-quote svg{flex:none;color:var(--pink-ink);margin-top:2px;width:18px;height:17px}
+.hero-quote p{
+  margin:0;font-family:"Newsreader",Georgia,serif;font-style:italic;font-size:.98rem;
+  line-height:1.5;color:var(--ink-soft);
+}
+.hero-quote cite{
+  display:block;margin-top:3px;font-style:normal;
+  font-family:"Jost","Futura","Century Gothic",system-ui,sans-serif;
+  font-size:.68rem;letter-spacing:.09em;text-transform:uppercase;color:var(--slate);
+}
+
 /* ---------- the stick pack, a real sealed sachet ---------- */
 .pack-stage{
   display:flex;justify-content:center;position:relative;
@@ -1558,6 +1574,8 @@ section{padding-block:clamp(68px,9vw,132px)}
         <a href="#inside" class="btn btn-ghost">See what's inside</a>
       </div>
       <p class="hero-note"><span class="dot" aria-hidden="true"></span> Free local delivery &mdash; every order is a pre-order</p>
+
+      <div class="hero-quotes" id="heroQuotes" hidden></div>
     </div>
 
     <div class="pack-stage">
@@ -3228,6 +3246,29 @@ function escapeHtml(s){
       $("#quotesPlaceholderFlag")?.remove();
     })
     .catch(() => { /* fetch failed or CORS blocked it - placeholder cards stay up, no harm done */ });
+})();
+
+(function loadFeaturedQuotes(){
+  const box = $("#heroQuotes");
+  if (!box) { return; }
+
+  fetch(CONFIG.sheetEndpoint + "?action=featured")
+    .then((r) => r.json())
+    .then((list) => {
+      if (!Array.isArray(list) || !list.length) { return; } // stays hidden - no placeholders in the hero
+      box.innerHTML = list.slice(0, 2).map((q) => (
+        '<div class="hero-quote">' +
+          '<svg viewBox="0 0 28 26" fill="currentColor" stroke="none" aria-hidden="true" filter="url(#sketch-sm)">' +
+            '<path d="M4 14 C 4 8, 8 5, 12 5 C 10 7, 9 10, 9 13 C 9 15, 10 16, 12 16 C 12 19, 9 21, 6 21 C 4 21, 4 18, 4 14 Z"/>' +
+            '<path d="M16 14 C 16 8, 20 5, 24 5 C 22 7, 21 10, 21 13 C 21 15, 22 16, 24 16 C 24 19, 21 21, 18 21 C 16 21, 16 18, 16 14 Z"/>' +
+          '</svg>' +
+          "<div><p>" + escapeHtml(q.quote) + "</p>" +
+          "<cite>— " + escapeHtml(q.name) + (q.context ? ", " + escapeHtml(q.context) : "") + "</cite></div>" +
+        "</div>"
+      )).join("");
+      box.hidden = false;
+    })
+    .catch(() => { /* stays hidden */ });
 })();
 
 /* ---------- hero stroke paints itself in on first load ---------- */
