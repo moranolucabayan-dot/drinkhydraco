@@ -340,8 +340,8 @@ section{padding-block:clamp(68px,9vw,132px)}
    past it onto the "table" below */
 .powder-layer{position:absolute;inset:0;pointer-events:none;overflow:visible;z-index:3}
 .powder-bit{
-  position:absolute;border-radius:50%;background:var(--pink);
-  animation:powderSpill 1.15s cubic-bezier(.4,0,.75,1) forwards;
+  position:absolute;border-radius:50%;background:#a3187a;
+  animation:powderSpill 1.25s cubic-bezier(.4,0,.75,1) forwards;
 }
 @keyframes powderSpill{
   0%{opacity:0;transform:translate(0,0) scale(.5)}
@@ -2156,21 +2156,22 @@ if (!REDUCED){
       stage.appendChild(layer);
     }
 
-    for (let i = 0; i < 20; i++){
+    for (let i = 0; i < 46; i++){
       const bit = document.createElement("span");
       bit.className = "powder-bit";
-      const size = 3 + Math.random() * 4;
-      // a little horizontal scatter, mostly falling - gravity, not a burst
-      const dx = (Math.random() - 0.5) * 90;
-      const dy = 380 + Math.random() * 190;
+      const size = 1.4 + Math.random() * 2.8;
+      // wide splatter - some grains land close, some fly clear across the
+      // stage, falling under gravity the whole way, not radiating evenly
+      const dx = (Math.random() - 0.5) * 340;
+      const dy = 160 + Math.random() * 480;
       bit.style.width  = size + "px";
       bit.style.height = size + "px";
-      bit.style.left   = (38 + Math.random() * 18) + "%";
+      bit.style.left   = (30 + Math.random() * 34) + "%";
       bit.style.top    = "6%";
       bit.style.setProperty("--dx", dx.toFixed(1) + "px");
       bit.style.setProperty("--dy", dy.toFixed(1) + "px");
-      bit.style.opacity = (0.55 + Math.random() * 0.35).toFixed(2);
-      bit.style.animationDelay = Math.round(Math.random() * 140) + "ms";
+      bit.style.opacity = (0.55 + Math.random() * 0.4).toFixed(2);
+      bit.style.animationDelay = Math.round(Math.random() * 180) + "ms";
       bit.addEventListener("animationend", () => bit.remove());
       layer.appendChild(bit);
     }
