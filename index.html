@@ -2157,6 +2157,41 @@ if (!REDUCED){
   sizeCanvas();
   window.addEventListener("resize", sizeCanvas);
 
+  /* ---------- sample the actual Hydraco mark into on-shape points ----------
+     Decodes the same --logo image used for the pack's own mark, draws it
+     small offscreen, and keeps every pixel with real alpha as a normalised
+     (0-1, 0-1) point. Each grain is handed one of these to converge on,
+     so the "logo" it forms is the real mark, not an approximation. */
+  let logoPoints = [];
+  (function sampleLogoShape(){
+    try {
+      const raw = getComputedStyle(document.documentElement).getPropertyValue("--logo").trim();
+      const m = raw.match(/url\((['"]?)(.*?)\1\)/);
+      if (!m) { return; }
+      const img = new Image();
+      img.onload = () => {
+        const sw = 46;
+        const sh = Math.max(1, Math.round(sw * ((img.naturalHeight || 37) / (img.naturalWidth || 24))));
+        const off = document.createElement("canvas");
+        off.width = sw; off.height = sh;
+        const octx = off.getContext("2d");
+        octx.drawImage(img, 0, 0, sw, sh);
+        let data;
+        try { data = octx.getImageData(0, 0, sw, sh).data; } catch (err) { return; }
+        const pts = [];
+        for (let yy = 0; yy < sh; yy++){
+          for (let xx = 0; xx < sw; xx++){
+            if (data[(yy * sw + xx) * 4 + 3] > 120) { pts.push([xx / sw, yy / sh]); }
+          }
+        }
+        logoPoints = pts;
+      };
+      img.src = m[2];
+    } catch (err) { /* sampling failed - grains just scatter and fade, no assembly */ }
+  })();
+
+  function easeInOutCubic(t){ return t < 0.5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2; }
+
   // a few close tonal variants, not one flat colour - real powder isn't
   // uniform, and a couple of paler/darker grains read as light catching it
   const COLORS = ["#a3187a", "#b8258c", "#8c1268", "#cf5aa8", "#6e0e50"];
@@ -2182,12 +2217,30 @@ if (!REDUCED){
       const age = now - p.bornAt;
       if (age >= p.maxAgeMs) { continue; }
       alive = true;
-      p.vy += GRAVITY_PX_S2 * dt;
-      p.vx *= dragFactor; p.vy *= dragFactor;
-      p.x  += p.vx * dt; p.y += p.vy * dt;
 
-      const fadeIn  = age < 150 ? age / 150 : 1;
-      const fadeOut = age > p.maxAgeMs - 2500 ? Math.max(0, (p.maxAgeMs - age) / 2500) : 1;
+      if (age < p.scatterEnd){
+        // phase 1: fly up and out, real gravity + drag
+        p.vy += GRAVITY_PX_S2 * dt;
+        p.vx *= dragFactor; p.vy *= dragFactor;
+        p.x  += p.vx * dt; p.y += p.vy * dt;
+      } else if (age < p.convergeEnd){
+        // phase 2: steer from wherever it drifted to, into its assigned
+        // point on the logo shape - captured once, then eased over
+        if (p.csx === null) { p.csx = p.x; p.csy = p.y; }
+        const t = (age - p.scatterEnd) / (p.convergeEnd - p.scatterEnd);
+        const e = easeInOutCubic(Math.min(1, Math.max(0, t)));
+        p.x = p.csx + (p.tx - p.csx) * e;
+        p.y = p.csy + (p.ty - p.csy) * e;
+      } else {
+        // phase 3: held in formation, fading below
+        p.x = p.tx; p.y = p.ty;
+      }
+
+      const fadeIn = age < 150 ? age / 150 : 1;
+      const holdMs = p.maxAgeMs - p.convergeEnd;
+      const fadeStart = p.convergeEnd + holdMs * 0.35; // hold fully formed, then dissolve
+      const fadeOut = age > fadeStart ? Math.max(0, (p.maxAgeMs - age) / (p.maxAgeMs - fadeStart)) : 1;
+
       ctx.globalAlpha = fadeIn * fadeOut * p.a;
       ctx.fillStyle = p.c;
       ctx.beginPath();
@@ -2212,22 +2265,43 @@ if (!REDUCED){
     const r  = pack.getBoundingClientRect();
     const ox = (r.left + r.width * 0.5) * dpr;
     const oy = (r.top + r.height * 0.05) * dpr;
-    const now = performance.now();
 
+    // where the mark reassembles - hovering just above the torn pack, same
+    // proportions as the real .pack-mark (24 x 37)
+    const logoH = 108, logoW = logoH * (24 / 37);
+    const logoCX = r.left + r.width * 0.5;
+    const logoCY = r.top - r.height * 0.04;
+    const haveLogo = logoPoints.length > 0;
+
+    const now = performance.now();
     for (let i = 0; i < 460; i++){
       const speed = (66 + Math.random() * 204) * dpr; // px/s
       // wide upward fan - mostly straight up, some fly off to either side
       const angle = (-90 + (Math.random() * 150 - 75)) * Math.PI / 180;
+      const maxAgeMs = 5000 + Math.random() * 5000; // disappears within 5-10s
+
+      let tx, ty;
+      if (haveLogo){
+        const pt = logoPoints[Math.floor(Math.random() * logoPoints.length)];
+        tx = (logoCX - logoW / 2 + pt[0] * logoW) * dpr;
+        ty = (logoCY - logoH / 2 + pt[1] * logoH) * dpr;
+      } else {
+        tx = ox; ty = oy - 130 * dpr; // no sampled shape yet - just drift and fade
+      }
+
       particles.push({
         x: ox + (Math.random() - 0.5) * 8 * dpr,
         y: oy,
         vx: Math.cos(angle) * speed,
         vy: Math.sin(angle) * speed,
+        tx, ty, csx: null, csy: null,
         r: (0.5 + Math.random() * 1.5) * dpr,
         c: COLORS[Math.floor(Math.random() * COLORS.length)],
         a: 0.6 + Math.random() * 0.35,
         bornAt: now,
-        maxAgeMs: 5000 + Math.random() * 5000, // disappears within 5-10s
+        maxAgeMs,
+        scatterEnd:  maxAgeMs * 0.32,
+        convergeEnd: maxAgeMs * 0.68,
       });
     }
     if (!running){ running = true; requestAnimationFrame(frame); }
