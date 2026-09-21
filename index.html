@@ -2218,6 +2218,8 @@ if (!REDUCED){
       if (age >= p.maxAgeMs) { continue; }
       alive = true;
 
+      let rMul = 1, mergeFade = 1;
+
       if (age < p.scatterEnd){
         // phase 1: fly up and out, real gravity + drag
         p.vy += GRAVITY_PX_S2 * dt;
@@ -2231,20 +2233,27 @@ if (!REDUCED){
         const e = easeInOutCubic(Math.min(1, Math.max(0, t)));
         p.x = p.csx + (p.tx - p.csx) * e;
         p.y = p.csy + (p.ty - p.csy) * e;
-      } else {
-        // phase 3: held in formation, fading below
+      } else if (age < p.holdEnd){
+        // phase 3: held in formation, fully solid
         p.x = p.tx; p.y = p.ty;
+      } else {
+        // phase 4: the 3 extra seconds - fly down off the floating mark and
+        // merge into the real one printed on the pack, shrinking and
+        // fading out as each grain arrives so it reads as being absorbed
+        if (p.msx === null) { p.msx = p.x; p.msy = p.y; }
+        const t = (age - p.holdEnd) / (p.mergeEnd - p.holdEnd);
+        const e = easeInOutCubic(Math.min(1, Math.max(0, t)));
+        p.x = p.msx + (p.mx - p.msx) * e;
+        p.y = p.msy + (p.my - p.msy) * e;
+        rMul = 1 - e * 0.7;
+        mergeFade = 1 - e;
       }
 
       const fadeIn = age < 150 ? age / 150 : 1;
-      const holdMs = p.maxAgeMs - p.convergeEnd;
-      const fadeStart = p.convergeEnd + holdMs * 0.35; // hold fully formed, then dissolve
-      const fadeOut = age > fadeStart ? Math.max(0, (p.maxAgeMs - age) / (p.maxAgeMs - fadeStart)) : 1;
-
-      ctx.globalAlpha = fadeIn * fadeOut * p.a;
+      ctx.globalAlpha = fadeIn * mergeFade * p.a;
       ctx.fillStyle = p.c;
       ctx.beginPath();
-      ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2);
+      ctx.arc(p.x, p.y, p.r * rMul, 0, Math.PI * 2);
       ctx.fill();
     }
     particles = particles.filter((p) => (now - p.bornAt) < p.maxAgeMs);
@@ -2273,21 +2282,35 @@ if (!REDUCED){
     const logoCY = r.top - r.height * 0.04;
     const haveLogo = logoPoints.length > 0;
 
+    // and the real mark actually printed on the sticker - the merge phase
+    // flies each grain from its point on the floating mark to the same
+    // relative point on this one, so it looks like it's landing on it
+    const markEl = pack.querySelector(".pack-mark");
+    const mr = markEl ? markEl.getBoundingClientRect() : null;
+
     const now = performance.now();
     for (let i = 0; i < 460; i++){
       const speed = (66 + Math.random() * 204) * dpr; // px/s
       // wide upward fan - mostly straight up, some fly off to either side
       const angle = (-90 + (Math.random() * 150 - 75)) * Math.PI / 180;
-      const maxAgeMs = 5000 + Math.random() * 5000; // disappears within 5-10s
+      // 5-10s to form and hold, plus 3 extra seconds at the end to merge
+      // into the pack's own logo
+      const holdAgeMs = 5000 + Math.random() * 5000;
+      const maxAgeMs  = holdAgeMs + 3000;
 
-      let tx, ty;
+      let tx, ty, fx = 0.5, fy = 0.5;
       if (haveLogo){
         const pt = logoPoints[Math.floor(Math.random() * logoPoints.length)];
-        tx = (logoCX - logoW / 2 + pt[0] * logoW) * dpr;
-        ty = (logoCY - logoH / 2 + pt[1] * logoH) * dpr;
+        fx = pt[0]; fy = pt[1];
+        tx = (logoCX - logoW / 2 + fx * logoW) * dpr;
+        ty = (logoCY - logoH / 2 + fy * logoH) * dpr;
       } else {
         tx = ox; ty = oy - 130 * dpr; // no sampled shape yet - just drift and fade
       }
+
+      // same relative spot on the real, on-pack mark
+      const mx = mr ? (mr.left + fx * mr.width)  * dpr : tx;
+      const my = mr ? (mr.top  + fy * mr.height) * dpr : ty - 40 * dpr;
 
       particles.push({
         x: ox + (Math.random() - 0.5) * 8 * dpr,
@@ -2295,13 +2318,16 @@ if (!REDUCED){
         vx: Math.cos(angle) * speed,
         vy: Math.sin(angle) * speed,
         tx, ty, csx: null, csy: null,
+        mx, my, msx: null, msy: null,
         r: (0.5 + Math.random() * 1.5) * dpr,
         c: COLORS[Math.floor(Math.random() * COLORS.length)],
         a: 0.6 + Math.random() * 0.35,
         bornAt: now,
         maxAgeMs,
-        scatterEnd:  maxAgeMs * 0.32,
-        convergeEnd: maxAgeMs * 0.68,
+        scatterEnd:  holdAgeMs * 0.32,
+        convergeEnd: holdAgeMs * 0.68,
+        holdEnd:     holdAgeMs,
+        mergeEnd:    maxAgeMs,
       });
     }
     if (!running){ running = true; requestAnimationFrame(frame); }
