@@ -426,12 +426,15 @@ section{padding-block:clamp(68px,9vw,132px)}
 }
 :root[data-theme="dark"]{ --nova-flash:#ffffff; --nova-accent:#1c1430; --nova-accent-soft:#e8e0ff; }
 
+/* hand-drawn, not a perfect CSS circle - a loose brush-loop SVG path
+   (same wobble filter as the rest of the site's line art), stroked
+   rather than boxed */
 .flare-ring{
-  position:fixed;left:0;top:0;z-index:114;pointer-events:none;
-  border-radius:50%;border:3px solid var(--nova-accent);
+  position:fixed;left:0;top:0;z-index:114;pointer-events:none;color:var(--nova-accent);
   transform:translate(-50%,-50%) scale(0);
   animation:flareRingExpand .75s cubic-bezier(.1,.75,.2,1) forwards;
 }
+.flare-ring svg{display:block;width:100%;height:100%;overflow:visible}
 @keyframes flareRingExpand{
   0%   { opacity:1;  transform:translate(-50%,-50%) scale(0); }
   100% { opacity:0;  transform:translate(-50%,-50%) scale(1); }
@@ -461,13 +464,15 @@ section{padding-block:clamp(68px,9vw,132px)}
 
 /* shooting-star streaks - the supernova seeding new stars out across the
    galaxy background, not just sparks near the mark */
+/* a tapered brush-flick ray, not a straight gradient bar - wide at the
+   base, drawn out to a point, like a loaded brush pulled fast across
+   paper rather than a ruled line */
 .nova-streak{
-  position:fixed;left:0;top:0;z-index:113;pointer-events:none;
-  height:2px;border-radius:2px;
-  background:linear-gradient(90deg, var(--nova-accent-soft) 0%, var(--nova-accent) 45%, transparent 100%);
+  position:fixed;left:0;top:0;z-index:113;pointer-events:none;color:var(--nova-accent);
   transform-origin:left center;
   animation:novaStreakFly 1.4s cubic-bezier(.16,.7,.22,1) forwards;
 }
+.nova-streak svg{display:block;overflow:visible}
 @keyframes novaStreakFly{
   0%   { opacity:0; transform:rotate(var(--ang)) scaleX(0); }
   22%  { opacity:1; transform:rotate(var(--ang)) scaleX(1); }
@@ -2754,6 +2759,11 @@ if (!REDUCED){
         ring.style.top  = cy + "px";
         ring.style.width  = size + "px";
         ring.style.height = size + "px";
+        // a loose brush-loop, not a mathematically perfect circle
+        ring.innerHTML =
+          '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" ' +
+          'stroke-linecap="round" stroke-linejoin="round" filter="url(#sketch-sm)">' +
+          '<path d="M6 13 C 4 6, 12 2, 18 4 C 23 6, 22 14, 16 16 C 9 18, 3 15, 6 10"/></svg>';
         ring.addEventListener("animationend", () => ring.remove());
         document.body.appendChild(ring);
       }, delay);
@@ -2773,7 +2783,7 @@ if (!REDUCED){
       spark.style.setProperty("--sx", (Math.cos(angle) * dist).toFixed(1) + "px");
       spark.style.setProperty("--sy", (Math.sin(angle) * dist).toFixed(1) + "px");
       spark.innerHTML =
-        '<svg width="' + size + '" height="' + size + '" viewBox="0 0 24 24" fill="currentColor" stroke="none">' +
+        '<svg width="' + size + '" height="' + size + '" viewBox="0 0 24 24" fill="currentColor" stroke="none" filter="url(#sketch-sm)">' +
         '<path d="M12 2 L13.4 9.6 L21 12 L13.4 14.4 L12 22 L10.6 14.4 L3 12 L10.6 9.6 Z"/></svg>';
       spark.addEventListener("animationend", () => spark.remove());
       document.body.appendChild(spark);
@@ -2789,9 +2799,20 @@ if (!REDUCED){
       streak.className = "nova-streak";
       streak.style.left  = cx + "px";
       streak.style.top   = cy + "px";
-      streak.style.width = reach.toFixed(0) + "px";
       streak.style.setProperty("--ang", angleDeg.toFixed(1) + "deg");
       streak.style.animationDelay = Math.round(Math.random() * 90) + "ms";
+      // a tapered brush-flick, not a ruled gradient bar - wide near the
+      // origin, drawn out to a point, with a slightly uneven waist so it
+      // doesn't read as a perfect, machine-symmetric taper
+      const L = reach, w = 4.5 + Math.random() * 2, waist = 0.45 + Math.random() * 0.2;
+      streak.innerHTML =
+        '<svg width="' + L.toFixed(0) + '" height="' + (w * 3).toFixed(0) + '" ' +
+        'viewBox="0 ' + (-w * 1.5).toFixed(1) + ' ' + L.toFixed(0) + ' ' + (w * 3).toFixed(1) + '" ' +
+        'filter="url(#sketch)"><path fill="currentColor" stroke="none" opacity=".92" d="' +
+        'M0,' + (-w * 0.4).toFixed(1) + ' ' +
+        'C ' + (L * 0.16).toFixed(0) + ',' + (-w).toFixed(1) + ' ' + (L * waist).toFixed(0) + ',' + (-w * 0.32).toFixed(1) + ' ' + L.toFixed(0) + ',0 ' +
+        'C ' + (L * waist).toFixed(0) + ',' + (w * 0.32).toFixed(1) + ' ' + (L * 0.16).toFixed(0) + ',' + w.toFixed(1) + ' 0,' + (w * 0.4).toFixed(1) + ' Z' +
+        '"/></svg>';
       streak.addEventListener("animationend", () => streak.remove());
       document.body.appendChild(streak);
     }
