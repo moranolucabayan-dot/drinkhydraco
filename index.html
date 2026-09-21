@@ -1126,6 +1126,30 @@ section{padding-block:clamp(68px,9vw,132px)}
   mask-image:radial-gradient(closest-side, #000 45%, transparent 92%);
   transform:rotate(-2.5deg) scale(1.05);
 }
+
+/* the cup sketches itself in as you scroll past it (stroke-dasharray,
+   driven by real scroll position, not a one-shot trigger), and pours a
+   little more in each time you hover or click it */
+.pour-art{cursor:pointer}
+.pour-art .liquid-group{
+  transform-box:fill-box;transform-origin:50% 100%;
+  transition:transform .5s cubic-bezier(.3,.8,.3,1);
+}
+.pour-art:focus-visible{outline:2px solid var(--teal);outline-offset:6px}
+.sprinkle-bit{
+  position:absolute;border-radius:50%;background:var(--pink-ink);pointer-events:none;
+  animation:sprinkleFall .8s cubic-bezier(.4,.1,.6,1) forwards;
+}
+@keyframes sprinkleFall{
+  0%   { opacity:0; transform:translate(0,0) scale(.5); }
+  15%  { opacity:1; transform:translate(calc(var(--sdx) * .2),calc(var(--sdy) * .2)) scale(1); }
+  100% { opacity:0; transform:translate(var(--sdx),var(--sdy)) scale(.6); }
+}
+@media (prefers-reduced-motion:reduce){
+  .pour-art .liquid-group{transition:none}
+  .sprinkle-bit{display:none}
+  .cup-outline{stroke-dasharray:none !important;stroke-dashoffset:0 !important}
+}
 @media (max-width:900px){ .formula-viz{position:static} }
 .formula-viz svg{width:100%;height:auto;max-width:420px;color:var(--line);display:block}
 .formula-flavor{margin:24px 0 0}
@@ -1621,19 +1645,21 @@ section{padding-block:clamp(68px,9vw,132px)}
     <div class="wrap formula-grid rv">
       <div class="formula-viz">
         <div class="formula-art">
-        <svg viewBox="0 0 520 460" role="img" aria-label="A hand-sketched Hydraco stick pouch pouring pink powder into a glass, in the same brush style as the Restore wordmark" xmlns="http://www.w3.org/2000/svg" filter="url(#sketch)">
+        <svg id="pourArt" class="pour-art" viewBox="0 0 520 460" role="img" tabindex="0" aria-label="A hand-sketched Hydraco stick pouch pouring pink powder into a glass, in the same brush style as the Restore wordmark. Hover or click to pour more in." xmlns="http://www.w3.org/2000/svg" filter="url(#sketch)">
         <g fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round" stroke-linecap="round">
-          <!-- cup: outline only -->
-          <path d="M250 176 L438 176 L412 424 Q411 432 403 432 L285 432 Q277 432 276 424 Z"/>
-          <ellipse cx="344" cy="176" rx="94" ry="14"/>
-          <!-- liquid: one flat fill, one line for the surface -->
-          <path d="M 263.1 272 L 421.5 272 L 409 424 Q 408 432 400 432 L 288 432 Q 280 432 279 424 Z"
-                fill="var(--pink)" stroke="none"/>
-          <ellipse cx="342.3" cy="272" rx="79.2" ry="10" fill="var(--pink)"/>
+          <!-- cup: outline only - drawn in as you scroll -->
+          <path class="cup-outline" d="M250 176 L438 176 L412 424 Q411 432 403 432 L285 432 Q277 432 276 424 Z"/>
+          <ellipse class="cup-outline" cx="344" cy="176" rx="94" ry="14"/>
+          <!-- liquid: rises a little on hover/click -->
+          <g class="liquid-group">
+            <path d="M 263.1 272 L 421.5 272 L 409 424 Q 408 432 400 432 L 288 432 Q 280 432 279 424 Z"
+                  fill="var(--pink)" stroke="none"/>
+            <ellipse cx="342.3" cy="272" rx="79.2" ry="10" fill="var(--pink)"/>
+          </g>
           <!-- stick pack: outline, one seal line, one word -->
           <g transform="rotate(34 168 150)">
-            <path d="M132 60 h72 a10 10 0 0 1 10 10 v168 a10 10 0 0 1 -10 10 h-72 a10 10 0 0 1 -10 -10 v-168 a10 10 0 0 1 10 -10 Z" fill="var(--paper)"/>
-            <line x1="122" y1="90" x2="214" y2="90"/>
+            <path class="cup-outline" d="M132 60 h72 a10 10 0 0 1 10 10 v168 a10 10 0 0 1 -10 10 h-72 a10 10 0 0 1 -10 -10 v-168 a10 10 0 0 1 10 -10 Z" fill="var(--paper)"/>
+            <line class="cup-outline" x1="122" y1="90" x2="214" y2="90"/>
             <text x="168" y="164" text-anchor="middle" transform="rotate(-90 168 162)" font-family="Jost, Futura, 'Century Gothic', sans-serif" font-size="10" letter-spacing="4" fill="currentColor" stroke="none">HYDRACO</text>
           </g>
           <!-- pour: one flat shape -->
@@ -3330,6 +3356,78 @@ const barIO = new IntersectionObserver((entries) => {
   });
 }, { rootMargin: "0px 0px -10% 0px" });
 document.querySelectorAll(".ingx-bar > span").forEach(el => barIO.observe(el));
+
+/* ---------- the pour illustration: sketches in as you scroll, and pours
+   more in every time you hover or click it ---------- */
+(function pourArtInteractive(){
+  const art   = document.getElementById("pourArt");
+  const stage = art && art.closest(".formula-art");
+  if (!art || !stage) { return; }
+
+  const outlines = Array.from(art.querySelectorAll(".cup-outline"));
+  const lengths  = outlines.map((el) => { try { return el.getTotalLength(); } catch (e) { return 0; } });
+
+  if (!REDUCED){
+    outlines.forEach((el, i) => {
+      el.style.strokeDasharray  = lengths[i];
+      el.style.strokeDashoffset = lengths[i];
+    });
+
+    let ticking = false;
+    function updateDraw(){
+      ticking = false;
+      const r = stage.getBoundingClientRect();
+      // 0 as the art enters the bottom of the screen, 1 once its top has
+      // scrolled about a third of the way up - so it's still drawing
+      // itself in while you're scrolling past it, not finished on entry
+      const start = innerHeight * 0.92;
+      const end   = innerHeight * 0.32;
+      const progress = Math.max(0, Math.min(1, (start - r.top) / (start - end)));
+      outlines.forEach((el, i) => { el.style.strokeDashoffset = lengths[i] * (1 - progress); });
+    }
+    updateDraw();
+    window.addEventListener("scroll", () => {
+      if (!ticking) { ticking = true; requestAnimationFrame(updateDraw); }
+    }, { passive: true });
+    window.addEventListener("resize", updateDraw);
+  }
+
+  // pours a little more in each time - hover nudges the level up, click
+  // nudges it further and sprinkles a few grains falling into the glass
+  let level = 1;
+  const MAX_LEVEL = 1.16;
+  const liquid = art.querySelector(".liquid-group");
+
+  function setLevel(next){
+    level = Math.min(MAX_LEVEL, next);
+    if (liquid) { liquid.style.transform = "scaleY(" + level.toFixed(3) + ")"; }
+  }
+
+  function sprinkle(n){
+    if (REDUCED) { return; }
+    const r = stage.getBoundingClientRect();
+    const ox = r.width * 0.64, oy = r.height * 0.4; // roughly where the pour lands
+    for (let i = 0; i < n; i++){
+      const bit  = document.createElement("span");
+      const size = 3 + Math.random() * 4;
+      bit.className = "sprinkle-bit";
+      bit.style.left   = ox + "px";
+      bit.style.top    = oy + "px";
+      bit.style.width  = size + "px";
+      bit.style.height = size + "px";
+      bit.style.setProperty("--sdx", ((Math.random() - 0.5) * 44).toFixed(1) + "px");
+      bit.style.setProperty("--sdy", (30 + Math.random() * 54).toFixed(1) + "px");
+      bit.addEventListener("animationend", () => bit.remove());
+      stage.appendChild(bit);
+    }
+  }
+
+  art.addEventListener("mouseenter", () => setLevel(level + 0.02));
+  art.addEventListener("click", () => { setLevel(level + 0.05); sprinkle(10); });
+  art.addEventListener("keydown", (e) => {
+    if (e.key === "Enter" || e.key === " "){ e.preventDefault(); setLevel(level + 0.05); sprinkle(10); }
+  });
+})();
 
 /* ---------- top-of-page scroll progress ---------- */
 (function scrollProgress(){
