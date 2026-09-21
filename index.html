@@ -372,7 +372,40 @@ section{padding-block:clamp(68px,9vw,132px)}
   50%,80% { color:#ffbf00; }
 }
 .word-reward{ animation:wordmarkGoldGlow 8s cubic-bezier(.3,.7,.3,1) 1; }
-@media (prefers-reduced-motion:reduce){ .mark-reward,.word-reward{animation:none} }
+
+/* one last, much brighter flash once things have settled back down -
+   white-hot at its peak, blazing orange-gold on the way out, like a
+   quick flare of sunlight rather than a repeat of the steady amber glow */
+@keyframes sunFlare{
+  0%   { transform:scale(1);   filter:none; }
+  28%  { transform:scale(2.3);
+         filter:drop-shadow(0 0 10px rgba(255,255,255,1))
+                drop-shadow(0 0 26px rgba(255,214,0,1))
+                drop-shadow(0 0 46px rgba(255,140,0,.9)); }
+  55%  { transform:scale(2.3);
+         filter:drop-shadow(0 0 8px rgba(255,255,255,.9))
+                drop-shadow(0 0 30px rgba(255,170,0,1))
+                drop-shadow(0 0 52px rgba(255,110,0,.85)); }
+  100% { transform:scale(1);   filter:none; }
+}
+@keyframes sunFlareColor{
+  0%,100% { background-color:var(--mark-base, #0e1414); }
+  28%     { background-color:#fff6d2; }
+  55%     { background-color:#ff9100; }
+}
+.mark-sunflare{
+  animation:sunFlare 2.6s cubic-bezier(.2,.85,.2,1) 1,
+            sunFlareColor 2.6s cubic-bezier(.2,.85,.2,1) 1;
+}
+@keyframes wordmarkSunFlare{
+  0%,100% { color:var(--ink); }
+  28%     { color:#fff6d2; }
+  55%     { color:#ff9100; }
+}
+.word-sunflare{ animation:wordmarkSunFlare 2.6s cubic-bezier(.2,.85,.2,1) 1; }
+@media (prefers-reduced-motion:reduce){
+  .mark-reward,.word-reward,.mark-sunflare,.word-sunflare{animation:none}
+}
 @media (prefers-reduced-motion:reduce){ .doodle-arrow,.doodle-underline .doodle-svg{transition:none} }
 .hero-buybox-opts{display:flex;gap:8px;flex-wrap:wrap}
 .hero-pack-opt{
@@ -2378,6 +2411,23 @@ if (!REDUCED){
           navWord.classList.add("word-reward");
         }
       }, 5000);
+
+      // once that's settled back to normal (5000ms start + 8000ms
+      // duration), one last much brighter flare - not a repeat of the
+      // steady amber glow, a quick white-hot-to-orange blaze
+      setTimeout(() => {
+        [markEl, navMark].forEach((el) => {
+          if (!el) { return; }
+          el.classList.remove("mark-sunflare");
+          void el.offsetWidth;
+          el.classList.add("mark-sunflare");
+        });
+        if (navWord){
+          navWord.classList.remove("word-sunflare");
+          void navWord.offsetWidth;
+          navWord.classList.add("word-sunflare");
+        }
+      }, 13200);
     }
   }
 
