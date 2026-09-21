@@ -284,6 +284,8 @@ section{padding-block:clamp(68px,9vw,132px)}
   display:inline-block;margin-left:.35em;width:15px;height:13px;
   vertical-align:-.05em;color:var(--pink-ink);pointer-events:none;
 }
+.doodle-spark{position:absolute;pointer-events:none;color:var(--pink-ink)}
+@media (max-width:520px){ .doodle-spark{display:none} }
 @media (prefers-reduced-motion:reduce){ .doodle-arrow,.doodle-underline .doodle-svg{transition:none} }
 .hero-buybox-opts{display:flex;gap:8px;flex-wrap:wrap}
 .hero-pack-opt{
@@ -1027,6 +1029,16 @@ section{padding-block:clamp(68px,9vw,132px)}
     </div>
 
     <div class="pack-stage">
+      <svg class="doodle-spark" viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" filter="url(#sketch-sm)" style="top:6%;right:-15%">
+        <path d="M12 2 L13.4 9.6 L21 12 L13.4 14.4 L12 22 L10.6 14.4 L3 12 L10.6 9.6 Z"/>
+      </svg>
+      <svg class="doodle-spark" viewBox="0 0 60 46" width="42" height="32" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" filter="url(#sketch-sm)" style="top:44%;right:-22%;transform:scaleX(-1) rotate(6deg)">
+        <path d="M8 6 C 22 5, 42 12, 50 30"/>
+        <path d="M39 25 L50 30 L47 18"/>
+      </svg>
+      <svg class="doodle-spark" viewBox="0 0 40 40" width="30" height="30" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" filter="url(#sketch-sm)" style="bottom:10%;right:-13%">
+        <path d="M20 34 C 8 34, 4 22, 12 14 C 18 8, 28 10, 28 18 C 28 24, 20 26, 18 20"/>
+      </svg>
       <div class="pack" role="img" aria-label="Hydraco Restore stick pack, 14.4 grams, post-workout electrolyte recovery mix, a paper label on a matte aluminium pouch">
         <div class="pack-sticker">
           <span class="pack-name">Hydraco</span>
