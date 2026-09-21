@@ -679,7 +679,9 @@ section{padding-block:clamp(68px,9vw,132px)}
 }
 .gallery-item:focus-visible{outline:2px solid var(--teal);outline-offset:3px}
 .gallery-item img{
-  width:100%;height:100%;object-fit:cover;display:block;
+  /* show the whole frame, uncropped - contain, not cover, letterboxed
+     against the tile's own panel colour rather than clipping the shot */
+  width:100%;height:100%;object-fit:contain;display:block;
   filter:saturate(1.05) contrast(1.02);
   transition:transform .4s ease;
 }
