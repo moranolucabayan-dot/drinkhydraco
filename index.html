@@ -355,13 +355,13 @@ section{padding-block:clamp(68px,9vw,132px)}
    so the moment isn't confined to the hero, it reaches the whole brand */
 @keyframes markMergeReward{
   0%   { transform:scale(1);   filter:none; }
-  50%  { transform:scale(1.9); filter:drop-shadow(0 0 12px rgba(217,164,4,.9)); }
-  80%  { transform:scale(1.9); filter:drop-shadow(0 0 14px rgba(217,164,4,1)); }
+  50%  { transform:scale(1.9); filter:drop-shadow(0 0 12px rgba(255,191,0,.9)); }
+  80%  { transform:scale(1.9); filter:drop-shadow(0 0 14px rgba(255,191,0,1)); }
   100% { transform:scale(1);   filter:none; }
 }
 @keyframes markMergeRewardColor{
   0%,100% { background-color: var(--mark-base, #0e1414); }
-  50%,80% { background-color: #d9a404; }
+  50%,80% { background-color: #ffbf00; }
 }
 .mark-reward{
   animation:markMergeReward 8s cubic-bezier(.3,.7,.3,1) 1,
@@ -369,7 +369,7 @@ section{padding-block:clamp(68px,9vw,132px)}
 }
 @keyframes wordmarkGoldGlow{
   0%,100% { color:var(--ink); }
-  50%,80% { color:#d9a404; }
+  50%,80% { color:#ffbf00; }
 }
 .word-reward{ animation:wordmarkGoldGlow 8s cubic-bezier(.3,.7,.3,1) 1; }
 @media (prefers-reduced-motion:reduce){ .mark-reward,.word-reward{animation:none} }
