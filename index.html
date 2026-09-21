@@ -734,6 +734,58 @@ section{padding-block:clamp(68px,9vw,132px)}
 .founder-grid{display:grid;grid-template-columns:200px 1fr;gap:clamp(28px,5vw,72px);align-items:start}
 @media (max-width:820px){ .founder-grid{grid-template-columns:1fr} }
 .founder-body{font-family:"Newsreader",Georgia,serif;font-size:1.24rem;line-height:1.74;color:var(--ink-soft);max-width:62ch}
+
+/* ---------- quotes & sponsors ---------- */
+.placeholder-flag{
+  position:relative;padding-left:16px;color:var(--slate);
+}
+.placeholder-flag::before{
+  content:"";position:absolute;left:0;top:.35em;bottom:.1em;width:2px;
+  background:repeating-linear-gradient(180deg,var(--pink-ink) 0 4px,transparent 4px 8px);
+}
+.quotes-grid{
+  display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));
+  gap:1px;background:var(--rule);border:1px solid var(--rule);border-radius:3px;overflow:hidden;
+  margin-top:clamp(28px,4vw,44px);
+}
+.quote-card{
+  margin:0;background:var(--paper);padding:clamp(24px,3vw,30px);
+  display:flex;flex-direction:column;gap:14px;
+}
+.quote-mark{color:var(--pink-ink);flex:none}
+.quote-card p{
+  font-family:"Newsreader",Georgia,serif;font-style:italic;font-size:1.05rem;
+  line-height:1.56;color:var(--ink);margin:0;flex:1;
+}
+.quote-card cite{
+  font-style:normal;font-family:"Jost","Futura","Century Gothic",system-ui,sans-serif;
+  font-size:.72rem;letter-spacing:.1em;text-transform:uppercase;color:var(--slate);
+}
+.sponsors-strip{margin-top:clamp(40px,5vw,56px)}
+.sponsors-label{font-size:.78rem;letter-spacing:.06em;margin-bottom:16px}
+.sponsors-row{display:flex;flex-wrap:wrap;gap:14px}
+.sponsor-slot{
+  flex:1 1 160px;text-align:center;padding:18px 14px;
+  border:1.5px dashed var(--rule);border-radius:6px;
+  font-family:"Jost","Futura","Century Gothic",system-ui,sans-serif;
+  font-size:.76rem;letter-spacing:.05em;color:var(--slate);
+}
+.quote-submit{margin-top:clamp(40px,5vw,56px);padding-top:clamp(28px,4vw,40px);border-top:1px solid var(--rule)}
+.quote-submit-toggle{
+  font-family:"Jost","Futura","Century Gothic",system-ui,sans-serif;
+  font-size:.86rem;letter-spacing:.04em;font-weight:500;color:var(--pink-ink);
+  background:none;border:none;padding:0;cursor:pointer;
+}
+.quote-submit-toggle:hover{color:var(--teal-ink)}
+.quote-form{
+  margin-top:22px;display:flex;flex-direction:column;gap:18px;
+  max-width:560px;padding:clamp(22px,3vw,30px);
+  background:var(--panel);border:1px solid var(--rule);border-radius:6px;
+}
+.quote-form textarea{min-height:88px;resize:vertical}
+.hint-inline{font-size:.76rem;color:var(--slate);font-weight:400;text-transform:none;letter-spacing:normal}
+.quote-msg{font-size:.84rem;line-height:1.55;color:var(--teal-ink);min-height:1.3em;margin:0}
+.quote-msg.err{color:#c0392b}
 .founder-body p+p{margin-top:1.15em}
 .founder-body .lead{color:var(--ink);font-size:1.42rem;line-height:1.56}
 .sig{margin-top:2.4rem;display:flex;flex-direction:column;gap:5px}
@@ -1953,6 +2005,100 @@ section{padding-block:clamp(68px,9vw,132px)}
     </div>
   </section>
 
+  <!-- ============ QUOTES & SPONSORS ============
+       Placeholder content, not real testimonials or partners - flagged
+       both visually (dashed borders, explicit "swap this" attributions)
+       and in this comment so nobody mistakes it for genuine social proof
+       before it's replaced. -->
+  <section id="proof" class="wrap rv proof">
+    <div class="sec-head">
+      <span class="tag">In the wild</span>
+      <h2>What people are saying</h2>
+      <p class="sec-lede placeholder-flag" id="quotesPlaceholderFlag">Sample layout &mdash; these turn into real customer quotes automatically once approved below.</p>
+    </div>
+
+    <div class="quotes-grid">
+      <blockquote class="quote-card">
+        <svg class="quote-mark" viewBox="0 0 28 26" width="30" height="28" fill="currentColor" stroke="none" aria-hidden="true" filter="url(#sketch-sm)">
+          <path d="M4 14 C 4 8, 8 5, 12 5 C 10 7, 9 10, 9 13 C 9 15, 10 16, 12 16 C 12 19, 9 21, 6 21 C 4 21, 4 18, 4 14 Z"/>
+          <path d="M16 14 C 16 8, 20 5, 24 5 C 22 7, 21 10, 21 13 C 21 15, 22 16, 24 16 C 24 19, 21 21, 18 21 C 16 21, 16 18, 16 14 Z"/>
+        </svg>
+        <p>Recovery days used to wreck me. A couple sticks in and the soreness the next morning is noticeably less.</p>
+        <cite>&mdash; Replace with a real customer's name &amp; context</cite>
+      </blockquote>
+
+      <blockquote class="quote-card">
+        <svg class="quote-mark" viewBox="0 0 28 26" width="30" height="28" fill="currentColor" stroke="none" aria-hidden="true" filter="url(#sketch-sm)">
+          <path d="M4 14 C 4 8, 8 5, 12 5 C 10 7, 9 10, 9 13 C 9 15, 10 16, 12 16 C 12 19, 9 21, 6 21 C 4 21, 4 18, 4 14 Z"/>
+          <path d="M16 14 C 16 8, 20 5, 24 5 C 22 7, 21 10, 21 13 C 21 15, 22 16, 24 16 C 24 19, 21 21, 18 21 C 16 21, 16 18, 16 14 Z"/>
+        </svg>
+        <p>Finally an electrolyte mix that isn't just sugar and food dye. Tastes clean, too.</p>
+        <cite>&mdash; Replace with a real customer's name &amp; context</cite>
+      </blockquote>
+
+      <blockquote class="quote-card">
+        <svg class="quote-mark" viewBox="0 0 28 26" width="30" height="28" fill="currentColor" stroke="none" aria-hidden="true" filter="url(#sketch-sm)">
+          <path d="M4 14 C 4 8, 8 5, 12 5 C 10 7, 9 10, 9 13 C 9 15, 10 16, 12 16 C 12 19, 9 21, 6 21 C 4 21, 4 18, 4 14 Z"/>
+          <path d="M16 14 C 16 8, 20 5, 24 5 C 22 7, 21 10, 21 13 C 21 15, 22 16, 24 16 C 24 19, 21 21, 18 21 C 16 21, 16 18, 16 14 Z"/>
+        </svg>
+        <p>Ordered on a Tuesday, had it by Thursday. Actually heard back when I had a question about my order.</p>
+        <cite>&mdash; Replace with a real customer's name &amp; context</cite>
+      </blockquote>
+
+      <blockquote class="quote-card">
+        <svg class="quote-mark" viewBox="0 0 28 26" width="30" height="28" fill="currentColor" stroke="none" aria-hidden="true" filter="url(#sketch-sm)">
+          <path d="M4 14 C 4 8, 8 5, 12 5 C 10 7, 9 10, 9 13 C 9 15, 10 16, 12 16 C 12 19, 9 21, 6 21 C 4 21, 4 18, 4 14 Z"/>
+          <path d="M16 14 C 16 8, 20 5, 24 5 C 22 7, 21 10, 21 13 C 21 15, 22 16, 24 16 C 24 19, 21 21, 18 21 C 16 21, 16 18, 16 14 Z"/>
+        </svg>
+        <p>My coach recommended tart cherry for recovery &mdash; glad to find a mix with an actual real dose of it.</p>
+        <cite>&mdash; Replace with a real customer's name &amp; context</cite>
+      </blockquote>
+    </div>
+
+    <div class="sponsors-strip">
+      <p class="sponsors-label placeholder-flag">Sponsors &amp; partners &mdash; sample slots, swap for real logos/names</p>
+      <div class="sponsors-row">
+        <span class="sponsor-slot">[Gym / studio name]</span>
+        <span class="sponsor-slot">[Retailer name]</span>
+        <span class="sponsor-slot">[Team / event name]</span>
+        <span class="sponsor-slot">[Press / publication]</span>
+      </div>
+    </div>
+
+    <div class="quote-submit">
+      <button type="button" class="quote-submit-toggle" id="quoteToggle" aria-expanded="false" aria-controls="quoteForm">
+        Already ordered? Share your experience &rarr;
+      </button>
+      <form id="quoteForm" class="quote-form" hidden>
+        <input type="hidden" name="action" value="submit_quote">
+        <p hidden><label>Leave this empty: <input name="company-website" tabindex="-1" autocomplete="off"></label></p>
+        <div class="row2">
+          <div class="field">
+            <label for="qfName">Your name</label>
+            <input id="qfName" name="name" type="text" autocomplete="name" required>
+          </div>
+          <div class="field">
+            <label for="qfRef">Order reference</label>
+            <input id="qfRef" name="order_ref" type="text" placeholder="HYD-XXXX" required>
+          </div>
+        </div>
+        <div class="field">
+          <label for="qfContext">Context <span class="hint-inline">(optional &mdash; e.g. &ldquo;CrossFit athlete&rdquo;)</span></label>
+          <input id="qfContext" name="context" type="text">
+        </div>
+        <div class="field">
+          <label for="qfQuote">Your quote</label>
+          <textarea id="qfQuote" name="quote" required placeholder="How did recovery feel?"></textarea>
+        </div>
+        <div style="display:flex;flex-wrap:wrap;gap:12px;align-items:center">
+          <button type="submit" class="btn btn-solid">Submit for review</button>
+          <span class="hint-inline">We read every one by hand before it goes on the site.</span>
+        </div>
+        <p class="quote-msg" id="quoteMsg" role="status" aria-live="polite"></p>
+      </form>
+    </div>
+  </section>
+
   <!-- ============ ORDER ============ -->
   <section id="order" class="order">
     <div class="wrap rv">
@@ -3000,6 +3146,88 @@ if (!REDUCED){
   pack.addEventListener("keydown", (e) => {
     if (e.key === "Enter" || e.key === " "){ e.preventDefault(); spill(); }
   });
+})();
+
+/* ---------- customer quotes: submit for review, load the approved ones ----------
+   Same endpoint and text/plain-JSON trick as the order form. Submitting
+   doesn't put a quote on the page - it lands as "Pending" in the Quotes
+   tab, and only shows up here once approved by hand from that sheet. */
+function escapeHtml(s){
+  return String(s == null ? "" : s).replace(/[&<>"']/g, (c) => (
+    { "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]
+  ));
+}
+
+(function quoteSubmit(){
+  const toggle = $("#quoteToggle");
+  const form   = $("#quoteForm");
+  if (!toggle || !form) { return; }
+
+  toggle.addEventListener("click", () => {
+    form.hidden = !form.hidden;
+    toggle.setAttribute("aria-expanded", String(!form.hidden));
+    if (!form.hidden) { $("#qfName")?.focus(); }
+  });
+
+  form.addEventListener("submit", async (e) => {
+    e.preventDefault();
+    if (form.querySelector('[name="company-website"]').value) { return; } // honeypot
+
+    const msg = $("#quoteMsg");
+    const required = [["#qfName", "your name"], ["#qfRef", "your order reference"], ["#qfQuote", "a quote"]];
+    const missing = required.filter(([sel]) => !$(sel).value.trim());
+    if (missing.length){
+      msg.className = "quote-msg err";
+      msg.textContent = "Add " + missing.map((m) => m[1]).join(", ") + " first.";
+      $(missing[0][0]).focus();
+      return;
+    }
+
+    const btn = form.querySelector('button[type="submit"]');
+    msg.className = "quote-msg";
+    msg.textContent = "Sending…";
+    if (btn) { btn.disabled = true; }
+
+    try {
+      await fetch(CONFIG.sheetEndpoint, {
+        method: "POST",
+        mode: "no-cors",                      // can't read the response - same as the order form
+        headers: { "Content-Type": "text/plain;charset=utf-8" },
+        body: JSON.stringify(Object.fromEntries(new FormData(form)))
+      });
+      msg.className = "quote-msg";
+      msg.textContent = "Thanks — sent for review. We'll add it once it's approved.";
+      form.reset();
+    } catch (err) {
+      msg.className = "quote-msg err";
+      msg.textContent = "That didn't go through — try again in a moment.";
+    } finally {
+      if (btn) { btn.disabled = false; }
+    }
+  });
+})();
+
+(function loadApprovedQuotes(){
+  const grid = document.querySelector(".quotes-grid");
+  if (!grid) { return; }
+
+  fetch(CONFIG.sheetEndpoint + "?action=quotes")
+    .then((r) => r.json())
+    .then((list) => {
+      if (!Array.isArray(list) || !list.length) { return; } // keep the placeholder cards
+      grid.innerHTML = list.slice(0, 6).map((q) => (
+        '<blockquote class="quote-card">' +
+          '<svg class="quote-mark" viewBox="0 0 28 26" width="30" height="28" fill="currentColor" stroke="none" aria-hidden="true" filter="url(#sketch-sm)">' +
+            '<path d="M4 14 C 4 8, 8 5, 12 5 C 10 7, 9 10, 9 13 C 9 15, 10 16, 12 16 C 12 19, 9 21, 6 21 C 4 21, 4 18, 4 14 Z"/>' +
+            '<path d="M16 14 C 16 8, 20 5, 24 5 C 22 7, 21 10, 21 13 C 21 15, 22 16, 24 16 C 24 19, 21 21, 18 21 C 16 21, 16 18, 16 14 Z"/>' +
+          '</svg>' +
+          "<p>" + escapeHtml(q.quote) + "</p>" +
+          "<cite>— " + escapeHtml(q.name) + (q.context ? ", " + escapeHtml(q.context) : "") + "</cite>" +
+        "</blockquote>"
+      )).join("");
+      $("#quotesPlaceholderFlag")?.remove();
+    })
+    .catch(() => { /* fetch failed or CORS blocked it - placeholder cards stay up, no harm done */ });
 })();
 
 /* ---------- hero stroke paints itself in on first load ---------- */
