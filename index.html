@@ -646,31 +646,37 @@ section{padding-block:clamp(68px,9vw,132px)}
 }
 /* a scrapbook-style collage, not a rigid uniform grid - photos vary in
    size and sit at a slight, hand-placed tilt, like prints pinned to a
-   board, and lift flat and large on hover/focus/click to actually look
-   at */
+   board. Tiles stay modest at rest; each one grows a little as it
+   scrolls past the middle of the screen, and grows more on hover/focus/
+   click, so nothing sits oversized by default. */
 .gallery-grid{
-  display:grid;grid-template-columns:repeat(6,1fr);grid-auto-rows:15vw;
-  gap:14px;margin-top:clamp(28px,4vw,44px);
+  display:grid;grid-template-columns:repeat(6,1fr);grid-auto-rows:9vw;
+  gap:12px;margin-top:clamp(28px,4vw,44px);
 }
-@media (min-width:701px){ .gallery-grid{grid-auto-rows:min(15vw,150px)} }
+@media (min-width:701px){ .gallery-grid{grid-auto-rows:min(9vw,96px)} }
 .gallery-item{
+  --rot:0deg;--sc:1;
   margin:0;position:relative;border-radius:4px;overflow:hidden;cursor:zoom-in;
   border:1px solid var(--rule);background:var(--panel);
-  grid-column:span 3;grid-row:span 3;
-  transition:transform .3s cubic-bezier(.22,.8,.3,1),box-shadow .3s ease;
+  grid-column:span 2;grid-row:span 2;
+  transform:rotate(var(--rot)) scale(var(--sc));
+  transition:transform .4s cubic-bezier(.22,.8,.3,1),box-shadow .3s ease;
+  will-change:transform;
 }
-.gallery-item:nth-child(1){grid-column:span 4;grid-row:span 4;transform:rotate(-1.1deg)}
-.gallery-item:nth-child(2){grid-column:span 2;grid-row:span 4;transform:rotate(1.6deg)}
-.gallery-item:nth-child(3){grid-column:span 2;grid-row:span 3;transform:rotate(-1.8deg)}
-.gallery-item:nth-child(4){grid-column:span 3;grid-row:span 3;transform:rotate(1.1deg)}
-.gallery-item:nth-child(5){grid-column:span 3;grid-row:span 4;transform:rotate(-.7deg)}
-.gallery-item:nth-child(6){grid-column:span 3;grid-row:span 3;transform:rotate(1.4deg)}
-.gallery-item:nth-child(7){grid-column:span 3;grid-row:span 3;transform:rotate(-1.3deg)}
+.gallery-item:nth-child(1){grid-column:span 3;grid-row:span 3;--rot:-1.1deg}
+.gallery-item:nth-child(2){grid-column:span 2;grid-row:span 2;--rot:1.6deg}
+.gallery-item:nth-child(3){grid-column:span 1;grid-row:span 2;--rot:-1.8deg}
+.gallery-item:nth-child(4){grid-column:span 2;grid-row:span 2;--rot:1.1deg}
+.gallery-item:nth-child(5){grid-column:span 2;grid-row:span 3;--rot:-.7deg}
+.gallery-item:nth-child(6){grid-column:span 2;grid-row:span 2;--rot:1.4deg}
+.gallery-item:nth-child(7){grid-column:span 2;grid-row:span 2;--rot:-1.3deg}
+/* the scroll-driven grow (set as --sc by JS, see galleryScrollGrow) lands
+   here at rest; hovering/focusing adds a further boost on top of whatever
+   --sc currently is, and flattens the tilt */
 .gallery-item:hover,.gallery-item:focus-visible{
-  transform:rotate(0deg) scale(1.08);
+  transform:rotate(0deg) scale(calc(var(--sc) * 1.1));
   z-index:5;box-shadow:var(--shadow-lift);
 }
-.gallery-item.picked{ transform:rotate(0deg) scale(1.08); z-index:5; box-shadow:var(--shadow-lift); }
 .gallery-item:focus-visible{outline:2px solid var(--teal);outline-offset:3px}
 .gallery-item img{
   width:100%;height:100%;object-fit:cover;display:block;
@@ -685,13 +691,13 @@ section{padding-block:clamp(68px,9vw,132px)}
   font-size:.64rem;letter-spacing:.08em;text-transform:uppercase;font-weight:500;
 }
 @media (max-width:700px){
-  .gallery-grid{grid-template-columns:repeat(2,1fr);grid-auto-rows:44vw}
-  .gallery-item{grid-column:span 1 !important;grid-row:span 1 !important;transform:none !important}
-  .gallery-item:hover,.gallery-item:focus-visible{transform:scale(1.04) !important}
+  .gallery-grid{grid-template-columns:repeat(2,1fr);grid-auto-rows:40vw}
+  .gallery-item{grid-column:span 1 !important;grid-row:span 1 !important;--rot:0deg}
+  .gallery-item:hover,.gallery-item:focus-visible{transform:scale(calc(var(--sc) * 1.05))}
 }
 @media (prefers-reduced-motion:reduce){
-  .gallery-item{transition:box-shadow .2s ease}
-  .gallery-item:hover,.gallery-item:focus-visible,.gallery-item.picked{transform:none}
+  .gallery-item{transform:none !important;transition:box-shadow .2s ease}
+  .gallery-item:hover,.gallery-item:focus-visible{transform:none !important}
   .gallery-item img,.gallery-item:hover img,.gallery-item:focus-visible img{transition:none;transform:none}
 }
 
@@ -2906,6 +2912,31 @@ const REDUCED = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
   document.addEventListener("keydown", (e) => {
     if (e.key === "Escape" && box.classList.contains("open")) { hide(); }
   });
+})();
+
+/* ---------- gallery scroll-grow: tiles swell a little as they pass the
+   middle of the screen, on top of whatever hover/focus adds ---------- */
+(function galleryScrollGrow(){
+  if (REDUCED) { return; }
+  const items = document.querySelectorAll(".gallery-item");
+  if (!items.length) { return; }
+  let ticking = false;
+  function update(){
+    const vCenter = innerHeight / 2;
+    items.forEach((item) => {
+      const r = item.getBoundingClientRect();
+      const reach = vCenter + r.height / 2;
+      const dist = Math.abs((r.top + r.height / 2) - vCenter);
+      const t = Math.max(0, 1 - dist / reach); // 1 dead-center, 0 off past the edge
+      item.style.setProperty("--sc", (1 + t * 0.09).toFixed(3));
+    });
+    ticking = false;
+  }
+  update();
+  addEventListener("scroll", () => {
+    if (!ticking) { ticking = true; requestAnimationFrame(update); }
+  }, { passive: true });
+  addEventListener("resize", update);
 })();
 
 function confetti(){
