@@ -513,7 +513,7 @@ section{padding-block:clamp(68px,9vw,132px)}
 .btn-ghost{border-color:var(--rule);color:var(--ink);background:transparent}
 .btn-ghost:hover{border-color:var(--teal);color:var(--teal-ink);transform:translateY(-2px)}
 .btn:focus-visible,a:focus-visible,button:focus-visible,input:focus-visible,select:focus-visible,textarea:focus-visible,
-[role="button"]:focus-visible{
+[role="button"]:focus-visible,.nf-row[data-nutrient]:focus-visible{
   outline:2px solid var(--teal);outline-offset:3px;
 }
 
@@ -665,7 +665,9 @@ section{padding-block:clamp(68px,9vw,132px)}
 .nf hr{border:none;border-top:1px solid var(--rule);margin:8px 0 6px}
 .nf .thick{border-top:5px solid var(--ink);margin:8px 0 6px}
 .nf .med{border-top:3px solid var(--ink);margin:6px 0}
-.nf-row{display:flex;justify-content:space-between;gap:10px;padding:3px 0;border-top:1px solid var(--rule)}
+.nf-row{display:flex;justify-content:space-between;gap:10px;padding:3px 0;border-top:1px solid var(--rule);transition:background .2s,box-shadow .2s}
+.nf-row[data-nutrient]{cursor:pointer;margin:0 -6px;padding-inline:6px;border-radius:3px}
+.nf-row[data-nutrient]:hover,.nf-row[data-nutrient].nn-active{background:var(--panel);box-shadow:inset 2px 0 0 var(--pink-ink)}
 .nf-row.plain{border-top:none}
 .nf-row b{font-weight:600}
 .nf-row .in1{padding-left:14px;font-weight:400;color:var(--ink-soft)}
@@ -693,7 +695,15 @@ section{padding-block:clamp(68px,9vw,132px)}
   font-family:"Newsreader",Georgia,serif;font-style:italic;font-size:1rem;
   color:var(--ink-soft);line-height:1.56;max-width:42ch;margin-top:2px;
 }
-.nutrient-note{display:flex;gap:14px;align-items:flex-start;padding-top:14px;border-top:1px solid var(--rule)}
+.nutrient-note{
+  display:flex;gap:14px;align-items:flex-start;padding-top:14px;border-top:1px solid var(--rule);
+  margin:0 -8px;padding-inline:8px;border-radius:4px;
+  opacity:0;transform:translateY(14px);
+  transition:opacity .6s ease,transform .6s cubic-bezier(.2,.7,.2,1),background .25s,box-shadow .25s;
+}
+.nutrient-note.in{opacity:1;transform:none}
+.nutrient-note.nn-active{background:var(--panel);box-shadow:inset 2px 0 0 var(--pink-ink)}
+@media (prefers-reduced-motion:reduce){ .nutrient-note{opacity:1;transform:none;transition:background .25s,box-shadow .25s} }
 .nutrient-notes .nutrient-note:first-of-type{border-top:none;padding-top:0}
 .nn-icon{
   flex:none;width:30px;height:30px;color:var(--pink-ink);
@@ -1726,16 +1736,16 @@ section{padding-block:clamp(68px,9vw,132px)}
             <div class="med"></div>
             <p class="nf-dv">% Daily Value*</p>
             <div class="nf-row"><b>Total Fat 0g</b><b>0%</b></div>
-            <div class="nf-row"><b>Sodium 230mg</b><b>10%</b></div>
+            <div class="nf-row" data-nutrient="sodium" tabindex="0"><b>Sodium 230mg</b><b>10%</b></div>
             <div class="nf-row"><b>Total Carbohydrate 7g</b><b>3%</b></div>
             <div class="nf-row"><span class="in1">Total Sugars 2g</span><span></span></div>
             <div class="nf-row"><span class="in2">Includes 2g Added Sugars</span><b>4%</b></div>
             <div class="nf-row"><b>Protein 0g</b><span></span></div>
             <div class="med"></div>
-            <div class="nf-row plain"><span>Calcium 20mg</span><span>2%</span></div>
-            <div class="nf-row"><span>Potassium 400mg</span><span>8%</span></div>
-            <div class="nf-row"><span>Vitamin C 9mg</span><span>10%</span></div>
-            <div class="nf-row"><span>Magnesium 15mg</span><span>4%</span></div>
+            <div class="nf-row plain" data-nutrient="calcium" tabindex="0"><span>Calcium 20mg</span><span>2%</span></div>
+            <div class="nf-row" data-nutrient="potassium" tabindex="0"><span>Potassium 400mg</span><span>8%</span></div>
+            <div class="nf-row" data-nutrient="vitaminc" tabindex="0"><span>Vitamin C 9mg</span><span>10%</span></div>
+            <div class="nf-row" data-nutrient="magnesium" tabindex="0"><span>Magnesium 15mg</span><span>4%</span></div>
             <p class="nf-foot">Not a significant source of saturated fat, trans fat, cholesterol, dietary fiber, vitamin D and iron.</p>
             <p class="nf-foot" style="border-top:none;padding-top:2px">* The % Daily Value (DV) tells you how much a nutrient in a serving of food contributes to a daily diet. 2,000 calories a day is used for general nutrition advice.</p>
           </div>
@@ -1745,9 +1755,9 @@ section{padding-block:clamp(68px,9vw,132px)}
 
         <div class="nutrient-notes">
           <span class="tag" style="align-self:flex-start">Worth knowing</span>
-          <p class="nn-lede">What each mineral and vitamin on that label actually does &mdash; and exactly where it comes from in the mix.</p>
+          <p class="nn-lede">What each mineral, vitamin and plant compound in the mix actually does &mdash; hover a line on the label, or just keep scrolling.</p>
 
-          <div class="nutrient-note">
+          <div class="nutrient-note" data-nutrient="sodium">
             <span class="nn-icon" aria-hidden="true">
               <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" filter="url(#sketch-sm)">
                 <path d="M13 3 L6 14 H11 L9 21 L18 9 H12 Z"/>
@@ -1760,7 +1770,7 @@ section{padding-block:clamp(68px,9vw,132px)}
             </div>
           </div>
 
-          <div class="nutrient-note">
+          <div class="nutrient-note" data-nutrient="potassium">
             <span class="nn-icon" aria-hidden="true">
               <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" filter="url(#sketch-sm)">
                 <path d="M12 3 C 12 3, 5 12, 5 17 A 7 7 0 0 0 19 17 C 19 12, 12 3, 12 3 Z"/>
@@ -1773,7 +1783,7 @@ section{padding-block:clamp(68px,9vw,132px)}
             </div>
           </div>
 
-          <div class="nutrient-note">
+          <div class="nutrient-note" data-nutrient="magnesium">
             <span class="nn-icon" aria-hidden="true">
               <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" filter="url(#sketch-sm)">
                 <path d="M12 4 C 17 4, 19 9, 19 13 C 19 18, 16 21, 12 21 C 8 21, 5 18, 5 13 C 5 9, 7 4, 12 4 Z"/>
@@ -1787,7 +1797,7 @@ section{padding-block:clamp(68px,9vw,132px)}
             </div>
           </div>
 
-          <div class="nutrient-note">
+          <div class="nutrient-note" data-nutrient="vitaminc">
             <span class="nn-icon" aria-hidden="true">
               <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" filter="url(#sketch-sm)">
                 <circle cx="12" cy="12" r="9"/>
@@ -1801,7 +1811,7 @@ section{padding-block:clamp(68px,9vw,132px)}
             </div>
           </div>
 
-          <div class="nutrient-note">
+          <div class="nutrient-note" data-nutrient="calcium">
             <span class="nn-icon" aria-hidden="true">
               <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" filter="url(#sketch-sm)">
                 <path d="M12 2 L20 6 V12 C20 17 16.5 20.5 12 22 C7.5 20.5 4 17 4 12 V6 Z"/>
@@ -1811,6 +1821,22 @@ section{padding-block:clamp(68px,9vw,132px)}
               <h4>Calcium &middot; 20mg</h4>
               <p><b>What &amp; why</b>Best known for bones, but it's also involved in muscle contraction and nerve signalling.</p>
               <p class="nn-source"><b>In Hydraco</b>Trace amounts from the coconut water and fruit powders &mdash; not a significant source, just naturally present.</p>
+            </div>
+          </div>
+
+          <div class="nutrient-note">
+            <span class="nn-icon" aria-hidden="true">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" filter="url(#sketch-sm)">
+                <circle cx="8" cy="15" r="4"/>
+                <circle cx="16" cy="15" r="4"/>
+                <path d="M8 11 C 8 7, 10 5, 12 3"/>
+                <path d="M16 11 C 16 7, 14 5, 12 3"/>
+              </svg>
+            </span>
+            <div class="nn-body">
+              <h4>Polyphenols &amp; antioxidants</h4>
+              <p><b>What &amp; why</b>The plant compounds behind tart cherry and pomegranate's antioxidant power &mdash; they help the body manage the oxidative stress hard training produces, which research links to less muscle soreness afterward.</p>
+              <p class="nn-source"><b>In Hydraco</b>From tart cherry powder and pomegranate extract powder &mdash; the full research behind them is in the formula section above.</p>
             </div>
           </div>
         </div>
@@ -2986,6 +3012,45 @@ const io = new IntersectionObserver((entries) => {
   entries.forEach(en => { if (en.isIntersecting){ en.target.classList.add("in"); io.unobserve(en.target); } });
 }, { rootMargin: "0px 0px -12% 0px" });
 document.querySelectorAll(".rv").forEach(el => io.observe(el));
+
+/* ---------- nutrient notes: reveal one at a time, not all at once ----------
+   Scrolling the panel into view staggers each note in with a short delay
+   per item. Hovering a line on the nutrition label reveals (and
+   highlights) its matching note immediately, ahead of the stagger - and
+   the reverse works too, hovering a note highlights its label line. */
+(function nutrientNotes(){
+  const notes = Array.from(document.querySelectorAll(".nutrient-note"));
+  if (!notes.length) { return; }
+
+  const notesIO = new IntersectionObserver((entries) => {
+    entries.forEach((en) => {
+      if (!en.isIntersecting) { return; }
+      notes.forEach((note, i) => {
+        setTimeout(() => note.classList.add("in"), i * 220);
+      });
+      notesIO.disconnect();
+    });
+  }, { threshold: 0.2 });
+  notesIO.observe(notes[0].closest(".nutrient-notes") || notes[0]);
+
+  const byNutrient = (key) => document.querySelector('[data-nutrient="' + key + '"].nutrient-note');
+  document.querySelectorAll(".nf-row[data-nutrient]").forEach((row) => {
+    const note = byNutrient(row.dataset.nutrient);
+    if (!note) { return; }
+    row.addEventListener("mouseenter", () => { note.classList.add("in", "nn-active"); row.classList.add("nn-active"); });
+    row.addEventListener("mouseleave", () => { note.classList.remove("nn-active"); row.classList.remove("nn-active"); });
+    row.addEventListener("focus", () => note.classList.add("in", "nn-active"));
+    row.addEventListener("blur",  () => note.classList.remove("nn-active"));
+  });
+  notes.forEach((note) => {
+    const key = note.dataset.nutrient;
+    if (!key) { return; }
+    const row = document.querySelector('.nf-row[data-nutrient="' + key + '"]');
+    if (!row) { return; }
+    note.addEventListener("mouseenter", () => { note.classList.add("nn-active"); row.classList.add("nn-active"); });
+    note.addEventListener("mouseleave", () => { note.classList.remove("nn-active"); row.classList.remove("nn-active"); });
+  });
+})();
 
 /* ---------- ingredient bars fill in once scrolled into view ---------- */
 const barIO = new IntersectionObserver((entries) => {
