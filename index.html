@@ -286,6 +286,22 @@ section{padding-block:clamp(68px,9vw,132px)}
 }
 .doodle-spark{position:absolute;pointer-events:none;color:var(--pink-ink)}
 @media (max-width:520px){ .doodle-spark{display:none} }
+
+/* ---------- doodles that pop up on hover/click ----------
+   A fixed full-viewport layer, never intercepting clicks, that spawns a
+   small hand-sketched mark near whatever you just hovered or tapped. */
+.doodle-layer{position:fixed;inset:0;pointer-events:none;z-index:85;overflow:hidden}
+.doodle-pop{
+  position:absolute;color:var(--pink-ink);pointer-events:none;
+  animation:doodlePop .9s cubic-bezier(.22,.8,.32,1) forwards;
+}
+@keyframes doodlePop{
+  0%{opacity:0;transform:scale(.35) rotate(var(--r0,0deg))}
+  18%{opacity:1;transform:scale(1.08) rotate(var(--r0,0deg))}
+  32%{transform:scale(1) rotate(var(--r0,0deg))}
+  100%{opacity:0;transform:scale(.9) translateY(-16px) rotate(var(--r1,10deg))}
+}
+@media (prefers-reduced-motion:reduce){ .doodle-layer{display:none} }
 @media (prefers-reduced-motion:reduce){ .doodle-arrow,.doodle-underline .doodle-svg{transition:none} }
 .hero-buybox-opts{display:flex;gap:8px;flex-wrap:wrap}
 .hero-pack-opt{
@@ -1987,6 +2003,78 @@ $("#paidBtn").addEventListener("click", () => {
 
 $("#payLater").addEventListener("click", closeModal);
 $("#doneClose").addEventListener("click", closeModal);
+
+/* ---------- doodles that pop up as you hover and click ----------
+   A small hand-sketched mark appears near whatever interactive thing you
+   just touched - a button, a pack card, an accordion row. Never on form
+   fields (typing your address shouldn't trigger a sparkle), never more
+   than one per fresh hover into an element, capped so it can't pile up. */
+if (!REDUCED){
+  const DOODLE_TARGETS =
+    'a.btn, button, .pack-opt, .hero-pack-opt, .nav-links a, .theme-toggle, ' +
+    '#qMinus, #qPlus, .seg-btn, .ingx-row summary, .faq summary, ' +
+    '.beat, .benefit, .bar-row, #copyBtn';
+
+  const DOODLE_PATHS = [
+    'M12 2 L13.4 9.6 L21 12 L13.4 14.4 L12 22 L10.6 14.4 L3 12 L10.6 9.6 Z',           // sparkle
+    'M12 20 C 3 13, 1 6, 7 3 C 11 1, 12 5, 12 7 C 12 5, 14 1, 18 3 C 24 6, 22 13, 12 20 Z', // heart
+    'M12 20 C 4 20, 2 11, 9 6 C 14 3, 20 5, 20 11 C 20 16, 13 17, 12 12',              // swirl
+    'M6 13 C 4 6, 12 2, 18 4 C 23 6, 22 14, 16 16 C 9 18, 3 15, 6 10',                 // loop
+    'M3 14 C 8 8, 12 18, 17 10 C 19 7, 21 8, 21 10',                                   // scribble tick
+    'M12 3 L12 21 M4 8 L20 16 M20 8 L4 16',                                            // asterisk
+  ];
+
+  const doodleLayer = document.createElement('div');
+  doodleLayer.className = 'doodle-layer';
+  doodleLayer.setAttribute('aria-hidden', 'true');
+  document.body.appendChild(doodleLayer);
+
+  const MAX_DOODLES = 14;
+  function spawnDoodle(x, y){
+    while (doodleLayer.childElementCount >= MAX_DOODLES){
+      doodleLayer.firstElementChild.remove();
+    }
+    const d = DOODLE_PATHS[Math.floor(Math.random() * DOODLE_PATHS.length)];
+    const size = 16 + Math.random() * 10;
+    const r0 = (Math.random() * 26 - 13).toFixed(1);
+    const r1 = (parseFloat(r0) + (Math.random() * 22 - 11)).toFixed(1);
+
+    const wrap = document.createElement('div');
+    wrap.className = 'doodle-pop';
+    wrap.style.left = (x - size / 2) + 'px';
+    wrap.style.top  = (y - size / 2) + 'px';
+    wrap.style.setProperty('--r0', r0 + 'deg');
+    wrap.style.setProperty('--r1', r1 + 'deg');
+    wrap.innerHTML =
+      '<svg width="' + size + '" height="' + size + '" viewBox="0 0 24 24" ' +
+      'fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" ' +
+      'stroke-linejoin="round" filter="url(#sketch-sm)"><path d="' + d + '"/></svg>';
+    wrap.addEventListener('animationend', () => wrap.remove());
+    doodleLayer.appendChild(wrap);
+  }
+
+  // hover: one doodle per fresh entry into a target, not per pixel of movement
+  let hoverTarget = null;
+  document.addEventListener('pointerover', (e) => {
+    const el = e.target.closest(DOODLE_TARGETS);
+    if (!el || el === hoverTarget) { return; }
+    hoverTarget = el;
+    const r = el.getBoundingClientRect();
+    spawnDoodle(r.left + r.width * (0.2 + Math.random() * 0.6),
+                r.top + r.height * (0.15 + Math.random() * 0.4));
+  }, { passive: true });
+  document.addEventListener('pointerout', (e) => {
+    if (hoverTarget && e.target.closest(DOODLE_TARGETS) === hoverTarget &&
+        !hoverTarget.contains(e.relatedTarget)) {
+      hoverTarget = null;
+    }
+  }, { passive: true });
+
+  // click: a doodle right at the tap/click point
+  document.addEventListener('click', (e) => {
+    if (e.target.closest(DOODLE_TARGETS)) { spawnDoodle(e.clientX, e.clientY); }
+  }, { passive: true });
+}
 
 /* ---------- hero stroke paints itself in on first load ---------- */
 if (!REDUCED){
