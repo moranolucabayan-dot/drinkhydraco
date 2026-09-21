@@ -338,17 +338,16 @@ section{padding-block:clamp(68px,9vw,132px)}
    clip the aluminium background to its rounded corners), which would cut
    the powder off right at the pack's own edge instead of letting it fall
    past it onto the "table" below */
-.powder-layer{position:absolute;inset:0;pointer-events:none;overflow:visible;z-index:3}
-.powder-bit{
-  position:absolute;border-radius:50%;background:#a3187a;
-  animation:powderSpill 1.25s cubic-bezier(.4,0,.75,1) forwards;
+/* canvas, not DOM nodes - at a few hundred grains per spill, a real
+   per-frame particle sim on <canvas> costs far less than that many
+   animating elements would */
+.powder-canvas{
+  position:absolute;left:50%;top:-52px;
+  width:min(620px,170vw);height:640px;
+  transform:translateX(-50%);
+  pointer-events:none;z-index:3;
 }
-@keyframes powderSpill{
-  0%{opacity:0;transform:translate(0,0) scale(.5)}
-  10%{opacity:1;transform:translate(calc(var(--dx) * .12),calc(var(--dy) * .06)) scale(1)}
-  100%{opacity:0;transform:translate(var(--dx),var(--dy)) scale(.6)}
-}
-@media (prefers-reduced-motion:reduce){ .powder-bit{display:none} .pack.torn .pack-tear{transition:none} }
+@media (prefers-reduced-motion:reduce){ .pack.torn .pack-tear{transition:none} }
 @media (prefers-reduced-motion:reduce){ .doodle-arrow,.doodle-underline .doodle-svg{transition:none} }
 .hero-buybox-opts{display:flex;gap:8px;flex-wrap:wrap}
 .hero-pack-opt{
@@ -1093,6 +1092,7 @@ section{padding-block:clamp(68px,9vw,132px)}
     </div>
 
     <div class="pack-stage">
+      <canvas class="powder-canvas" id="powderCanvas" aria-hidden="true"></canvas>
       <svg class="doodle-spark" viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" filter="url(#sketch-sm)" style="top:6%;right:-15%">
         <path d="M12 2 L13.4 9.6 L21 12 L13.4 14.4 L12 22 L10.6 14.4 L3 12 L10.6 9.6 Z"/>
       </svg>
@@ -2134,47 +2134,88 @@ if (!REDUCED){
 
 /* ---------- tear it open, spill the powder ----------
    First click (or Enter/Space): the top 5% peels back and stays that way
-   - real packs don't reseal. Every click after that spills more powder,
-   falling with real gravity from the tear point down past the pack, like
-   it's landing on a table, not bursting outward like confetti. */
+   - real packs don't reseal. Every click spills a puff of fine powder -
+   460 grains, launched upward in a wide fan and pulled back down by real
+   gravity + air drag, on <canvas> rather than that many DOM nodes. */
 (function packPowder(){
-  const pack  = document.querySelector(".pack");
-  const stage = document.querySelector(".pack-stage");
-  const hint  = document.getElementById("packHint");
-  if (!pack || !stage) { return; }
+  const pack   = document.querySelector(".pack");
+  const stage  = document.querySelector(".pack-stage");
+  const hint   = document.getElementById("packHint");
+  const canvas = document.getElementById("powderCanvas");
+  if (!pack || !stage || !canvas) { return; }
+
+  const ctx = canvas.getContext("2d");
+  let dpr = Math.min(window.devicePixelRatio || 1, 2.5);
+  let W = 0, H = 0;
+
+  function sizeCanvas(){
+    const r = canvas.getBoundingClientRect();
+    W = canvas.width  = Math.max(1, Math.round(r.width  * dpr));
+    H = canvas.height = Math.max(1, Math.round(r.height * dpr));
+  }
+  sizeCanvas();
+  window.addEventListener("resize", sizeCanvas);
+
+  // a few close tonal variants, not one flat colour - real powder isn't
+  // uniform, and a couple of paler/darker grains read as light catching it
+  const COLORS = ["#a3187a", "#b8258c", "#8c1268", "#cf5aa8", "#6e0e50"];
+  const GRAVITY = 0.16 * dpr;
+  const DRAG    = 0.982;
+
+  let particles = [];
+  let running   = false;
+
+  function frame(){
+    ctx.clearRect(0, 0, W, H);
+    let alive = false;
+    for (const p of particles){
+      if (p.life >= p.maxLife) { continue; }
+      alive = true;
+      p.vy += GRAVITY;
+      p.vx *= DRAG; p.vy *= DRAG;
+      p.x  += p.vx; p.y += p.vy;
+      p.life++;
+
+      const fadeIn  = p.life < 5 ? p.life / 5 : 1;
+      const fadeOut = p.life > p.maxLife - 20 ? Math.max(0, (p.maxLife - p.life) / 20) : 1;
+      ctx.globalAlpha = fadeIn * fadeOut * p.a;
+      ctx.fillStyle = p.c;
+      ctx.beginPath();
+      ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2);
+      ctx.fill();
+    }
+    particles = particles.filter((p) => p.life < p.maxLife);
+    if (alive) {
+      requestAnimationFrame(frame);
+    } else {
+      running = false;
+      ctx.clearRect(0, 0, W, H);
+    }
+  }
 
   function spill(){
     hint?.classList.add("hidden");
     pack.classList.add("torn");
-    if (REDUCED) { return; }
+    if (REDUCED || !W || !H) { return; }
 
-    let layer = stage.querySelector(".powder-layer");
-    if (!layer){
-      layer = document.createElement("div");
-      layer.className = "powder-layer";
-      layer.setAttribute("aria-hidden", "true");
-      stage.appendChild(layer);
+    const ox = W * 0.5, oy = H * 0.42; // roughly where the canvas sits over the tear
+    for (let i = 0; i < 460; i++){
+      const speed = (1.1 + Math.random() * 3.4) * dpr;
+      // wide upward fan - mostly straight up, some fly off to either side
+      const angle = (-90 + (Math.random() * 150 - 75)) * Math.PI / 180;
+      particles.push({
+        x: ox + (Math.random() - 0.5) * 8 * dpr,
+        y: oy,
+        vx: Math.cos(angle) * speed,
+        vy: Math.sin(angle) * speed,
+        r: (0.5 + Math.random() * 1.5) * dpr,
+        c: COLORS[Math.floor(Math.random() * COLORS.length)],
+        a: 0.6 + Math.random() * 0.35,
+        life: 0,
+        maxLife: 70 + Math.random() * 60,
+      });
     }
-
-    for (let i = 0; i < 46; i++){
-      const bit = document.createElement("span");
-      bit.className = "powder-bit";
-      const size = 1.4 + Math.random() * 2.8;
-      // wide splatter - some grains land close, some fly clear across the
-      // stage, falling under gravity the whole way, not radiating evenly
-      const dx = (Math.random() - 0.5) * 340;
-      const dy = 160 + Math.random() * 480;
-      bit.style.width  = size + "px";
-      bit.style.height = size + "px";
-      bit.style.left   = (30 + Math.random() * 34) + "%";
-      bit.style.top    = "6%";
-      bit.style.setProperty("--dx", dx.toFixed(1) + "px");
-      bit.style.setProperty("--dy", dy.toFixed(1) + "px");
-      bit.style.opacity = (0.55 + Math.random() * 0.4).toFixed(2);
-      bit.style.animationDelay = Math.round(Math.random() * 180) + "ms";
-      bit.addEventListener("animationend", () => bit.remove());
-      layer.appendChild(bit);
-    }
+    if (!running){ running = true; requestAnimationFrame(frame); }
   }
 
   pack.addEventListener("click", spill);
