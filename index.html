@@ -157,7 +157,7 @@ section{padding-block:clamp(68px,9vw,132px)}
 .brand{display:flex;align-items:center;gap:11px;text-decoration:none;color:var(--ink)}
 .mark{
   width:19px;height:29px;flex:none;
-  background-color:#000;
+  background-color:#000;--mark-base:#000;
   -webkit-mask-image:var(--logo);mask-image:var(--logo);
   -webkit-mask-size:contain;mask-size:contain;
   -webkit-mask-repeat:no-repeat;mask-repeat:no-repeat;
@@ -348,6 +348,31 @@ section{padding-block:clamp(68px,9vw,132px)}
   pointer-events:none;z-index:110;
 }
 @media (prefers-reduced-motion:reduce){ .pack.torn .pack-tear{transition:none} }
+
+/* ---------- the payoff: as the powder merges in, both logo marks swell
+   and glow gold for a few seconds, then settle back down - the pack's
+   own mark AND the real brand mark up in the nav, top-left of the page,
+   so the moment isn't confined to the hero, it reaches the whole brand */
+@keyframes markMergeReward{
+  0%   { transform:scale(1);   filter:none; }
+  50%  { transform:scale(1.9); filter:drop-shadow(0 0 12px rgba(214,168,63,.9)); }
+  80%  { transform:scale(1.9); filter:drop-shadow(0 0 14px rgba(214,168,63,1)); }
+  100% { transform:scale(1);   filter:none; }
+}
+@keyframes markMergeRewardColor{
+  0%,100% { background-color: var(--mark-base, #0e1414); }
+  50%,80% { background-color: #d6a83f; }
+}
+.mark-reward{
+  animation:markMergeReward 8s cubic-bezier(.3,.7,.3,1) 1,
+            markMergeRewardColor 8s cubic-bezier(.3,.7,.3,1) 1;
+}
+@keyframes wordmarkGoldGlow{
+  0%,100% { color:var(--ink); }
+  50%,80% { color:#d6a83f; }
+}
+.word-reward{ animation:wordmarkGoldGlow 8s cubic-bezier(.3,.7,.3,1) 1; }
+@media (prefers-reduced-motion:reduce){ .mark-reward,.word-reward{animation:none} }
 @media (prefers-reduced-motion:reduce){ .doodle-arrow,.doodle-underline .doodle-svg{transition:none} }
 .hero-buybox-opts{display:flex;gap:8px;flex-wrap:wrap}
 .hero-pack-opt{
@@ -2331,6 +2356,29 @@ if (!REDUCED){
       });
     }
     if (!running){ running = true; requestAnimationFrame(frame); }
+
+    // the payoff: both logo marks swell and glow gold as the grains merge
+    // in, roughly bracketing the whole 5000-13000ms window particles can
+    // land in (holdAgeMs is randomised per grain, so there's no single
+    // instant "merge finishes" - this just needs to overlap it, not sync
+    // to it frame-for-frame)
+    if (!REDUCED){
+      const navMark = document.querySelector(".nav .mark");
+      const navWord = document.querySelector(".nav .wordmark");
+      setTimeout(() => {
+        [markEl, navMark].forEach((el) => {
+          if (!el) { return; }
+          el.classList.remove("mark-reward");
+          void el.offsetWidth; // restart the animation even if it's still running
+          el.classList.add("mark-reward");
+        });
+        if (navWord){
+          navWord.classList.remove("word-reward");
+          void navWord.offsetWidth;
+          navWord.classList.add("word-reward");
+        }
+      }, 5000);
+    }
   }
 
   function spill(){
