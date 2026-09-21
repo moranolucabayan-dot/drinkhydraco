@@ -414,8 +414,37 @@ section{padding-block:clamp(68px,9vw,132px)}
   20%  { opacity:1; transform:translate(calc(-50% + var(--sx) * .25),calc(-50% + var(--sy) * .25)) scale(1) rotate(25deg); }
   100% { opacity:0; transform:translate(calc(-50% + var(--sx)),calc(-50% + var(--sy))) scale(.4) rotate(80deg); }
 }
+/* supernova shockwave - one or two rings expanding fast from the mark
+   and fading, alongside the sparks */
+.flare-ring{
+  position:fixed;left:0;top:0;z-index:114;pointer-events:none;
+  border-radius:50%;border:2px solid #ffbf00;
+  transform:translate(-50%,-50%) scale(0);
+  animation:flareRingExpand 1s cubic-bezier(.15,.7,.25,1) forwards;
+}
+@keyframes flareRingExpand{
+  0%   { opacity:.9; transform:translate(-50%,-50%) scale(0); }
+  100% { opacity:0;  transform:translate(-50%,-50%) scale(1); }
+}
+
+/* shooting-star streaks - the supernova seeding new stars out across the
+   galaxy background, not just sparks near the mark */
+.nova-streak{
+  position:fixed;left:0;top:0;z-index:113;pointer-events:none;
+  height:2px;border-radius:2px;
+  background:linear-gradient(90deg, #fff8dd 0%, #ffbf00 45%, transparent 100%);
+  transform-origin:left center;
+  animation:novaStreakFly 1.4s cubic-bezier(.16,.7,.22,1) forwards;
+}
+@keyframes novaStreakFly{
+  0%   { opacity:0; transform:rotate(var(--ang)) scaleX(0); }
+  22%  { opacity:1; transform:rotate(var(--ang)) scaleX(1); }
+  100% { opacity:0; transform:rotate(var(--ang)) scaleX(1); }
+}
+
 @media (prefers-reduced-motion:reduce){
-  .mark-reward,.word-reward,.mark-sunflare,.word-sunflare,.flare-spark{animation:none}
+  .mark-reward,.word-reward,.mark-sunflare,.word-sunflare,
+  .flare-spark,.flare-ring,.nova-streak{animation:none}
 }
 @media (prefers-reduced-motion:reduce){ .doodle-arrow,.doodle-underline .doodle-svg{transition:none} }
 .hero-buybox-opts{display:flex;gap:8px;flex-wrap:wrap}
@@ -2652,15 +2681,39 @@ if (!REDUCED){
     }
   }
 
+  // supernova: a shockwave ring or two, a wide burst of sparks across a
+  // white-hot-to-ember colour range, and long streaks that shoot out
+  // across the rest of the page - seeding new stars into the galaxy
+  // background rather than a burst confined to the mark itself
   function starSparkBurst(el){
-    const r = el.getBoundingClientRect();
+    const r  = el.getBoundingClientRect();
     const cx = r.left + r.width / 2, cy = r.top + r.height / 2;
-    for (let i = 0; i < 14; i++){
+    const NOVA_COLORS = ["#fff8dd", "#ffe27a", "#ffbf00", "#ff8a2b", "#e0521a"];
+
+    // shockwave rings
+    [0, 140].forEach((delay, i) => {
+      setTimeout(() => {
+        const ring = document.createElement("div");
+        ring.className = "flare-ring";
+        const size = 60 + i * 40;
+        ring.style.left = cx + "px";
+        ring.style.top  = cy + "px";
+        ring.style.width  = size + "px";
+        ring.style.height = size + "px";
+        ring.addEventListener("animationend", () => ring.remove());
+        document.body.appendChild(ring);
+      }, delay);
+    });
+
+    // the burst of sparks - wider, denser, and across a real stellar
+    // colour range instead of one flat gold
+    for (let i = 0; i < 34; i++){
       const angle = Math.random() * Math.PI * 2;
-      const dist  = 24 + Math.random() * 50;
-      const size  = 10 + Math.random() * 8;
+      const dist  = 30 + Math.random() * 110;
+      const size  = 8 + Math.random() * 11;
       const spark = document.createElement("div");
       spark.className = "flare-spark";
+      spark.style.color = NOVA_COLORS[Math.floor(Math.random() * NOVA_COLORS.length)];
       spark.style.left = cx + "px";
       spark.style.top  = cy + "px";
       spark.style.setProperty("--sx", (Math.cos(angle) * dist).toFixed(1) + "px");
@@ -2670,6 +2723,23 @@ if (!REDUCED){
         '<path d="M12 2 L13.4 9.6 L21 12 L13.4 14.4 L12 22 L10.6 14.4 L3 12 L10.6 9.6 Z"/></svg>';
       spark.addEventListener("animationend", () => spark.remove());
       document.body.appendChild(spark);
+    }
+
+    // shooting-star streaks flying out across the rest of the page - the
+    // galaxy tie-in, not just a burst local to the mark
+    const streakCount = 12;
+    for (let i = 0; i < streakCount; i++){
+      const angleDeg = (360 / streakCount) * i + (Math.random() * 18 - 9);
+      const reach = Math.max(innerWidth, innerHeight) * (0.35 + Math.random() * 0.45);
+      const streak = document.createElement("div");
+      streak.className = "nova-streak";
+      streak.style.left  = cx + "px";
+      streak.style.top   = cy + "px";
+      streak.style.width = reach.toFixed(0) + "px";
+      streak.style.setProperty("--ang", angleDeg.toFixed(1) + "deg");
+      streak.style.animationDelay = Math.round(Math.random() * 90) + "ms";
+      streak.addEventListener("animationend", () => streak.remove());
+      document.body.appendChild(streak);
     }
   }
 
