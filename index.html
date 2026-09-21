@@ -407,25 +407,47 @@ section{padding-block:clamp(68px,9vw,132px)}
 /* gold star sparks, thrown off both marks at the same moment as the flare */
 .flare-spark{
   position:fixed;left:0;top:0;z-index:115;pointer-events:none;color:#ffbf00;
-  animation:flareSparkPop 1.1s cubic-bezier(.2,.8,.3,1) forwards;
+  animation:flareSparkPop .9s cubic-bezier(.15,.85,.3,1) forwards;
 }
 @keyframes flareSparkPop{
   0%   { opacity:0; transform:translate(-50%,-50%) scale(.3) rotate(0deg); }
-  20%  { opacity:1; transform:translate(calc(-50% + var(--sx) * .25),calc(-50% + var(--sy) * .25)) scale(1) rotate(25deg); }
+  10%  { opacity:1; transform:translate(calc(-50% + var(--sx) * .4),calc(-50% + var(--sy) * .4)) scale(1.15) rotate(25deg); }
   100% { opacity:0; transform:translate(calc(-50% + var(--sx)),calc(-50% + var(--sy))) scale(.4) rotate(80deg); }
 }
 /* supernova shockwave - one or two rings expanding fast from the mark
    and fading, alongside the sparks */
 .flare-ring{
   position:fixed;left:0;top:0;z-index:114;pointer-events:none;
-  border-radius:50%;border:2px solid #ffbf00;
+  border-radius:50%;border:3px solid #ffbf00;
   transform:translate(-50%,-50%) scale(0);
-  animation:flareRingExpand 1s cubic-bezier(.15,.7,.25,1) forwards;
+  animation:flareRingExpand .75s cubic-bezier(.1,.75,.2,1) forwards;
 }
 @keyframes flareRingExpand{
-  0%   { opacity:.9; transform:translate(-50%,-50%) scale(0); }
+  0%   { opacity:1;  transform:translate(-50%,-50%) scale(0); }
   100% { opacity:0;  transform:translate(-50%,-50%) scale(1); }
 }
+
+/* the detonation itself - the whole screen goes white, and shakes */
+.nova-flash{
+  position:fixed;inset:0;z-index:116;pointer-events:none;background:#fff;
+  animation:novaFlashPop .55s cubic-bezier(.05,.85,.2,1) forwards;
+}
+@keyframes novaFlashPop{
+  0%   { opacity:1; }
+  55%  { opacity:.85; }
+  100% { opacity:0; }
+}
+@keyframes pageShake{
+  0%   { transform:translate(0,0) rotate(0); }
+  15%  { transform:translate(-7px,4px) rotate(-.35deg); }
+  30%  { transform:translate(6px,-5px) rotate(.35deg); }
+  45%  { transform:translate(-5px,5px) rotate(-.22deg); }
+  60%  { transform:translate(5px,-3px) rotate(.22deg); }
+  78%  { transform:translate(-2px,2px) rotate(0); }
+  100% { transform:translate(0,0) rotate(0); }
+}
+.page-shake{ animation:pageShake .45s cubic-bezier(.36,.07,.19,.97) 1; }
+@media (prefers-reduced-motion:reduce){ .nova-flash,.page-shake{animation:none} }
 
 /* shooting-star streaks - the supernova seeding new stars out across the
    galaxy background, not just sparks near the mark */
@@ -2690,12 +2712,24 @@ if (!REDUCED){
     const cx = r.left + r.width / 2, cy = r.top + r.height / 2;
     const NOVA_COLORS = ["#fff8dd", "#ffe27a", "#ffbf00", "#ff8a2b", "#e0521a"];
 
-    // shockwave rings
-    [0, 140].forEach((delay, i) => {
+    // the detonation: the whole screen flashes white, and shakes
+    const flash = document.createElement("div");
+    flash.className = "nova-flash";
+    flash.addEventListener("animationend", () => flash.remove());
+    document.body.appendChild(flash);
+
+    document.body.classList.remove("page-shake");
+    void document.body.offsetWidth; // restart the shake even on repeat clicks
+    document.body.classList.add("page-shake");
+    setTimeout(() => document.body.classList.remove("page-shake"), 450);
+
+    // shockwave rings - three, faster, the first one big: a real blast
+    // wave rather than a couple of gentle echoes
+    [0, 90, 190].forEach((delay, i) => {
       setTimeout(() => {
         const ring = document.createElement("div");
         ring.className = "flare-ring";
-        const size = 60 + i * 40;
+        const size = 100 + i * 70;
         ring.style.left = cx + "px";
         ring.style.top  = cy + "px";
         ring.style.width  = size + "px";
