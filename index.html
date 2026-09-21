@@ -680,6 +680,46 @@ section{padding-block:clamp(68px,9vw,132px)}
 .nf-foot{font-size:9.5px;line-height:1.41;padding-top:6px;border-top:1px solid var(--rule);color:var(--slate)}
 .nf-note{margin-top:17px;font-size:.74rem;font-style:italic;color:var(--slate);line-height:1.56;max-width:340px}
 
+/* ---------- nutrient notes: the label's own side panel ---------- */
+.nf-wrap{
+  display:flex;flex-wrap:wrap;justify-content:center;
+  gap:clamp(36px,5vw,64px);align-items:flex-start;
+}
+.nutrient-notes{
+  display:flex;flex-direction:column;gap:18px;
+  width:min(420px,100%);padding-top:4px;
+}
+.nn-lede{
+  font-family:"Newsreader",Georgia,serif;font-style:italic;font-size:1rem;
+  color:var(--ink-soft);line-height:1.56;max-width:42ch;margin-top:2px;
+}
+.nutrient-note{display:flex;gap:14px;align-items:flex-start;padding-top:14px;border-top:1px solid var(--rule)}
+.nutrient-notes .nutrient-note:first-of-type{border-top:none;padding-top:0}
+.nn-icon{
+  flex:none;width:30px;height:30px;color:var(--pink-ink);
+  margin-top:2px;
+}
+.nn-icon svg{width:100%;height:100%;display:block}
+.nn-body h4{
+  font-family:"Jost","Futura","Century Gothic",system-ui,sans-serif;
+  font-size:.78rem;letter-spacing:.1em;text-transform:uppercase;font-weight:600;
+  color:var(--ink);margin:0 0 6px;
+}
+.nn-body p{
+  font-family:"Newsreader",Georgia,serif;font-size:.9rem;line-height:1.58;
+  color:var(--ink-soft);margin:0;max-width:38ch;
+}
+.nn-body p + p{margin-top:6px}
+.nn-body p b{
+  font-family:"Jost","Futura","Century Gothic",system-ui,sans-serif;
+  font-size:.62rem;letter-spacing:.14em;text-transform:uppercase;font-weight:600;
+  color:var(--slate);margin-right:.5em;
+}
+.nn-source{font-size:.86rem}
+@media (max-width:520px){
+  .nn-body p,.nn-source{max-width:none}
+}
+
 /* ---------- founder ---------- */
 .founder-grid{display:grid;grid-template-columns:200px 1fr;gap:clamp(28px,5vw,72px);align-items:start}
 @media (max-width:820px){ .founder-grid{grid-template-columns:1fr} }
@@ -1671,7 +1711,7 @@ section{padding-block:clamp(68px,9vw,132px)}
         </div>
       </div>
 
-      <div class="wrap rv" style="display:flex;justify-content:center">
+      <div class="wrap rv nf-wrap">
         <div style="width:min(340px,100%)">
           <div class="nf">
             <p class="nf-title">Nutrition Facts</p>
@@ -1701,6 +1741,78 @@ section{padding-block:clamp(68px,9vw,132px)}
           </div>
           <p class="nf-note">Nutritional values are estimates derived from ingredient-level data and analysis.</p>
           <p class="nf-note"><strong style="color:var(--ink);font-weight:500">Allergens.</strong> Made in a facility that may also process nuts, dairy or soy.</p>
+        </div>
+
+        <div class="nutrient-notes">
+          <span class="tag" style="align-self:flex-start">Worth knowing</span>
+          <p class="nn-lede">What each mineral and vitamin on that label actually does &mdash; and exactly where it comes from in the mix.</p>
+
+          <div class="nutrient-note">
+            <span class="nn-icon" aria-hidden="true">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" filter="url(#sketch-sm)">
+                <path d="M13 3 L6 14 H11 L9 21 L18 9 H12 Z"/>
+              </svg>
+            </span>
+            <div class="nn-body">
+              <h4>Sodium &middot; 230mg</h4>
+              <p><b>What &amp; why</b>The main electrolyte you lose in sweat &mdash; it helps your cells hold onto the water you drink instead of passing it straight through, and keeps nerves and muscles firing correctly.</p>
+              <p class="nn-source"><b>In Hydraco</b>From pink Himalayan salt.</p>
+            </div>
+          </div>
+
+          <div class="nutrient-note">
+            <span class="nn-icon" aria-hidden="true">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" filter="url(#sketch-sm)">
+                <path d="M12 3 C 12 3, 5 12, 5 17 A 7 7 0 0 0 19 17 C 19 12, 12 3, 12 3 Z"/>
+              </svg>
+            </span>
+            <div class="nn-body">
+              <h4>Potassium &middot; 400mg</h4>
+              <p><b>What &amp; why</b>Works alongside sodium to move water into your cells rather than past them, and helps your muscles contract properly.</p>
+              <p class="nn-source"><b>In Hydraco</b>Mainly from coconut water powder, with a little more from apple powder.</p>
+            </div>
+          </div>
+
+          <div class="nutrient-note">
+            <span class="nn-icon" aria-hidden="true">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" filter="url(#sketch-sm)">
+                <path d="M12 4 C 17 4, 19 9, 19 13 C 19 18, 16 21, 12 21 C 8 21, 5 18, 5 13 C 5 9, 7 4, 12 4 Z"/>
+                <path d="M12 6 C 12 6, 12 13, 12 19"/>
+              </svg>
+            </span>
+            <div class="nn-body">
+              <h4>Magnesium &middot; 15mg</h4>
+              <p><b>What &amp; why</b>The mineral your muscles need to relax again after they've worked &mdash; and most people don't get enough of it day to day.</p>
+              <p class="nn-source"><b>In Hydraco</b>A plant-based source: pumpkin seed extract powder.</p>
+            </div>
+          </div>
+
+          <div class="nutrient-note">
+            <span class="nn-icon" aria-hidden="true">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" filter="url(#sketch-sm)">
+                <circle cx="12" cy="12" r="9"/>
+                <path d="M12 3 V21 M3 12 H21 M5.5 5.5 L18.5 18.5 M18.5 5.5 L5.5 18.5"/>
+              </svg>
+            </span>
+            <div class="nn-body">
+              <h4>Vitamin C &middot; 9mg</h4>
+              <p><b>What &amp; why</b>An antioxidant that supports your immune system and helps your body absorb other nutrients.</p>
+              <p class="nn-source"><b>In Hydraco</b>Naturally from lemon juice powder.</p>
+            </div>
+          </div>
+
+          <div class="nutrient-note">
+            <span class="nn-icon" aria-hidden="true">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" filter="url(#sketch-sm)">
+                <path d="M12 2 L20 6 V12 C20 17 16.5 20.5 12 22 C7.5 20.5 4 17 4 12 V6 Z"/>
+              </svg>
+            </span>
+            <div class="nn-body">
+              <h4>Calcium &middot; 20mg</h4>
+              <p><b>What &amp; why</b>Best known for bones, but it's also involved in muscle contraction and nerve signalling.</p>
+              <p class="nn-source"><b>In Hydraco</b>Trace amounts from the coconut water and fruit powders &mdash; not a significant source, just naturally present.</p>
+            </div>
+          </div>
         </div>
       </div>
     </div>
