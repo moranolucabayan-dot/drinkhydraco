@@ -302,6 +302,34 @@ section{padding-block:clamp(68px,9vw,132px)}
   100%{opacity:0;transform:scale(.9) translateY(-16px) rotate(var(--r1,10deg))}
 }
 @media (prefers-reduced-motion:reduce){ .doodle-layer{display:none} }
+
+/* ---------- "click me" hint + powder burst on the hero pack ---------- */
+.pack{cursor:pointer}
+.pack-hint{
+  position:absolute;top:-2px;left:2%;z-index:4;pointer-events:none;
+  display:flex;align-items:center;gap:3px;
+  font-family:"Jost","Futura","Century Gothic",system-ui,sans-serif;
+  font-size:.72rem;letter-spacing:.06em;font-weight:600;font-style:italic;
+  color:var(--pink-ink);transform:rotate(-9deg);
+  animation:hintBob 2.4s ease-in-out infinite;
+  transition:opacity .4s ease,transform .4s ease;
+}
+.pack-hint.hidden{opacity:0;transform:rotate(-9deg) translateY(-6px)}
+@keyframes hintBob{0%,100%{transform:rotate(-9deg) translateY(0)}50%{transform:rotate(-9deg) translateY(-4px)}}
+@media (max-width:520px){ .pack-hint{display:none} }
+@media (prefers-reduced-motion:reduce){ .pack-hint{animation:none} }
+
+.powder-layer{position:absolute;inset:0;pointer-events:none;overflow:visible;z-index:3}
+.powder-bit{
+  position:absolute;border-radius:50%;background:var(--pink);
+  animation:powderBurst .85s cubic-bezier(.15,.7,.3,1) forwards;
+}
+@keyframes powderBurst{
+  0%{opacity:0;transform:translate(0,0) scale(.4)}
+  14%{opacity:1;transform:translate(calc(var(--dx) * .3),calc(var(--dy) * .3)) scale(1)}
+  100%{opacity:0;transform:translate(var(--dx),calc(var(--dy) + 26px)) scale(.5)}
+}
+@media (prefers-reduced-motion:reduce){ .powder-bit{display:none} }
 @media (prefers-reduced-motion:reduce){ .doodle-arrow,.doodle-underline .doodle-svg{transition:none} }
 .hero-buybox-opts{display:flex;gap:8px;flex-wrap:wrap}
 .hero-pack-opt{
@@ -331,7 +359,8 @@ section{padding-block:clamp(68px,9vw,132px)}
 .btn-solid:hover{background:var(--teal-ink);transform:translateY(-2px)}
 .btn-ghost{border-color:var(--rule);color:var(--ink);background:transparent}
 .btn-ghost:hover{border-color:var(--teal);color:var(--teal-ink);transform:translateY(-2px)}
-.btn:focus-visible,a:focus-visible,button:focus-visible,input:focus-visible,select:focus-visible,textarea:focus-visible{
+.btn:focus-visible,a:focus-visible,button:focus-visible,input:focus-visible,select:focus-visible,textarea:focus-visible,
+[role="button"]:focus-visible{
   outline:2px solid var(--teal);outline-offset:3px;
 }
 
@@ -1055,7 +1084,14 @@ section{padding-block:clamp(68px,9vw,132px)}
       <svg class="doodle-spark" viewBox="0 0 40 40" width="30" height="30" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" filter="url(#sketch-sm)" style="bottom:10%;right:-13%">
         <path d="M20 34 C 8 34, 4 22, 12 14 C 18 8, 28 10, 28 18 C 28 24, 20 26, 18 20"/>
       </svg>
-      <div class="pack" role="img" aria-label="Hydraco Restore stick pack, 14.4 grams, post-workout electrolyte recovery mix, a paper label on a matte aluminium pouch">
+      <span class="pack-hint" id="packHint" aria-hidden="true">
+        Click me
+        <svg viewBox="0 0 34 28" width="26" height="21" fill="none" stroke="currentColor" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" filter="url(#sketch-sm)">
+          <path d="M5 3 C 11 9, 7 18, 16 23"/>
+          <path d="M11 20 L16 23 L15 16"/>
+        </svg>
+      </span>
+      <div class="pack" role="button" tabindex="0" aria-label="Hydraco Restore stick pack, 14.4 grams, post-workout electrolyte recovery mix, a paper label on a matte aluminium pouch. Click to see the powder">
         <div class="pack-sticker">
           <span class="pack-name">Hydraco</span>
           <span class="pack-mark" aria-hidden="true"></span>
@@ -2075,6 +2111,51 @@ if (!REDUCED){
     if (e.target.closest(DOODLE_TARGETS)) { spawnDoodle(e.clientX, e.clientY); }
   }, { passive: true });
 }
+
+/* ---------- powder burst when the hero pack is clicked ---------- */
+(function packPowder(){
+  const pack  = document.querySelector(".pack");
+  const stage = document.querySelector(".pack-stage");
+  const hint  = document.getElementById("packHint");
+  if (!pack || !stage) { return; }
+
+  function burst(){
+    hint?.classList.add("hidden");
+    if (REDUCED) { return; }
+
+    let layer = stage.querySelector(".powder-layer");
+    if (!layer){
+      layer = document.createElement("div");
+      layer.className = "powder-layer";
+      layer.setAttribute("aria-hidden", "true");
+      stage.appendChild(layer);
+    }
+
+    for (let i = 0; i < 18; i++){
+      const bit = document.createElement("span");
+      bit.className = "powder-bit";
+      const size  = 3 + Math.random() * 4;
+      // mostly-upward spread, like powder puffing out of the top seal
+      const angle = (-170 + Math.random() * 160) * Math.PI / 180;
+      const dist  = 22 + Math.random() * 48;
+      bit.style.width  = size + "px";
+      bit.style.height = size + "px";
+      bit.style.left   = (44 + Math.random() * 14) + "%";
+      bit.style.top    = "4%";
+      bit.style.setProperty("--dx", (Math.cos(angle) * dist).toFixed(1) + "px");
+      bit.style.setProperty("--dy", (Math.sin(angle) * dist).toFixed(1) + "px");
+      bit.style.opacity = (0.55 + Math.random() * 0.35).toFixed(2);
+      bit.style.animationDelay = Math.round(Math.random() * 80) + "ms";
+      bit.addEventListener("animationend", () => bit.remove());
+      layer.appendChild(bit);
+    }
+  }
+
+  pack.addEventListener("click", burst);
+  pack.addEventListener("keydown", (e) => {
+    if (e.key === "Enter" || e.key === " "){ e.preventDefault(); burst(); }
+  });
+})();
 
 /* ---------- hero stroke paints itself in on first load ---------- */
 if (!REDUCED){
