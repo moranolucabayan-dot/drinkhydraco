@@ -341,11 +341,11 @@ section{padding-block:clamp(68px,9vw,132px)}
 /* canvas, not DOM nodes - at a few hundred grains per spill, a real
    per-frame particle sim on <canvas> costs far less than that many
    animating elements would */
+/* fixed to the viewport, not boxed to .pack-stage - it should be able to
+   drift out over the rest of the page, the same way #confetti does */
 .powder-canvas{
-  position:absolute;left:50%;top:-52px;
-  width:min(620px,170vw);height:640px;
-  transform:translateX(-50%);
-  pointer-events:none;z-index:3;
+  position:fixed;inset:0;width:100%;height:100%;
+  pointer-events:none;z-index:110;
 }
 @media (prefers-reduced-motion:reduce){ .pack.torn .pack-tear{transition:none} }
 @media (prefers-reduced-motion:reduce){ .doodle-arrow,.doodle-underline .doodle-svg{transition:none} }
@@ -2148,10 +2148,11 @@ if (!REDUCED){
   let dpr = Math.min(window.devicePixelRatio || 1, 2.5);
   let W = 0, H = 0;
 
+  // sized to the whole viewport, like #confetti - not boxed to the pack,
+  // so grains are free to drift out over the rest of the page
   function sizeCanvas(){
-    const r = canvas.getBoundingClientRect();
-    W = canvas.width  = Math.max(1, Math.round(r.width  * dpr));
-    H = canvas.height = Math.max(1, Math.round(r.height * dpr));
+    W = canvas.width  = Math.max(1, Math.round(innerWidth  * dpr));
+    H = canvas.height = Math.max(1, Math.round(innerHeight * dpr));
   }
   sizeCanvas();
   window.addEventListener("resize", sizeCanvas);
@@ -2159,36 +2160,45 @@ if (!REDUCED){
   // a few close tonal variants, not one flat colour - real powder isn't
   // uniform, and a couple of paler/darker grains read as light catching it
   const COLORS = ["#a3187a", "#b8258c", "#8c1268", "#cf5aa8", "#6e0e50"];
-  const GRAVITY = -0.16 * dpr; // flipped: pulls grains further up, not back down
-  const DRAG    = 0.982;
+  // per-second units now, not per-frame - real elapsed time drives the
+  // sim below, so a 5-10s lifespan is an actual 5-10 seconds regardless
+  // of the display's refresh rate
+  const GRAVITY_PX_S2 = -9.6 * dpr; // flipped: pulls grains further up, not back down
+  const DRAG_PER_S     = 0.34;      // fraction of velocity kept after 1 full second
 
-  let particles = [];
-  let running   = false;
+  let particles  = [];
+  let running    = false;
+  let lastT      = null;
 
-  function frame(){
+  function frame(now){
+    if (lastT === null) { lastT = now; }
+    const dt = Math.min((now - lastT) / 1000, 0.05); // seconds, clamped against tab-switch gaps
+    lastT = now;
+
     ctx.clearRect(0, 0, W, H);
     let alive = false;
+    const dragFactor = Math.pow(DRAG_PER_S, dt);
     for (const p of particles){
-      if (p.life >= p.maxLife) { continue; }
+      const age = now - p.bornAt;
+      if (age >= p.maxAgeMs) { continue; }
       alive = true;
-      p.vy += GRAVITY;
-      p.vx *= DRAG; p.vy *= DRAG;
-      p.x  += p.vx; p.y += p.vy;
-      p.life++;
+      p.vy += GRAVITY_PX_S2 * dt;
+      p.vx *= dragFactor; p.vy *= dragFactor;
+      p.x  += p.vx * dt; p.y += p.vy * dt;
 
-      const fadeIn  = p.life < 5 ? p.life / 5 : 1;
-      const fadeOut = p.life > p.maxLife - 20 ? Math.max(0, (p.maxLife - p.life) / 20) : 1;
+      const fadeIn  = age < 150 ? age / 150 : 1;
+      const fadeOut = age > p.maxAgeMs - 2500 ? Math.max(0, (p.maxAgeMs - age) / 2500) : 1;
       ctx.globalAlpha = fadeIn * fadeOut * p.a;
       ctx.fillStyle = p.c;
       ctx.beginPath();
       ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2);
       ctx.fill();
     }
-    particles = particles.filter((p) => p.life < p.maxLife);
+    particles = particles.filter((p) => (now - p.bornAt) < p.maxAgeMs);
     if (alive) {
       requestAnimationFrame(frame);
     } else {
-      running = false;
+      running = false; lastT = null;
       ctx.clearRect(0, 0, W, H);
     }
   }
@@ -2196,13 +2206,16 @@ if (!REDUCED){
   function spillPowder(){
     if (REDUCED || !W || !H) { return; }
 
-    // the tear sits at the very top of the pack, not the middle of the
-    // canvas - .powder-canvas is offset -52px above .pack-stage, whose own
-    // 20px top padding then leads into the pack, so the tear line lands
-    // about 13% down this canvas's own height
-    const ox = W * 0.5, oy = H * 0.13;
+    // where the tear actually is right now, in real page coordinates -
+    // the canvas covers the whole viewport, so this is just the pack's
+    // own on-screen top edge, no more guessing at an offset
+    const r  = pack.getBoundingClientRect();
+    const ox = (r.left + r.width * 0.5) * dpr;
+    const oy = (r.top + r.height * 0.05) * dpr;
+    const now = performance.now();
+
     for (let i = 0; i < 460; i++){
-      const speed = (1.1 + Math.random() * 3.4) * dpr;
+      const speed = (66 + Math.random() * 204) * dpr; // px/s
       // wide upward fan - mostly straight up, some fly off to either side
       const angle = (-90 + (Math.random() * 150 - 75)) * Math.PI / 180;
       particles.push({
@@ -2213,8 +2226,8 @@ if (!REDUCED){
         r: (0.5 + Math.random() * 1.5) * dpr,
         c: COLORS[Math.floor(Math.random() * COLORS.length)],
         a: 0.6 + Math.random() * 0.35,
-        life: 0,
-        maxLife: 70 + Math.random() * 60,
+        bornAt: now,
+        maxAgeMs: 5000 + Math.random() * 5000, // disappears within 5-10s
       });
     }
     if (!running){ running = true; requestAnimationFrame(frame); }
