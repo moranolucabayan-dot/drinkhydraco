@@ -416,9 +416,19 @@ section{padding-block:clamp(68px,9vw,132px)}
 }
 /* supernova shockwave - one or two rings expanding fast from the mark
    and fading, alongside the sparks */
+/* the detonation flips with the theme: a light-mode page goes to a black
+   night sky (a white flash on an already-white page reads as nothing),
+   a dark-mode page goes to white with dark-matter sparks instead of gold
+   ones - same three-state pattern as --brush-blend/--star-opacity */
+:root{ --nova-flash:#05070c; --nova-accent:#ffbf00; --nova-accent-soft:#fff8dd; }
+@media (prefers-color-scheme:dark){
+  :root:not([data-theme="light"]){ --nova-flash:#ffffff; --nova-accent:#1c1430; --nova-accent-soft:#e8e0ff; }
+}
+:root[data-theme="dark"]{ --nova-flash:#ffffff; --nova-accent:#1c1430; --nova-accent-soft:#e8e0ff; }
+
 .flare-ring{
   position:fixed;left:0;top:0;z-index:114;pointer-events:none;
-  border-radius:50%;border:3px solid #ffbf00;
+  border-radius:50%;border:3px solid var(--nova-accent);
   transform:translate(-50%,-50%) scale(0);
   animation:flareRingExpand .75s cubic-bezier(.1,.75,.2,1) forwards;
 }
@@ -429,7 +439,7 @@ section{padding-block:clamp(68px,9vw,132px)}
 
 /* the detonation itself - the whole screen goes white, and shakes */
 .nova-flash{
-  position:fixed;inset:0;z-index:116;pointer-events:none;background:#fff;
+  position:fixed;inset:0;z-index:116;pointer-events:none;background:var(--nova-flash);
   animation:novaFlashPop .55s cubic-bezier(.05,.85,.2,1) forwards;
 }
 @keyframes novaFlashPop{
@@ -454,7 +464,7 @@ section{padding-block:clamp(68px,9vw,132px)}
 .nova-streak{
   position:fixed;left:0;top:0;z-index:113;pointer-events:none;
   height:2px;border-radius:2px;
-  background:linear-gradient(90deg, #fff8dd 0%, #ffbf00 45%, transparent 100%);
+  background:linear-gradient(90deg, var(--nova-accent-soft) 0%, var(--nova-accent) 45%, transparent 100%);
   transform-origin:left center;
   animation:novaStreakFly 1.4s cubic-bezier(.16,.7,.22,1) forwards;
 }
@@ -2710,7 +2720,17 @@ if (!REDUCED){
   function starSparkBurst(el){
     const r  = el.getBoundingClientRect();
     const cx = r.left + r.width / 2, cy = r.top + r.height / 2;
-    const NOVA_COLORS = ["#fff8dd", "#ffe27a", "#ffbf00", "#ff8a2b", "#e0521a"];
+    // the flash flips the whole screen's background per theme (see
+    // --nova-flash), so the sparks flip with it too - warm stellar
+    // colours over a light-mode page's night-sky flash, dark-matter
+    // tones over a dark-mode page's white flash
+    const explicitTheme = document.documentElement.getAttribute("data-theme");
+    const isDark = explicitTheme
+      ? explicitTheme === "dark"
+      : window.matchMedia("(prefers-color-scheme: dark)").matches;
+    const NOVA_COLORS = isDark
+      ? ["#0a0812", "#150f26", "#241a3d", "#05040a", "#2e1f52"]
+      : ["#fff8dd", "#ffe27a", "#ffbf00", "#ff8a2b", "#e0521a"];
 
     // the detonation: the whole screen flashes white, and shakes
     const flash = document.createElement("div");
