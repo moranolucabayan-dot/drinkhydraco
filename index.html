@@ -2159,7 +2159,7 @@ if (!REDUCED){
   // a few close tonal variants, not one flat colour - real powder isn't
   // uniform, and a couple of paler/darker grains read as light catching it
   const COLORS = ["#a3187a", "#b8258c", "#8c1268", "#cf5aa8", "#6e0e50"];
-  const GRAVITY = 0.16 * dpr;
+  const GRAVITY = -0.16 * dpr; // flipped: pulls grains further up, not back down
   const DRAG    = 0.982;
 
   let particles = [];
