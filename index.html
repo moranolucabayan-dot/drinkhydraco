@@ -319,17 +319,36 @@ section{padding-block:clamp(68px,9vw,132px)}
 @media (max-width:520px){ .pack-hint{display:none} }
 @media (prefers-reduced-motion:reduce){ .pack-hint{animation:none} }
 
+/* the top 5% tears open first - a small flap, colour-matched to the
+   aluminium so it's invisible until torn, with a jagged clip-path edge
+   standing in for a ripped seal. Peels back once and stays that way. */
+.pack-tear{
+  position:absolute;top:0;left:0;right:0;height:5%;z-index:2;
+  background:repeating-linear-gradient(96deg,
+    #c5c7c7 0px, #cacccc 4px, #c1c3c3 8px, #cdcecf 12px, #c5c7c7 16px);
+  clip-path:polygon(
+    0% 0%,100% 0%,100% 55%,91% 100%,82% 45%,73% 100%,64% 55%,55% 100%,
+    46% 45%,37% 100%,28% 55%,19% 100%,10% 45%,0% 100%);
+  transform-origin:20% 100%;
+  transition:transform .5s cubic-bezier(.3,.8,.4,1),opacity .5s ease;
+}
+.pack.torn .pack-tear{transform:rotate(-18deg) translate(-3px,-9px);opacity:.92}
+
+/* lives on .pack-stage, not .pack - .pack has overflow:hidden (needed to
+   clip the aluminium background to its rounded corners), which would cut
+   the powder off right at the pack's own edge instead of letting it fall
+   past it onto the "table" below */
 .powder-layer{position:absolute;inset:0;pointer-events:none;overflow:visible;z-index:3}
 .powder-bit{
   position:absolute;border-radius:50%;background:var(--pink);
-  animation:powderBurst .85s cubic-bezier(.15,.7,.3,1) forwards;
+  animation:powderSpill 1.15s cubic-bezier(.4,0,.75,1) forwards;
 }
-@keyframes powderBurst{
-  0%{opacity:0;transform:translate(0,0) scale(.4)}
-  14%{opacity:1;transform:translate(calc(var(--dx) * .3),calc(var(--dy) * .3)) scale(1)}
-  100%{opacity:0;transform:translate(var(--dx),calc(var(--dy) + 26px)) scale(.5)}
+@keyframes powderSpill{
+  0%{opacity:0;transform:translate(0,0) scale(.5)}
+  10%{opacity:1;transform:translate(calc(var(--dx) * .12),calc(var(--dy) * .06)) scale(1)}
+  100%{opacity:0;transform:translate(var(--dx),var(--dy)) scale(.6)}
 }
-@media (prefers-reduced-motion:reduce){ .powder-bit{display:none} }
+@media (prefers-reduced-motion:reduce){ .powder-bit{display:none} .pack.torn .pack-tear{transition:none} }
 @media (prefers-reduced-motion:reduce){ .doodle-arrow,.doodle-underline .doodle-svg{transition:none} }
 .hero-buybox-opts{display:flex;gap:8px;flex-wrap:wrap}
 .hero-pack-opt{
@@ -1091,7 +1110,8 @@ section{padding-block:clamp(68px,9vw,132px)}
           <path d="M11 20 L16 23 L15 16"/>
         </svg>
       </span>
-      <div class="pack" role="button" tabindex="0" aria-label="Hydraco Restore stick pack, 14.4 grams, post-workout electrolyte recovery mix, a paper label on a matte aluminium pouch. Click to see the powder">
+      <div class="pack" role="button" tabindex="0" aria-label="Hydraco Restore stick pack, 14.4 grams, post-workout electrolyte recovery mix, a paper label on a matte aluminium pouch. Click to tear it open">
+        <span class="pack-tear" aria-hidden="true"></span>
         <div class="pack-sticker">
           <span class="pack-name">Hydraco</span>
           <span class="pack-mark" aria-hidden="true"></span>
@@ -2112,15 +2132,20 @@ if (!REDUCED){
   }, { passive: true });
 }
 
-/* ---------- powder burst when the hero pack is clicked ---------- */
+/* ---------- tear it open, spill the powder ----------
+   First click (or Enter/Space): the top 5% peels back and stays that way
+   - real packs don't reseal. Every click after that spills more powder,
+   falling with real gravity from the tear point down past the pack, like
+   it's landing on a table, not bursting outward like confetti. */
 (function packPowder(){
   const pack  = document.querySelector(".pack");
   const stage = document.querySelector(".pack-stage");
   const hint  = document.getElementById("packHint");
   if (!pack || !stage) { return; }
 
-  function burst(){
+  function spill(){
     hint?.classList.add("hidden");
+    pack.classList.add("torn");
     if (REDUCED) { return; }
 
     let layer = stage.querySelector(".powder-layer");
@@ -2131,29 +2156,29 @@ if (!REDUCED){
       stage.appendChild(layer);
     }
 
-    for (let i = 0; i < 18; i++){
+    for (let i = 0; i < 20; i++){
       const bit = document.createElement("span");
       bit.className = "powder-bit";
-      const size  = 3 + Math.random() * 4;
-      // mostly-upward spread, like powder puffing out of the top seal
-      const angle = (-170 + Math.random() * 160) * Math.PI / 180;
-      const dist  = 22 + Math.random() * 48;
+      const size = 3 + Math.random() * 4;
+      // a little horizontal scatter, mostly falling - gravity, not a burst
+      const dx = (Math.random() - 0.5) * 90;
+      const dy = 380 + Math.random() * 190;
       bit.style.width  = size + "px";
       bit.style.height = size + "px";
-      bit.style.left   = (44 + Math.random() * 14) + "%";
-      bit.style.top    = "4%";
-      bit.style.setProperty("--dx", (Math.cos(angle) * dist).toFixed(1) + "px");
-      bit.style.setProperty("--dy", (Math.sin(angle) * dist).toFixed(1) + "px");
+      bit.style.left   = (38 + Math.random() * 18) + "%";
+      bit.style.top    = "6%";
+      bit.style.setProperty("--dx", dx.toFixed(1) + "px");
+      bit.style.setProperty("--dy", dy.toFixed(1) + "px");
       bit.style.opacity = (0.55 + Math.random() * 0.35).toFixed(2);
-      bit.style.animationDelay = Math.round(Math.random() * 80) + "ms";
+      bit.style.animationDelay = Math.round(Math.random() * 140) + "ms";
       bit.addEventListener("animationend", () => bit.remove());
       layer.appendChild(bit);
     }
   }
 
-  pack.addEventListener("click", burst);
+  pack.addEventListener("click", spill);
   pack.addEventListener("keydown", (e) => {
-    if (e.key === "Enter" || e.key === " "){ e.preventDefault(); burst(); }
+    if (e.key === "Enter" || e.key === " "){ e.preventDefault(); spill(); }
   });
 })();
 
