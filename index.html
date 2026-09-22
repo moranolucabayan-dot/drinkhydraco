@@ -176,6 +176,9 @@ section{padding-block:clamp(68px,9vw,132px)}
 }
 .nav-cta:hover{background:var(--teal-ink);color:var(--paper)!important}
 .nav-links a.active:not(.nav-cta){color:var(--teal-ink);text-decoration:underline;text-underline-offset:6px;text-decoration-thickness:1.5px}
+/* two more links (Gallery, Reviews) landed here since the last pass - tighten
+   before the full hide so a laptop-width window doesn't overflow the row */
+@media (max-width:1080px){ .nav-links{gap:15px} .nav-links a:not(.nav-cta){font-size:.68rem;letter-spacing:.12em} }
 @media (max-width:760px){ .nav-links a:not(.nav-cta){display:none} }
 
 /* ---------- top-of-page scroll progress ---------- */
@@ -1697,7 +1700,9 @@ section{padding-block:clamp(68px,9vw,132px)}
       <a href="#why">Why recovery</a>
       <a href="#formula">The formula</a>
       <a href="#inside">What's inside</a>
+      <a href="#gallery">Gallery</a>
       <a href="#story">Our story</a>
+      <a href="#proof">Reviews</a>
       <a href="#order" class="nav-cta">Pre-order</a>
     </div>
     <button type="button" class="theme-toggle" id="themeToggle" aria-label="Switch to dark mode" aria-pressed="false">
@@ -2026,6 +2031,19 @@ section{padding-block:clamp(68px,9vw,132px)}
             </div>
           </div>
 
+          <div class="nutrient-note" data-nutrient="calcium">
+            <span class="nn-icon" aria-hidden="true">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" filter="url(#sketch-sm)">
+                <path d="M12 2 L20 6 V12 C20 17 16.5 20.5 12 22 C7.5 20.5 4 17 4 12 V6 Z"/>
+              </svg>
+            </span>
+            <div class="nn-body">
+              <h4>Calcium &middot; 20mg</h4>
+              <p><b>What &amp; why</b>Best known for bones, but it's also involved in muscle contraction and nerve signalling.</p>
+              <p class="nn-source"><b>In Hydraco</b>Trace amounts from the coconut water and fruit powders &mdash; not a significant source, just naturally present.</p>
+            </div>
+          </div>
+
           <div class="nutrient-note" data-nutrient="potassium">
             <span class="nn-icon" aria-hidden="true">
               <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" filter="url(#sketch-sm)">
@@ -2036,20 +2054,6 @@ section{padding-block:clamp(68px,9vw,132px)}
               <h4>Potassium &middot; 400mg</h4>
               <p><b>What &amp; why</b>Works alongside sodium to move water into your cells rather than past them, and helps your muscles contract properly.</p>
               <p class="nn-source"><b>In Hydraco</b>Mainly from coconut water powder, with a little more from apple powder.</p>
-            </div>
-          </div>
-
-          <div class="nutrient-note" data-nutrient="magnesium">
-            <span class="nn-icon" aria-hidden="true">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" filter="url(#sketch-sm)">
-                <path d="M12 4 C 17 4, 19 9, 19 13 C 19 18, 16 21, 12 21 C 8 21, 5 18, 5 13 C 5 9, 7 4, 12 4 Z"/>
-                <path d="M12 6 C 12 6, 12 13, 12 19"/>
-              </svg>
-            </span>
-            <div class="nn-body">
-              <h4>Magnesium &middot; 15mg</h4>
-              <p><b>What &amp; why</b>The mineral your muscles need to relax again after they've worked &mdash; and most people don't get enough of it day to day.</p>
-              <p class="nn-source"><b>In Hydraco</b>A plant-based source: pumpkin seed extract powder.</p>
             </div>
           </div>
 
@@ -2067,16 +2071,17 @@ section{padding-block:clamp(68px,9vw,132px)}
             </div>
           </div>
 
-          <div class="nutrient-note" data-nutrient="calcium">
+          <div class="nutrient-note" data-nutrient="magnesium">
             <span class="nn-icon" aria-hidden="true">
               <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" filter="url(#sketch-sm)">
-                <path d="M12 2 L20 6 V12 C20 17 16.5 20.5 12 22 C7.5 20.5 4 17 4 12 V6 Z"/>
+                <path d="M12 4 C 17 4, 19 9, 19 13 C 19 18, 16 21, 12 21 C 8 21, 5 18, 5 13 C 5 9, 7 4, 12 4 Z"/>
+                <path d="M12 6 C 12 6, 12 13, 12 19"/>
               </svg>
             </span>
             <div class="nn-body">
-              <h4>Calcium &middot; 20mg</h4>
-              <p><b>What &amp; why</b>Best known for bones, but it's also involved in muscle contraction and nerve signalling.</p>
-              <p class="nn-source"><b>In Hydraco</b>Trace amounts from the coconut water and fruit powders &mdash; not a significant source, just naturally present.</p>
+              <h4>Magnesium &middot; 15mg</h4>
+              <p><b>What &amp; why</b>The mineral your muscles need to relax again after they've worked &mdash; and most people don't get enough of it day to day.</p>
+              <p class="nn-source"><b>In Hydraco</b>A plant-based source: pumpkin seed extract powder.</p>
             </div>
           </div>
 
@@ -2393,9 +2398,8 @@ section{padding-block:clamp(68px,9vw,132px)}
         </button>
       </div>
 
-      <form class='order-panel' id='orderForm' method='POST' name='hydraco-order' data-netlify="true" netlify-honeypot="company-website" novalidate>
-        <input type="hidden" name="form-name" value="hydraco-order">
-        <p hidden><label>Leave this empty: <input name="company-website"></label></p>
+      <form class='order-panel' id='orderForm' name='hydraco-order' novalidate>
+        <p hidden><label>Leave this empty: <input name="company-website" tabindex="-1" autocomplete="off"></label></p>
         <input type="hidden" name="order_ref"  id="hOrderRef">
         <input type="hidden" name="pack"       id="hPack">
         <input type="hidden" name="quantity"   id="hQty">
@@ -2510,11 +2514,6 @@ section{padding-block:clamp(68px,9vw,132px)}
   </section>
 
   <canvas id="confetti" aria-hidden="true"></canvas>
-
-  <form hidden method='post' name='hydraco-payment-claim' data-netlify="true">
-    <input type="hidden" name="form-name" value="hydraco-payment-claim">
-    <input name="order_ref"><input name="name"><input name="email"><input name="amount">
-  </form>
 
   <dialog id="doneModal" aria-labelledby="doneTitle">
     <div class="modal-in">
@@ -2688,7 +2687,7 @@ function render(){
   $("#qVal").textContent   = qty;
   $("#qNote").textContent  = "× " + sticks + "-pack";
 
-  // mirror into the hidden fields Netlify will capture
+  // mirror into the hidden fields the submit handler reads via FormData
   $("#hOrderRef").value = orderCode;
   $("#hPack").value     = sticks + "-pack";
   $("#hQty").value      = qty;
