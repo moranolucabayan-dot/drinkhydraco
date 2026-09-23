@@ -277,7 +277,11 @@ section{padding-block:clamp(68px,9vw,132px)}
    Small hand-drawn accents in the same wobble style as the illustrations
    (filter="url(#sketch-sm)"), used sparingly - a pointer, a couple of
    underline scribbles, a signature flourish. Never intercept clicks. */
-.doodle-arrow{position:absolute;pointer-events:none;color:var(--pink-ink)}
+/* pure ornament (an arrow at the CTA, sparks around the hero pack) - a
+   confident CTA and product shot don't need decoration pointing at them
+   by default, so these are a fun-mode extra rather than always-on */
+.doodle-arrow{position:absolute;pointer-events:none;color:var(--pink-ink);display:none}
+body.fun-mode .doodle-arrow{display:block}
 .doodle-underline{position:relative;display:inline-block}
 .doodle-underline .doodle-svg{
   position:absolute;left:-3%;bottom:-.4em;width:106%;height:.6em;
@@ -287,8 +291,9 @@ section{padding-block:clamp(68px,9vw,132px)}
   display:inline-block;margin-left:.35em;width:15px;height:13px;
   vertical-align:-.05em;color:var(--pink-ink);pointer-events:none;
 }
-.doodle-spark{position:absolute;pointer-events:none;color:var(--pink-ink)}
-@media (max-width:520px){ .doodle-spark{display:none} }
+.doodle-spark{position:absolute;pointer-events:none;color:var(--pink-ink);display:none}
+body.fun-mode .doodle-spark{display:block}
+@media (max-width:520px){ .doodle-spark,body.fun-mode .doodle-spark{display:none} }
 
 /* ---------- doodles that pop up on hover/click ----------
    A fixed full-viewport layer, never intercepting clicks, that spawns a
@@ -306,21 +311,29 @@ section{padding-block:clamp(68px,9vw,132px)}
 }
 @media (prefers-reduced-motion:reduce){ .doodle-layer{display:none} }
 
-/* ---------- "click me" hint + powder burst on the hero pack ---------- */
+/* ---------- "tap to open" hint + powder burst on the hero pack ----------
+   Calm and upright by default - a plain product cue, not a gimmick.
+   Fun mode brings back the hand-written tilt, italic and bob. */
 .pack{cursor:pointer}
 .pack-hint{
   position:absolute;top:-2px;left:2%;z-index:4;pointer-events:none;
   display:flex;align-items:center;gap:3px;
   font-family:"Jost","Futura","Century Gothic",system-ui,sans-serif;
-  font-size:.72rem;letter-spacing:.06em;font-weight:600;font-style:italic;
+  font-size:.68rem;letter-spacing:.12em;text-transform:uppercase;font-weight:500;
+  color:var(--slate);
+  transition:opacity .4s ease,transform .4s ease,color .3s ease;
+}
+.pack-hint.hidden{opacity:0;transform:translateY(-6px)}
+@media (max-width:520px){ .pack-hint{display:none} }
+
+body.fun-mode .pack-hint{
+  font-style:italic;font-weight:600;letter-spacing:.06em;text-transform:none;
   color:var(--pink-ink);transform:rotate(-9deg);
   animation:hintBob 2.4s ease-in-out infinite;
-  transition:opacity .4s ease,transform .4s ease;
 }
-.pack-hint.hidden{opacity:0;transform:rotate(-9deg) translateY(-6px)}
+body.fun-mode .pack-hint.hidden{transform:rotate(-9deg) translateY(-6px)}
 @keyframes hintBob{0%,100%{transform:rotate(-9deg) translateY(0)}50%{transform:rotate(-9deg) translateY(-4px)}}
-@media (max-width:520px){ .pack-hint{display:none} }
-@media (prefers-reduced-motion:reduce){ .pack-hint{animation:none} }
+@media (prefers-reduced-motion:reduce){ .pack-hint,body.fun-mode .pack-hint{animation:none} }
 
 /* the top 5% tears open first - a small flap, colour-matched to the
    aluminium so it's invisible until torn, with a jagged clip-path edge
@@ -612,18 +625,23 @@ section{padding-block:clamp(68px,9vw,132px)}
 .pack-foot b{display:block;font-size:.5rem;letter-spacing:.15em;text-transform:uppercase;font-weight:600}
 .pack-foot span{display:block;margin-top:15px;font-size:.48rem;letter-spacing:.06em;color:#61706f}
 
-/* ---------- marquee strip ---------- */
+/* ---------- trust strip ----------
+   A still, wrapped row, not a perpetually scrolling marquee - the same
+   claims, read at a glance instead of chased across the screen. */
 .strip{
   border-block:1px solid var(--rule);background:var(--panel);
-  overflow:hidden;padding-block:14px;
+  padding-block:16px;
 }
-.strip-track{display:flex;gap:0;width:max-content;animation:slide 42s linear infinite}
+.strip-track{
+  display:flex;flex-wrap:wrap;justify-content:center;align-items:center;
+  row-gap:10px;max-width:1040px;margin-inline:auto;padding-inline:24px;
+}
 .strip span{
-  font-size:.72rem;letter-spacing:.28em;text-transform:uppercase;color:var(--ink-soft);
-  padding-inline:28px;white-space:nowrap;font-weight:500;
+  font-size:.72rem;letter-spacing:.2em;text-transform:uppercase;color:var(--ink-soft);
+  padding-inline:18px;white-space:nowrap;font-weight:500;
 }
-.strip span::after{content:"·";margin-left:28px;color:var(--pink)}
-@keyframes slide{to{transform:translateX(-50%)}}
+.strip span::after{content:"·";margin-left:18px;color:var(--pink)}
+.strip span:last-child::after{content:none}
 
 /* ---------- benefits ---------- */
 .sec-head{display:flex;flex-direction:column;gap:20px;margin-bottom:clamp(42px,5vw,68px);max-width:56ch}
@@ -1810,7 +1828,7 @@ body.fun-mode .galaxy-bg{opacity:1}
         <path d="M20 34 C 8 34, 4 22, 12 14 C 18 8, 28 10, 28 18 C 28 24, 20 26, 18 20"/>
       </svg>
       <span class="pack-hint" id="packHint" aria-hidden="true">
-        Click me
+        <span id="packHintText">Tap to open</span>
         <svg viewBox="0 0 34 28" width="26" height="21" fill="none" stroke="currentColor" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" filter="url(#sketch-sm)">
           <path d="M5 3 C 11 9, 7 18, 16 23"/>
           <path d="M11 20 L16 23 L15 16"/>
@@ -2138,9 +2156,6 @@ body.fun-mode .galaxy-bg{opacity:1}
   <!-- ============ STRIP ============ -->
   <div class="strip" aria-hidden="true">
     <div class="strip-track">
-      <span>No chemicals</span><span>Pure ingredients</span><span>Low sugar</span><span>No artificial sweeteners</span>
-      <span>Tart cherry</span><span>Pomegranate</span><span>Coconut water</span><span>Pink Himalayan salt</span>
-      <span>Monk fruit</span><span>30 calories</span>
       <span>No chemicals</span><span>Pure ingredients</span><span>Low sugar</span><span>No artificial sweeteners</span>
       <span>Tart cherry</span><span>Pomegranate</span><span>Coconut water</span><span>Pink Himalayan salt</span>
       <span>Monk fruit</span><span>30 calories</span>
@@ -2933,8 +2948,14 @@ function setFunMode(on){
                             : "psst — want the fun version of the site? ✨";
     }
   });
+  const hintText = document.getElementById("packHintText");
+  if (hintText) { hintText.textContent = on ? "Click me" : "Tap to open"; }
 }
 document.body.classList.toggle("fun-mode", funMode());
+{
+  const hintText = document.getElementById("packHintText");
+  if (hintText) { hintText.textContent = funMode() ? "Click me" : "Tap to open"; }
+}
 document.querySelectorAll(".fun-toggle").forEach((btn) => {
   btn.addEventListener("click", () => setFunMode(!funMode()));
 });
