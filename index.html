@@ -1065,6 +1065,11 @@ body.fun-mode .pack-hint.hidden{transform:rotate(-9deg) translateY(-6px)}
   font-weight:600;color:var(--pink-ink);
 }
 .modal-pay .pay-grid dd{font-size:1.05rem}
+/* the exact moment someone has to switch apps and retype a reference by
+   hand is where a mistyped memo breaks the payment match - one tap
+   instead of that */
+.modal-copy-btn{align-self:flex-start;font-size:.72rem;padding:.62em 1.1em}
+.modal-copy-msg{margin:0;font-size:.74rem;color:var(--teal-ink);min-height:1.2em}
 .modal-step{display:flex;flex-direction:column;gap:16px;align-items:center;width:100%}
 .modal-step[hidden]{display:none}
 .modal-actions{display:flex;flex-wrap:wrap;gap:10px;justify-content:center;margin-top:4px}
@@ -2184,7 +2189,7 @@ body.fun-mode .galaxy-bg{opacity:1}
             </span>
             <div class="nn-body">
               <h4>Polyphenols &amp; antioxidants</h4>
-              <p><b>What &amp; why</b>The plant compounds behind tart cherry and pomegranate's antioxidant power &mdash; they help the body manage the oxidative stress hard training produces, which research links to less muscle soreness afterward.</p>
+              <p><b>What &amp; why</b>The plant compounds behind tart cherry and pomegranate's antioxidant power &mdash; they help the body manage the oxidative stress hard training produces. Results across the soreness research are mixed, not a guarantee; the individual studies are cited in the formula section above.</p>
               <p class="nn-source"><b>In Hydraco</b>From tart cherry powder and pomegranate extract powder &mdash; the full research behind them is in the formula section above.</p>
             </div>
           </div>
@@ -2618,6 +2623,8 @@ body.fun-mode .galaxy-bg{opacity:1}
             <div><dt>Zelle to</dt><dd id="mTo">(202) 271-3548</dd></div>
             <div><dt>Memo</dt><dd id="mRef" class="ref">&mdash;</dd></div>
           </dl>
+          <button type="button" class="btn btn-ghost modal-copy-btn" id="mCopyBtn">Copy amount &amp; memo</button>
+          <p class="modal-copy-msg" id="mCopyMsg" role="status" aria-live="polite"></p>
         </div>
 
         <div class="modal-actions">
@@ -2955,6 +2962,19 @@ $("#copyBtn").addEventListener("click", async () => {
   }
 });
 
+/* the amount and memo are exactly what needs to get retyped into a
+   banking app - a copy-paste there beats a hand-typed reference, where
+   one mistyped character breaks the payment match */
+$("#mCopyBtn")?.addEventListener("click", async () => {
+  const msg = $("#mCopyMsg");
+  try{
+    await navigator.clipboard.writeText($("#mAmt").textContent + " — memo " + $("#mRef").textContent);
+    msg.textContent = "Copied.";
+  }catch{
+    msg.textContent = "Couldn't reach the clipboard — copy the amount and memo by hand.";
+  }
+});
+
 /* ---------- fill in config-driven bits ---------- */
 $("#zPhone").textContent = CONFIG.zellePhone;
 newOrderCode();
@@ -3163,6 +3183,7 @@ function openModal(total){
   $("#mTo").textContent   = CONFIG.zellePhone;
   $("#mRef").textContent  = orderCode;
   $("#mRef2").textContent = orderCode;
+  $("#mCopyMsg").textContent = "";
   $("#stepPay").hidden  = false;
   $("#stepDone").hidden = true;
 
