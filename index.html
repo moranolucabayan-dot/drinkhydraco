@@ -655,18 +655,26 @@ body.fun-mode .pack-hint.hidden{transform:rotate(-9deg) translateY(-6px)}
   transition:grid-template-rows .32s cubic-bezier(.22,.8,.32,1) .03s;
 }
 .ink-full-wrap > .ink-full{
-  display:block;overflow:hidden;opacity:0;padding-top:0;
-  transition:opacity .3s ease,padding-top .3s ease;
+  display:block;overflow:hidden;padding-top:0;
+  transition:padding-top .3s ease;
 }
 .ink.revealed .ink-full-wrap,.ink:hover .ink-full-wrap,.ink:focus-visible .ink-full-wrap{
   grid-template-rows:1fr;transition-delay:.12s; /* still a beat, not an instant flash - but a real hover shows it fast */
 }
 .ink.revealed .ink-full,.ink:hover .ink-full,.ink:focus-visible .ink-full{
-  opacity:1;padding-top:.3em;transition-delay:.2s;
+  padding-top:.3em;transition-delay:.2s;
 }
+/* each letter fades in on its own randomised delay (assigned once, in
+   JS - see inkScramble) rather than the sentence as a whole fading in
+   at once, so it reads like it's materialising out of order and
+   settling into place - Hydraco could resolve d-h-y-r-a-c-o, not
+   h-y-d-r-a-c-o, even though every letter ends up exactly where it
+   belongs */
+.ink-char{opacity:0;transition:opacity .22s linear}
+.ink.revealed .ink-char,.ink:hover .ink-char,.ink:focus-visible .ink-char{opacity:1}
 .ink:focus-visible{outline:2px solid var(--teal);outline-offset:4px;border-radius:2px}
 @media (prefers-reduced-motion:reduce){
-  .ink-core,.ink-full-wrap,.ink-full{transition:none}
+  .ink-core,.ink-full-wrap,.ink-full,.ink-char{transition:none}
 }
 
 /* ---------- benefits ---------- */
@@ -785,8 +793,11 @@ body.fun-mode .pack-hint.hidden{transform:rotate(-9deg) translateY(-6px)}
 /* ---------- inside / nutrition ---------- */
 /* a plain div, not a section element - it never picked up the standard
    section padding-block every other section gets, so it sat crammed
-   right up against the ingredient list above it */
-.inside{background:var(--panel);border-block:1px solid var(--rule);padding-block:clamp(68px,9vw,132px)}
+   right up against the ingredient list above it. No panel background or
+   border lines either - the page reads as one continuous flow, with
+   headings and spacing doing the work of separating topics instead of
+   boxing them into visually distinct "sections". */
+.inside{padding-block:clamp(68px,9vw,132px)}
 .inside-grid{display:grid;grid-template-columns:1fr 340px;gap:clamp(32px,5vw,64px);align-items:start}
 @media (max-width:880px){ .inside-grid{grid-template-columns:1fr} }
 
@@ -853,6 +864,10 @@ body.fun-mode .pack-hint.hidden{transform:rotate(-9deg) translateY(-6px)}
 .nf-wrap{
   display:flex;flex-wrap:wrap;justify-content:center;
   gap:clamp(36px,5vw,64px);align-items:flex-start;
+  /* this is a separate wrap sibling from the comparison chart above it,
+     with no margin of its own to carry the gap - it sat crammed right
+     underneath, on both mobile and desktop */
+  margin-top:clamp(56px,7vw,96px);
 }
 .nutrient-notes{
   display:flex;flex-direction:column;gap:18px;
@@ -960,7 +975,6 @@ body.fun-mode .pack-hint.hidden{transform:rotate(-9deg) translateY(-6px)}
 .sig span{font-size:.72rem;letter-spacing:.2em;text-transform:uppercase;color:var(--slate)}
 
 /* ---------- order ---------- */
-.order{background:var(--panel);border-block:1px solid var(--rule)}
 .packs{display:grid;grid-template-columns:repeat(auto-fit,minmax(215px,1fr));gap:18px;margin-top:39px}
 .pack-opt{
   position:relative;background:var(--paper);border:1px solid var(--rule);border-radius:4px;
@@ -2986,11 +3000,37 @@ document.querySelectorAll(".fun-toggle").forEach((btn) => {
   btn.addEventListener("click", () => setFunMode(!funMode()));
 });
 
-/* ---------- invisible ink: click/tap to pin a passage open ----------
+/* ---------- invisible ink: scrambled per-letter reveal + click/tap pin ----------
    Hover and keyboard focus already reveal it via CSS (:hover/
-   :focus-visible - see .ink in the stylesheet); this just adds a
-   persistent toggle for a mouse click or a tap, where there's no hover
-   to linger in. */
+   :focus-visible - see .ink in the stylesheet); this adds a persistent
+   toggle for a mouse click or a tap, where there's no hover to linger
+   in, and splits each .ink-full passage into one span per letter so it
+   materialises out of reading order - "Hydraco" resolving roughly
+   d-h-y-r-a-c-o, not h-y-d-r-a-c-o - while every letter still lands in
+   its correct, spelled-out position. Skipped entirely under reduced
+   motion, where the whole passage should just appear at once. */
+if (!REDUCED){
+  function inkScramble(root){
+    Array.from(root.childNodes).forEach((node) => {
+      if (node.nodeType === Node.TEXT_NODE){
+        const frag = document.createDocumentFragment();
+        for (const ch of node.textContent){
+          if (ch.trim() === ""){ frag.appendChild(document.createTextNode(ch)); continue; }
+          const span = document.createElement("span");
+          span.className = "ink-char";
+          span.textContent = ch;
+          span.style.transitionDelay = (Math.random() * 380).toFixed(0) + "ms";
+          frag.appendChild(span);
+        }
+        root.replaceChild(frag, node);
+      } else if (node.nodeType === Node.ELEMENT_NODE){
+        inkScramble(node);
+      }
+    });
+  }
+  document.querySelectorAll(".ink-full").forEach(inkScramble);
+}
+
 document.querySelectorAll(".ink").forEach((el) => {
   el.addEventListener("click", () => el.classList.toggle("revealed"));
   el.addEventListener("keydown", (e) => {
