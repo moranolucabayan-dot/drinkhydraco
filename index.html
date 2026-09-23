@@ -1114,6 +1114,30 @@ section{padding-block:clamp(68px,9vw,132px)}
 }
 .foot-end a{color:var(--slate);text-decoration:none}
 .foot-end a:hover{color:var(--teal-ink)}
+/* small, deliberately unshouty - a discoverable extra, not a call to action */
+.fun-toggle{
+  display:inline-flex;align-items:center;justify-content:center;flex:none;
+  width:22px;height:22px;margin-left:2px;border-radius:50%;border:1px solid transparent;
+  background:none;color:var(--slate);cursor:pointer;vertical-align:-5px;
+  transition:color .2s,border-color .2s,transform .3s;
+}
+.fun-toggle svg{width:13px;height:13px}
+.fun-toggle:hover,.fun-toggle:focus-visible{color:var(--pink-ink);border-color:var(--rule)}
+.fun-toggle.on{color:var(--pink-ink);transform:rotate(-12deg)}
+@media (prefers-reduced-motion:reduce){ .fun-toggle{transition:none} }
+
+/* it shares .fun-toggle's click-handling and on/off state, but reads as
+   text here, not an icon - override the icon-button sizing entirely */
+.modal-fun-offer{
+  width:auto;height:auto;margin:16px 0 0;padding:0;border-radius:0;
+  display:inline-block;border:none;background:none;
+  font-family:"Jost","Futura","Century Gothic",system-ui,sans-serif;
+  font-size:.76rem;letter-spacing:.02em;color:var(--slate);
+  text-decoration:underline;text-underline-offset:3px;cursor:pointer;
+  vertical-align:baseline;transform:none;
+}
+.modal-fun-offer:hover,.modal-fun-offer:focus-visible{color:var(--pink-ink)}
+.modal-fun-offer.on{color:var(--pink-ink);text-decoration:none;transform:none}
 
 /* ============================================================
    Dosage Explorer + interactive ingredients.
@@ -1447,6 +1471,12 @@ section{padding-block:clamp(68px,9vw,132px)}
 :root[data-theme="dark"]{ --star-opacity:.68; --star-peak-opacity:1; }
 
 .galaxy-bg{position:fixed;inset:0;z-index:2;pointer-events:none;overflow:hidden}
+/* the starfield is a fun-mode-only flourish - hidden by default so the
+   page reads as a plain, professional paper ground, and faded in once
+   fun mode is switched on */
+.galaxy-bg{opacity:0;transition:opacity .8s ease}
+body.fun-mode .galaxy-bg{opacity:1}
+@media (prefers-reduced-motion:reduce){ .galaxy-bg{transition:none} }
 .star-layer{
   position:absolute;top:0;left:0;width:2px;height:2px;border-radius:50%;
   background:transparent;opacity:var(--star-opacity);
@@ -2551,6 +2581,8 @@ section{padding-block:clamp(68px,9vw,132px)}
         </p>
         <p class="modal-tag">Remember: Not a drink. A recovery system. :)</p>
         <button type="button" class="btn btn-solid" id="doneClose">Got it</button>
+        <br>
+        <button type="button" class="fun-toggle modal-fun-offer" aria-pressed="false" aria-label="Turn on some fun" title="Turn on some fun ✨">psst &mdash; want the fun version of the site? ✨</button>
       </div>
     </div>
   </dialog>
@@ -2619,7 +2651,13 @@ section{padding-block:clamp(68px,9vw,132px)}
     </div>
 
     <div class="foot-end">
-      <span>&copy; <span id="yr">2026</span> Hydraco &nbsp;·&nbsp; drinkhydraco.com</span>
+      <span>&copy; <span id="yr">2026</span> Hydraco &nbsp;·&nbsp; drinkhydraco.com
+        <button type="button" class="fun-toggle" aria-pressed="false" aria-label="Turn on some fun" title="Turn on some fun ✨">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" filter="url(#sketch-sm)">
+            <path d="M12 2 L13.4 9.6 L21 12 L13.4 14.4 L12 22 L10.6 14.4 L3 12 L10.6 9.6 Z"/>
+          </svg>
+        </button>
+      </span>
       <span><a href="#order">Pre-order</a> &nbsp;·&nbsp; <a href="#contact" id="mailLink">Contact</a></span>
     </div>
   </div>
@@ -2871,6 +2909,36 @@ render();
 /* ---------- confetti, in the brand palette ---------- */
 const REDUCED = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 
+/* ---------- fun mode: off by default ----------
+   The site reads clean and businesslike out of the box - the supernova,
+   the sitewide hover doodles, the galaxy starfield and the confetti are
+   all real, finished features, just not ones a first-time visitor placing
+   an order needs to see. They're one click away behind a small toggle in
+   the footer, and offered again right after a completed order - a private
+   reward, not a marketing gimmick, so it's never pushed on anyone. */
+const FUN_KEY = "hydraco-fun-mode";
+function funMode(){
+  try { return localStorage.getItem(FUN_KEY) === "1"; } catch (err) { return false; }
+}
+function setFunMode(on){
+  try { localStorage.setItem(FUN_KEY, on ? "1" : "0"); } catch (err) { /* private mode etc - just won't persist */ }
+  document.body.classList.toggle("fun-mode", on);
+  document.querySelectorAll(".fun-toggle").forEach((btn) => {
+    btn.classList.toggle("on", on);
+    btn.setAttribute("aria-pressed", on ? "true" : "false");
+    btn.setAttribute("aria-label", on ? "Turn off the fun stuff" : "Turn on some fun");
+    btn.title = on ? "Turn off the fun stuff" : "Turn on some fun ✨";
+    if (btn.classList.contains("modal-fun-offer")){
+      btn.textContent = on ? "the fun stuff is on ✨ (tap to turn it back off)"
+                            : "psst — want the fun version of the site? ✨";
+    }
+  });
+}
+document.body.classList.toggle("fun-mode", funMode());
+document.querySelectorAll(".fun-toggle").forEach((btn) => {
+  btn.addEventListener("click", () => setFunMode(!funMode()));
+});
+
 /* ---------- gallery lightbox: click a collage photo to see it full size ---------- */
 (function galleryLightbox(){
   const box   = $("#galleryLightbox");
@@ -2941,7 +3009,7 @@ const REDUCED = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 })();
 
 function confetti(){
-  if (REDUCED) { return; }
+  if (REDUCED || !funMode()) { return; }
   const cv  = $("#confetti");
   const ctx = cv.getContext("2d");
   const dpr = window.devicePixelRatio || 1;
@@ -3087,9 +3155,14 @@ if (!REDUCED){
     doodleLayer.appendChild(wrap);
   }
 
+  // fun-mode only - checked live at spawn time, not just at page load, so
+  // switching it on from the footer or the order modal works immediately
+  // without a reload
+
   // hover: one doodle per fresh entry into a target, not per pixel of movement
   let hoverTarget = null;
   document.addEventListener('pointerover', (e) => {
+    if (!funMode()) { return; }
     const el = e.target.closest(DOODLE_TARGETS);
     if (!el || el === hoverTarget) { return; }
     hoverTarget = el;
@@ -3106,7 +3179,7 @@ if (!REDUCED){
 
   // click: a doodle right at the tap/click point
   document.addEventListener('click', (e) => {
-    if (e.target.closest(DOODLE_TARGETS)) { spawnDoodle(e.clientX, e.clientY); }
+    if (funMode() && e.target.closest(DOODLE_TARGETS)) { spawnDoodle(e.clientX, e.clientY); }
   }, { passive: true });
 }
 
@@ -3335,8 +3408,12 @@ if (!REDUCED){
       // once that's settled back to normal (5000ms start + 8000ms
       // duration), one last much brighter flare - white-hot core through
       // gold to charcoal, not a repeat of the steady amber glow - plus a
-      // handful of small gold star sparks thrown off each mark
+      // handful of small gold star sparks thrown off each mark.
+      // The full supernova (screen flash, shake, streaks) is a fun-mode
+      // extra, checked live so it still fires if fun mode gets switched
+      // on in the 13s between the click and this timeout landing.
       setTimeout(() => {
+        if (!funMode()) { return; }
         [markEl, navMark].forEach((el) => {
           if (!el) { return; }
           el.classList.remove("mark-sunflare");
