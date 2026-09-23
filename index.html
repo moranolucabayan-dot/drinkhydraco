@@ -647,22 +647,22 @@ body.fun-mode .pack-hint.hidden{transform:rotate(-9deg) translateY(-6px)}
    keyboard. Never used for anything load-bearing - pricing, legal,
    nutrition facts and the payment steps all stay fully visible always. */
 .ink{cursor:pointer}
-.ink-core{transition:opacity .3s ease}
+.ink-core{transition:opacity .2s ease}
 .ink-core::after{content:" \02026";opacity:.45;font-style:normal}
 .ink.revealed .ink-core,.ink:hover .ink-core,.ink:focus-visible .ink-core{opacity:.4}
 .ink-full-wrap{
   display:grid;grid-template-rows:0fr;
-  transition:grid-template-rows .55s cubic-bezier(.22,.8,.32,1) .05s;
+  transition:grid-template-rows .32s cubic-bezier(.22,.8,.32,1) .03s;
 }
 .ink-full-wrap > .ink-full{
   display:block;overflow:hidden;opacity:0;padding-top:0;
-  transition:opacity .5s ease,padding-top .5s ease;
+  transition:opacity .3s ease,padding-top .3s ease;
 }
 .ink.revealed .ink-full-wrap,.ink:hover .ink-full-wrap,.ink:focus-visible .ink-full-wrap{
-  grid-template-rows:1fr;transition-delay:.45s; /* the "stay for longer" - a brief hover does nothing */
+  grid-template-rows:1fr;transition-delay:.12s; /* still a beat, not an instant flash - but a real hover shows it fast */
 }
 .ink.revealed .ink-full,.ink:hover .ink-full,.ink:focus-visible .ink-full{
-  opacity:1;padding-top:.3em;transition-delay:.7s;
+  opacity:1;padding-top:.3em;transition-delay:.2s;
 }
 .ink:focus-visible{outline:2px solid var(--teal);outline-offset:4px;border-radius:2px}
 @media (prefers-reduced-motion:reduce){
@@ -783,7 +783,10 @@ body.fun-mode .pack-hint.hidden{transform:rotate(-9deg) translateY(-6px)}
 }
 
 /* ---------- inside / nutrition ---------- */
-.inside{background:var(--panel);border-block:1px solid var(--rule)}
+/* a plain div, not a section element - it never picked up the standard
+   section padding-block every other section gets, so it sat crammed
+   right up against the ingredient list above it */
+.inside{background:var(--panel);border-block:1px solid var(--rule);padding-block:clamp(68px,9vw,132px)}
 .inside-grid{display:grid;grid-template-columns:1fr 340px;gap:clamp(32px,5vw,64px);align-items:start}
 @media (max-width:880px){ .inside-grid{grid-template-columns:1fr} }
 
@@ -2028,10 +2031,7 @@ body.fun-mode .galaxy-bg{opacity:1}
           </details>
         </li>
         </ol>
-        <p class="ingx-note">
-          Amounts are rounded and shown as ranges &mdash; the full recipe is ours, but nothing in it
-          is a secret ingredient. Every one is on the pack.
-        </p>
+        <p class="ingx-note ink" tabindex="0"><span class="ink-core">Full recipe, right on the pack</span><span class="ink-full-wrap"><span class="ink-full">Amounts are rounded and shown as ranges &mdash; the full recipe is ours, but nothing in it is a secret ingredient. Every one is on the pack.</span></span></p>
       </div>
     </div>
 
