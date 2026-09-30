@@ -994,6 +994,7 @@ body.fun-mode .pack-hint.hidden{transform:rotate(-9deg) translateY(-6px)}
   border:2px solid var(--pink);border-radius:4px;background:var(--paper);
   padding:24px 24px 22px;display:flex;flex-direction:column;gap:14px;
 }
+.pay-panel[hidden]{display:none}
 .pay-head{
   font-size:.74rem;letter-spacing:.2em;text-transform:uppercase;font-weight:600;
   color:var(--pink-ink);
@@ -2409,8 +2410,8 @@ body.fun-mode .galaxy-bg{opacity:1}
         <span class="tag">Order</span>
         <h2>Choose <span class="doodle-underline">your pack<svg class="doodle-svg" viewBox="0 0 120 18" fill="none" stroke="var(--pink-ink)" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" filter="url(#sketch-sm)"><path d="M3 10 C 25 2, 50 15, 75 6 C 92 1, 108 12, 117 8"/></svg></span></h2>
         <p style="color:var(--ink-soft);font-family:Newsreader,Georgia,serif;font-size:1.14rem;line-height:1.68">
-          Made in small batches &mdash; every order goes into the next batch, paid by Zelle or Apple Cash.
-          No card details touch this site.
+          Made in small batches &mdash; every order goes into the next batch, paid by Zelle, Apple Cash, or card.
+          Card payments are handled securely by Stripe &mdash; we never see or store your card details.
         </p>
       </div>
 
@@ -2499,7 +2500,7 @@ body.fun-mode .galaxy-bg{opacity:1}
 
           <label class="ack" for="fAck">
             <input type="checkbox" id="fAck" name="ack">
-            <span>I understand I need to send the payment myself, using the method
+            <span id="ackText">I understand I need to send the payment myself, using the method
             I picked above &mdash; this page can't charge me, and my order isn't
             confirmed until it arrives.</span>
           </label>
@@ -2544,8 +2545,9 @@ body.fun-mode .galaxy-bg{opacity:1}
             <div class="pay-method-picker" role="group" aria-label="Payment method">
               <button type="button" class="pay-method-opt" data-method="zelle" aria-pressed="true">Zelle</button>
               <button type="button" class="pay-method-opt" data-method="applecash" aria-pressed="false">Apple Cash</button>
+              <button type="button" class="pay-method-opt" data-method="card" aria-pressed="false">Card</button>
             </div>
-            <span class="k" style="margin-top:8px">Send to</span>
+            <span class="k" style="margin-top:8px" id="zSendToLabel">Send to</span>
             <span class="v" id="zPhone">(202) 271-3548</span>
             <span class="k" style="margin-top:8px">Memo / reference</span>
             <span class="v code" id="zCode">&mdash;</span>
@@ -2558,8 +2560,9 @@ body.fun-mode .galaxy-bg{opacity:1}
           </div>
 
           <p style="font-size:.74rem;color:var(--slate);line-height:1.61">
-            These transfers go directly between accounts and can't be reversed.
-            If anything looks wrong, email us before sending and we'll sort it out.
+            Zelle and Apple Cash send money directly between accounts and can't be reversed;
+            card payments are processed securely through Stripe. If anything looks wrong,
+            email us before completing payment and we'll sort it out.
           </p>
         </aside>
       </form>
@@ -2625,7 +2628,7 @@ body.fun-mode .galaxy-bg{opacity:1}
       </details>
       <details>
         <summary>How do I pay?</summary>
-        <p>By Zelle or Apple Cash, whichever you pick in the order panel &mdash; put your order reference in the memo. We never collect card details.</p>
+        <p>By Zelle, Apple Cash, or card &mdash; whichever you pick in the order panel. Card payments go through Stripe's secure checkout; we never see or store your card number.</p>
       </details>
       <details>
         <summary>Where do you deliver, and what does it cost?</summary>
@@ -2702,15 +2705,21 @@ const CONFIG = {
   zelleName:   "Hydraco",
 
   // Every way a customer can pay, in the order the picker shows them.
-  // Both currently route to the same number - Apple Cash sends over iMessage,
-  // not a banking app, hence its own "how" text below.
+  // Zelle and Apple Cash both route to the same number - Apple Cash sends
+  // over iMessage, not a banking app, hence its own "how" text below. Card
+  // doesn't have a "send to" number at all - it hands off to Stripe's own
+  // hosted checkout instead (see /api/create-checkout-session.js and the
+  // submit handler's dedicated card branch below).
   paymentMethods: [
     { id: "zelle",     label: "Zelle",      sendTo: "(202) 271-3548",
       verb: "send the Zelle",
       how:  "<b>Open your bank's app and send the Zelle yourself</b>, to the number above, with your order reference in the memo." },
     { id: "applecash", label: "Apple Cash", sendTo: "(202) 271-3548",
       verb: "send Apple Cash",
-      how:  "<b>Open Messages and send an Apple Cash payment yourself</b>, to the number above, with your order reference as a note." }
+      how:  "<b>Open Messages and send an Apple Cash payment yourself</b>, to the number above, with your order reference as a note." },
+    { id: "card",      label: "Card",       sendTo: "Stripe — secure checkout",
+      verb: "pay by card",
+      how:  "You'll be taken to Stripe's secure checkout to enter your card details." }
   ],
 
   // Where orders are emailed.
@@ -2833,6 +2842,14 @@ function selectPayMethod(id){
   $("#zPhone").textContent = m.sendTo;
   const stepText = $("#stepPayText");
   if (stepText) { stepText.innerHTML = m.how; }
+  const sendToLabel = $("#zSendToLabel");
+  if (sendToLabel) { sendToLabel.textContent = id === "card" ? "Checkout" : "Send to"; }
+  const ackText = $("#ackText");
+  if (ackText) {
+    ackText.textContent = id === "card"
+      ? "I'm ready to enter my card details on Stripe's secure checkout page to complete payment."
+      : "I understand I need to send the payment myself, using the method I picked above — this page can't charge me, and my order isn't confirmed until it arrives.";
+  }
   render();
 }
 
@@ -2879,8 +2896,9 @@ $("#orderForm").addEventListener("submit", async (e) => {
 
   if (!missing.length && !$("#fAck").checked){
     msg.className = "order-msg err";
-    msg.textContent = "Tick the box to confirm you'll send the payment yourself — "
-                    + "this page can't charge you.";
+    msg.textContent = payMethod === "card"
+      ? "Tick the box to confirm you're ready to check out with Stripe."
+      : "Tick the box to confirm you'll send the payment yourself — this page can't charge you.";
     $("#fAck").focus();
     return;
   }
@@ -2910,6 +2928,46 @@ $("#orderForm").addEventListener("submit", async (e) => {
   msg.className = "order-msg";
   msg.textContent = "Sending your order\u2026";
   if (btn) { btn.disabled = true; }
+
+  /* ---------- card: hand off to Stripe's own hosted checkout ----------
+     No "send it yourself" step - Stripe collects the card number and CVV
+     on its own secure page, never on this one, then sends the browser
+     back here once payment actually succeeds (see the ?paid=1 handling
+     near the bottom of this script). The order is still best-effort
+     recorded to the sheet below, same as the other methods, but Stripe's
+     own dashboard is the authoritative record of whether this was paid -
+     worth checking there before shipping, the same way a Zelle transfer
+     gets checked in the bank app before shipping. */
+  if (payMethod === "card") {
+    fetch(CONFIG.sheetEndpoint, {
+      method:  "POST",
+      mode:    "no-cors",
+      headers: { "Content-Type": "text/plain;charset=utf-8" },
+      body:    JSON.stringify(Object.fromEntries(new FormData(form)))
+    }).catch(() => {});
+
+    try {
+      const resp = await fetch("/api/create-checkout-session", {
+        method:  "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          sticks, qty, orderRef: orderCode,
+          name:  $("#fName").value.trim(),
+          email: $("#fEmail").value.trim()
+        })
+      });
+      const data = await resp.json();
+      if (!resp.ok || !data.url) { throw new Error((data && data.error) || "checkout failed"); }
+      window.location.href = data.url;   // off to Stripe; nothing left to do here
+      return;
+    } catch (err) {
+      msg.className   = "order-msg err";
+      msg.textContent = "We couldn't start secure checkout \u2014 please try again, "
+                      + "or pick Zelle or Apple Cash instead.";
+      if (btn) { btn.disabled = false; }
+      return;
+    }
+  }
 
   /* Posts straight to the Google Apps Script, so the order lands in the
      Orders sheet whether or not the customer has a mail app, and regardless
@@ -3162,6 +3220,32 @@ $("#paidBtn").addEventListener("click", () => {
 
 $("#payLater").addEventListener("click", closeModal);
 $("#doneClose").addEventListener("click", closeModal);
+
+/* ---------- coming back from Stripe ----------
+   Stripe only redirects to success_url after the card payment actually
+   goes through, so this skips straight to the "done" step - no "I've
+   sent it" click needed, unlike the Zelle/Apple Cash path above. */
+(function handleStripeReturn(){
+  const params = new URLSearchParams(location.search);
+  if (params.get("paid") === "1"){
+    const ref = params.get("ref");
+    if (ref) { orderCode = ref; }
+    $("#mRef2").textContent = orderCode || "—";
+    $("#stepPay").hidden  = true;
+    $("#stepDone").hidden = false;
+    const dlg = $("#doneModal");
+    if (typeof dlg.showModal === "function"){ dlg.showModal(); } else { dlg.setAttribute("open",""); }
+    confetti();
+    history.replaceState(null, "", location.pathname + location.hash);
+  } else if (params.get("cancelled") === "1"){
+    const msg = $("#orderMsg");
+    if (msg){
+      msg.className = "order-msg err";
+      msg.textContent = "Checkout was cancelled — no payment was made. You can try again below.";
+    }
+    history.replaceState(null, "", location.pathname + location.hash);
+  }
+})();
 
 /* ---------- doodles that pop up as you hover and click ----------
    A small hand-sketched mark appears near whatever interactive thing you
