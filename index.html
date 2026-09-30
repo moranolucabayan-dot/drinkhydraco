@@ -1034,6 +1034,15 @@ body.fun-mode .pack-hint.hidden{transform:rotate(-9deg) translateY(-6px)}
 .zelle-box .v{font-size:1.18rem;letter-spacing:.06em;color:var(--ink);font-variant-numeric:tabular-nums}
 .zelle-box .v.code{color:var(--pink-ink);font-weight:500}
 
+.pay-method-picker{display:flex;gap:8px;flex-wrap:wrap;margin-top:2px}
+.pay-method-opt{
+  font-family:inherit;font-size:.72rem;letter-spacing:.06em;font-weight:500;
+  padding:.56em 1.05em;border-radius:999px;border:1.5px solid var(--rule);background:var(--paper);
+  color:var(--ink-soft);cursor:pointer;transition:border-color .18s,color .18s,background .18s;
+}
+.pay-method-opt:hover{border-color:var(--teal);color:var(--teal-ink)}
+.pay-method-opt[aria-pressed="true"]{border-color:var(--ink);background:var(--ink);color:var(--paper)}
+
 .order-msg{font-size:.84rem;line-height:1.61;color:var(--teal-ink);min-height:1.3em}
 .order-msg.err{color:var(--pink-ink)}
 
@@ -1741,7 +1750,7 @@ body.fun-mode .galaxy-bg{opacity:1}
 }
 @media (max-width:640px){ .gym-band{min-height:44vh} }
 
-/* ---------- pre-order: three packets, kept at their own portrait
+/* ---------- order section: three packets, kept at their own portrait
    shape and a sane display width - not stretched into a wide crop ---------- */
 .preorder-photo{margin-bottom:clamp(28px,4vw,44px)}
 .preorder-photo img{max-width:340px;margin-inline:auto}
@@ -1816,7 +1825,7 @@ body.fun-mode .galaxy-bg{opacity:1}
       <a href="#inside">What's inside</a>
       <a href="#story">Our story</a>
       <a href="#proof">Reviews</a>
-      <a href="#order" class="nav-cta">Pre-order</a>
+      <a href="#order" class="nav-cta">Order</a>
     </div>
     <button type="button" class="theme-toggle" id="themeToggle" aria-label="Switch to dark mode" aria-pressed="false">
       <svg class="ti-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true">
@@ -1834,7 +1843,7 @@ body.fun-mode .galaxy-bg{opacity:1}
   <div class="wrap stickybar-in">
     <span class="stickybar-pack" id="sbPack">19-pack &times; 1</span>
     <span class="stickybar-price" id="sbPrice">$39.71</span>
-    <a href="#order" class="btn btn-solid stickybar-cta">Pre-order</a>
+    <a href="#order" class="btn btn-solid stickybar-cta">Order</a>
   </div>
 </div>
 
@@ -1870,7 +1879,7 @@ body.fun-mode .galaxy-bg{opacity:1}
             <span class="hp-price">$89.55</span>
           </button>
         </div>
-        <a href="#order" class="btn btn-solid hero-buy-cta" id="heroBuyBtn">Pre-order &mdash; <span id="heroBuyPrice">$39.71</span></a>
+        <a href="#order" class="btn btn-solid hero-buy-cta" id="heroBuyBtn">Order &mdash; <span id="heroBuyPrice">$39.71</span></a>
         <svg class="doodle-arrow" viewBox="0 0 60 46" width="44" height="34" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" filter="url(#sketch-sm)" style="top:-28px;right:8px;transform:rotate(6deg)">
           <path d="M8 6 C 22 5, 42 12, 50 30"/>
           <path d="M39 25 L50 30 L47 18"/>
@@ -1880,7 +1889,7 @@ body.fun-mode .galaxy-bg{opacity:1}
       <div class="hero-actions">
         <a href="#inside" class="btn btn-ghost">See what's inside</a>
       </div>
-      <p class="hero-note"><span class="dot" aria-hidden="true"></span> Free local delivery &mdash; every order is a pre-order</p>
+      <p class="hero-note"><span class="dot" aria-hidden="true"></span> Free local delivery &mdash; every order ships from the next small batch</p>
 
       <div class="hero-quotes" id="heroQuotes" hidden></div>
     </div>
@@ -2397,10 +2406,10 @@ body.fun-mode .galaxy-bg{opacity:1}
   <section id="order" class="order">
     <div class="wrap rv">
       <div class="sec-head">
-        <span class="tag">Pre-order</span>
+        <span class="tag">Order</span>
         <h2>Choose <span class="doodle-underline">your pack<svg class="doodle-svg" viewBox="0 0 120 18" fill="none" stroke="var(--pink-ink)" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" filter="url(#sketch-sm)"><path d="M3 10 C 25 2, 50 15, 75 6 C 92 1, 108 12, 117 8"/></svg></span></h2>
         <p style="color:var(--ink-soft);font-family:Newsreader,Georgia,serif;font-size:1.14rem;line-height:1.68">
-          Made in small batches &mdash; every order is a pre-order, paid by Zelle.
+          Made in small batches &mdash; every order goes into the next batch, paid by Zelle or Apple Cash.
           No card details touch this site.
         </p>
       </div>
@@ -2442,6 +2451,7 @@ body.fun-mode .galaxy-bg{opacity:1}
       <form class='order-panel' id='orderForm' name='hydraco-order' novalidate>
         <p hidden><label>Leave this empty: <input name="company-website" tabindex="-1" autocomplete="off"></label></p>
         <input type="hidden" name="order_ref"  id="hOrderRef">
+        <input type="hidden" name="payment_method" id="hPayMethod">
         <input type="hidden" name="pack"       id="hPack">
         <input type="hidden" name="quantity"   id="hQty">
         <input type="hidden" name="unit_price" id="hUnit">
@@ -2479,7 +2489,7 @@ body.fun-mode .galaxy-bg{opacity:1}
             <label for="fAddr">Delivery address</label>
             <textarea id="fAddr" name="address" autocomplete="shipping street-address" required
               placeholder="Street, city, state, ZIP"></textarea>
-            <span class="hint">Free in NYC/MD/D.C./VA &mdash; elsewhere, we'll quote delivery first.</span>
+            <span class="hint">Free in NYC/MD/D.C./VA &mdash; anywhere else, including internationally, we'll quote delivery first.</span>
           </div>
 
           <div class="field">
@@ -2489,19 +2499,19 @@ body.fun-mode .galaxy-bg{opacity:1}
 
           <label class="ack" for="fAck">
             <input type="checkbox" id="fAck" name="ack">
-            <span>I understand I need to send the payment myself through my bank's
-            Zelle &mdash; this page can't charge me, and my order isn't confirmed
-            until the transfer arrives.</span>
+            <span>I understand I need to send the payment myself, using the method
+            I picked above &mdash; this page can't charge me, and my order isn't
+            confirmed until it arrives.</span>
           </label>
 
           <div style="display:flex;flex-wrap:wrap;gap:12px;align-items:center">
-            <button type="submit" class="btn btn-solid">Place pre-order</button>
+            <button type="submit" class="btn btn-solid">Place order</button>
             <button type="button" class="btn btn-ghost" id="copyBtn">Copy order summary</button>
           </div>
           <p class="order-msg" id="orderMsg" role="status" aria-live="polite"></p>
 
           <div class="pay-panel" id="payPanel" hidden>
-            <p class="pay-head">To complete the transaction, send the Zelle</p>
+            <p class="pay-head" id="payHead">To complete the transaction, send the Zelle</p>
             <p class="pay-body">
               Your order details are on their way to us. Money doesn't move until
               <b>you</b> send it. Open your banking app, choose Zelle, and send:
@@ -2526,24 +2536,29 @@ body.fun-mode .galaxy-bg{opacity:1}
           </div>
           <p class="area-note">
             Free in <b>NYC</b> and <b>Maryland, D.C. &amp; Virginia</b> (within about an hour of our office).
-            Elsewhere? Place the order &mdash; we'll <b>email a quote</b> before you pay.
+            Anywhere else &mdash; including internationally &mdash; place the order and we'll <b>email a quote</b> before you pay.
           </p>
 
           <div class="zelle-box">
-            <span class="k">Zelle this amount to</span>
+            <span class="k">Pay with</span>
+            <div class="pay-method-picker" role="group" aria-label="Payment method">
+              <button type="button" class="pay-method-opt" data-method="zelle" aria-pressed="true">Zelle</button>
+              <button type="button" class="pay-method-opt" data-method="applecash" aria-pressed="false">Apple Cash</button>
+            </div>
+            <span class="k" style="margin-top:8px">Send to</span>
             <span class="v" id="zPhone">(202) 271-3548</span>
             <span class="k" style="margin-top:8px">Memo / reference</span>
             <span class="v code" id="zCode">&mdash;</span>
           </div>
 
           <div class="steps">
-            <div class="step"><p>Fill in your details and hit <b>Place pre-order</b>. That sends us the order &mdash; it does <b>not</b> move any money.</p></div>
-            <div class="step"><p><b>Open your bank's app and send the Zelle yourself</b>, to the number above, with your order reference in the memo.</p></div>
+            <div class="step"><p>Fill in your details and hit <b>Place order</b>. That sends us the order &mdash; it does <b>not</b> move any money.</p></div>
+            <div class="step"><p id="stepPayText"><b>Open your bank's app and send the Zelle yourself</b>, to the number above, with your order reference in the memo.</p></div>
             <div class="step"><p>We match your payment to your order and confirm your <b>delivery date</b> by email, usually within one business day.</p></div>
           </div>
 
           <p style="font-size:.74rem;color:var(--slate);line-height:1.61">
-            Zelle transfers are sent directly between banks and can't be reversed.
+            These transfers go directly between accounts and can't be reversed.
             If anything looks wrong, email us before sending and we'll sort it out.
           </p>
         </aside>
@@ -2560,7 +2575,7 @@ body.fun-mode .galaxy-bg{opacity:1}
       <!-- step 1: the order is in, but nothing has been paid -->
       <div class="modal-step" id="stepPay">
         <h2 id="doneTitle">Almost done</h2>
-        <p class="modal-lede">
+        <p class="modal-lede" id="modalPayLede">
           We have your order. To complete the transaction, send the payment by Zelle.
         </p>
 
@@ -2568,7 +2583,7 @@ body.fun-mode .galaxy-bg{opacity:1}
           <p class="modal-pay-head">Your order isn't confirmed until this arrives</p>
           <dl class="pay-grid">
             <div><dt>Amount</dt><dd id="mAmt">&mdash;</dd></div>
-            <div><dt>Zelle to</dt><dd id="mTo">(202) 271-3548</dd></div>
+            <div><dt id="mToLabel">Zelle to</dt><dd id="mTo">(202) 271-3548</dd></div>
             <div><dt>Memo</dt><dd id="mRef" class="ref">&mdash;</dd></div>
           </dl>
           <button type="button" class="btn btn-ghost modal-copy-btn" id="mCopyBtn">Copy amount &amp; memo</button>
@@ -2605,12 +2620,12 @@ body.fun-mode .galaxy-bg{opacity:1}
     </div>
     <div class="faq">
       <details>
-        <summary>Why is everything a pre-order?</summary>
+        <summary>Why does my order take a few days?</summary>
         <p>Restore is made in small batches. Every order goes against the next one &mdash; you'll get a confirmation email with your ship date.</p>
       </details>
       <details>
         <summary>How do I pay?</summary>
-        <p>By Zelle, to the number in the order panel &mdash; put your order reference in the memo. We never collect card details.</p>
+        <p>By Zelle or Apple Cash, whichever you pick in the order panel &mdash; put your order reference in the memo. We never collect card details.</p>
       </details>
       <details>
         <summary>Where do you deliver, and what does it cost?</summary>
@@ -2644,7 +2659,7 @@ body.fun-mode .galaxy-bg{opacity:1}
       <a class="brand" href="#top"><span class="mark" aria-hidden="true"></span><span class="wordmark">Hydraco</span></a>
       <p style="font-family:Newsreader,Georgia,serif;font-size:1.06rem;color:var(--ink-soft);max-width:34ch;line-height:1.66">
         Designed for recovery, not stimulation. Made in small batches in Bethesda, Maryland.
-        Free local delivery across the D.C. area and New York City.
+        Free local delivery across the D.C. area and New York City &mdash; and we ship anywhere else, including internationally, with a delivery quote emailed before you pay.
       </p>
       <div class="foot-contact" id="contact" tabindex="-1">
         <span class="foot-contact-label">Get in touch</span>
@@ -2668,7 +2683,7 @@ body.fun-mode .galaxy-bg{opacity:1}
           </svg>
         </button>
       </span>
-      <span><a href="#order">Pre-order</a> &nbsp;·&nbsp; <a href="#contact" id="mailLink">Contact</a></span>
+      <span><a href="#order">Order</a> &nbsp;·&nbsp; <a href="#contact" id="mailLink">Contact</a></span>
     </div>
   </div>
 </footer>
@@ -2686,7 +2701,19 @@ const CONFIG = {
   // The name that shows in their Zelle app when they enter that number.
   zelleName:   "Hydraco",
 
-  // Where pre-orders are emailed.
+  // Every way a customer can pay, in the order the picker shows them.
+  // Both currently route to the same number - Apple Cash sends over iMessage,
+  // not a banking app, hence its own "how" text below.
+  paymentMethods: [
+    { id: "zelle",     label: "Zelle",      sendTo: "(202) 271-3548",
+      verb: "send the Zelle",
+      how:  "<b>Open your bank's app and send the Zelle yourself</b>, to the number above, with your order reference in the memo." },
+    { id: "applecash", label: "Apple Cash", sendTo: "(202) 271-3548",
+      verb: "send Apple Cash",
+      how:  "<b>Open Messages and send an Apple Cash payment yourself</b>, to the number above, with your order reference as a note." }
+  ],
+
+  // Where orders are emailed.
   orderEmail:  "hydracompanymd@gmail.com",
 
   // Delivery is free inside the service area. Orders to addresses outside it
@@ -2720,7 +2747,11 @@ function newOrderCode(){
 }
 
 /* ---------- state ---------- */
-let sticks = 19, unit = 2.09, qty = 1;
+let sticks = 19, unit = 2.09, qty = 1, payMethod = "zelle";
+
+function payMethodInfo(id){
+  return CONFIG.paymentMethods.find(m => m.id === id) || CONFIG.paymentMethods[0];
+}
 
 function render(){
   const packPrice = +(sticks * unit).toFixed(2);
@@ -2736,7 +2767,8 @@ function render(){
   $("#qNote").textContent  = "× " + sticks + "-pack";
 
   // mirror into the hidden fields the submit handler reads via FormData
-  $("#hOrderRef").value = orderCode;
+  $("#hOrderRef").value    = orderCode;
+  $("#hPayMethod").value   = payMethodInfo(payMethod).label;
   $("#hPack").value     = sticks + "-pack";
   $("#hQty").value      = qty;
   $("#hUnit").value     = money(unit);
@@ -2788,6 +2820,26 @@ heroPackBtns.forEach((btn) => {
   });
 });
 
+/* ---------- payment method ----------
+   Chosen once, before submitting - the post-submit panel and the
+   confirmation modal just display whatever was picked here, they don't
+   offer a second chance to change it. */
+const payMethodBtns = document.querySelectorAll(".pay-method-opt");
+
+function selectPayMethod(id){
+  payMethod = id;
+  const m = payMethodInfo(id);
+  payMethodBtns.forEach(b => b.setAttribute("aria-pressed", b.dataset.method === id ? "true" : "false"));
+  $("#zPhone").textContent = m.sendTo;
+  const stepText = $("#stepPayText");
+  if (stepText) { stepText.innerHTML = m.how; }
+  render();
+}
+
+payMethodBtns.forEach((btn) => {
+  btn.addEventListener("click", () => selectPayMethod(btn.dataset.method));
+});
+
 /* ---------- quantity ---------- */
 $("#qMinus").addEventListener("click", () => { qty = Math.max(1, qty - 1); render(); });
 $("#qPlus").addEventListener("click",  () => { qty = Math.min(20, qty + 1); render(); });
@@ -2795,16 +2847,17 @@ $("#qPlus").addEventListener("click",  () => { qty = Math.min(20, qty + 1); rend
 /* ---------- order summary ---------- */
 function summary(){
   const t = render();
+  const m = payMethodInfo(payMethod);
   const g = (id) => ($(id).value || "").trim();
   return [
-    "HYDRACO RESTORE — PRE-ORDER",
+    "HYDRACO RESTORE — ORDER",
     "Order reference: " + orderCode,
     "",
     "Item:      " + sticks + "-pack (" + sticks + " stick packs) × " + qty,
     "Subtotal:  " + money(t.sub),
     "Delivery:  " + (t.ship === 0 ? "Free (service area)" : money(t.ship)),
     "TOTAL DUE: " + money(t.total),
-    "Paid by Zelle to " + CONFIG.zellePhone + " with memo " + orderCode,
+    "Paid by " + m.label + " to " + m.sendTo + " with memo " + orderCode,
     "",
     "Name:    " + g("#fName"),
     "Email:   " + g("#fEmail"),
@@ -2826,7 +2879,7 @@ $("#orderForm").addEventListener("submit", async (e) => {
 
   if (!missing.length && !$("#fAck").checked){
     msg.className = "order-msg err";
-    msg.textContent = "Tick the box to confirm you'll send the Zelle payment yourself — "
+    msg.textContent = "Tick the box to confirm you'll send the payment yourself — "
                     + "this page can't charge you.";
     $("#fAck").focus();
     return;
@@ -2845,9 +2898,11 @@ $("#orderForm").addEventListener("submit", async (e) => {
 
   const showPayment = () => {
     const panel = $("#payPanel");
+    const m = payMethodInfo(payMethod);
     $("#payAmt").textContent = money(t.total);
-    $("#payTo").textContent  = CONFIG.zellePhone;
+    $("#payTo").textContent  = m.sendTo;
     $("#payRef").textContent = orderCode;
+    $("#payHead").textContent = "To complete the transaction, " + m.verb;
     panel.hidden = false;
     panel.scrollIntoView({ behavior: "smooth", block: "center" });
   };
@@ -2880,7 +2935,7 @@ $("#orderForm").addEventListener("submit", async (e) => {
     });
     msg.className   = "order-msg";
     msg.textContent = "Order " + orderCode + " received. To complete the transaction, "
-                    + "send the Zelle \u2014 details are on screen.";
+                    + payMethodInfo(payMethod).verb + " \u2014 details are on screen.";
     openModal(money(t.total));
     newOrderCode();          // next order gets its own reference
   } catch (err) {
@@ -2889,7 +2944,7 @@ $("#orderForm").addEventListener("submit", async (e) => {
                     + "instead \u2014 please press send. Or email " + CONFIG.orderEmail
                     + " quoting " + orderCode + ".";
     window.location.href = "mailto:" + CONFIG.orderEmail
-      + "?subject=" + encodeURIComponent("Pre-order " + orderCode + " \u2014 " + money(t.total))
+      + "?subject=" + encodeURIComponent("Order " + orderCode + " \u2014 " + money(t.total))
       + "&body="    + encodeURIComponent(summary());
   } finally {
     if (btn) { btn.disabled = false; }
@@ -2924,7 +2979,7 @@ $("#mCopyBtn")?.addEventListener("click", async () => {
 });
 
 /* ---------- fill in config-driven bits ---------- */
-$("#zPhone").textContent = CONFIG.zellePhone;
+selectPayMethod("zelle");
 newOrderCode();
 $("#yr").textContent     = new Date().getFullYear();
 render();
@@ -3054,12 +3109,15 @@ function confetti(){
 
 /* ---------- the confirmation modal ----------
    Two steps on purpose. Placing the order is NOT the finish line: the
-   customer still has to send the Zelle, and this page has no way of
+   customer still has to send the payment, and this page has no way of
    knowing when that happens. So step 1 asks for the payment, and the
    confetti waits until they say they've sent it. */
 function openModal(total){
+  const m = payMethodInfo(payMethod);
   $("#mAmt").textContent  = total;
-  $("#mTo").textContent   = CONFIG.zellePhone;
+  $("#mTo").textContent   = m.sendTo;
+  $("#mToLabel").textContent = m.label + " to";
+  $("#modalPayLede").textContent = "We have your order. To complete the transaction, " + m.verb + ".";
   $("#mRef").textContent  = orderCode;
   $("#mRef2").textContent = orderCode;
   $("#mCopyMsg").textContent = "";
