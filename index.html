@@ -3124,8 +3124,8 @@ function openModal(total){
   $("#stepPay").hidden  = false;
   $("#stepDone").hidden = true;
 
-  const m = $("#doneModal");
-  if (typeof m.showModal === "function"){ m.showModal(); } else { m.setAttribute("open",""); }
+  const dlg = $("#doneModal");
+  if (typeof dlg.showModal === "function"){ dlg.showModal(); } else { dlg.setAttribute("open",""); }
 }
 
 function closeModal(){
