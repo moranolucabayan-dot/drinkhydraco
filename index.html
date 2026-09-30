@@ -100,6 +100,13 @@
 
 *{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
 
+/* .formula-viz's position:sticky, paired with its grid sibling, inflates
+   the document's horizontal scrollable area in Chrome/Safari even though
+   every element's own box stays within the viewport - overflow-x:hidden
+   on body alone doesn't stop it (that only clips body's own box; the
+   root/viewport scroller still allows the drag). Needs to be on html too. */
+html{overflow-x:hidden}
+
 body{
   margin:0;
   background:var(--paper);
