@@ -186,7 +186,40 @@ section{padding-block:clamp(68px,9vw,132px)}
 /* two more links (Gallery, Reviews) landed here since the last pass - tighten
    before the full hide so a laptop-width window doesn't overflow the row */
 @media (max-width:1080px){ .nav-links{gap:15px} .nav-links a:not(.nav-cta){font-size:.68rem;letter-spacing:.12em} }
-@media (max-width:760px){ .nav-links a:not(.nav-cta){display:none} }
+
+/* ---------- mobile menu ----------
+   Below 760px the row can't fit five links plus the CTA, so they move
+   into a dropdown panel anchored under the (sticky, already-positioned)
+   nav bar, opened by a hamburger button that only exists at this width. */
+.nav-toggle{
+  display:none;align-items:center;justify-content:center;flex:none;
+  width:44px;height:44px;border-radius:50%;border:1px solid var(--rule);
+  background:transparent;color:var(--ink);cursor:pointer;
+  transition:border-color .2s,color .2s;
+}
+.nav-toggle svg{width:20px;height:20px}
+.nav-toggle .ti-close{display:none}
+.nav-toggle[aria-expanded="true"] .ti-burger{display:none}
+.nav-toggle[aria-expanded="true"] .ti-close{display:block}
+@media (max-width:760px){
+  .nav-toggle{display:inline-flex}
+  .nav-links{
+    position:absolute;top:100%;left:0;right:0;
+    flex-direction:column;align-items:stretch;gap:0;margin-left:0;
+    background:var(--paper);border-bottom:1px solid var(--rule);
+    box-shadow:0 16px 32px -20px rgba(14,20,20,.3);
+    max-height:0;overflow:hidden;opacity:0;
+    transition:max-height .32s cubic-bezier(.2,.7,.2,1),opacity .22s ease;
+  }
+  .nav-links.open{max-height:80vh;opacity:1;overflow-y:auto}
+  .nav-links a:not(.nav-cta){
+    display:block;padding:16px clamp(20px,6vw,40px);border-top:1px solid var(--rule);
+    font-size:.82rem;letter-spacing:.12em;
+  }
+  .nav-links a:first-child{border-top:none}
+  .nav-links .nav-cta{display:inline-flex;margin:18px clamp(20px,6vw,40px) 22px;justify-content:center}
+}
+@media (prefers-reduced-motion:reduce){ .nav-links{transition:none} }
 
 /* ---------- top-of-page scroll progress ---------- */
 .scroll-progress{position:fixed;top:0;left:0;right:0;height:2.5px;z-index:80;pointer-events:none}
@@ -929,7 +962,7 @@ body.fun-mode .pack-hint.hidden{transform:rotate(-9deg) translateY(-6px)}
 
 .qty{display:flex;align-items:center;gap:14px;margin-top:8px}
 .qty button{
-  width:38px;height:38px;border-radius:50%;border:1px solid var(--rule);background:var(--paper);
+  width:44px;height:44px;border-radius:50%;border:1px solid var(--rule);background:var(--paper);
   color:var(--ink);font-size:1.15rem;cursor:pointer;font-family:inherit;line-height:1;
   transition:border-color .2s,color .2s;
 }
@@ -1827,7 +1860,7 @@ body.fun-mode .galaxy-bg{opacity:1}
 <nav class="nav">
   <div class="wrap nav-in">
     <a class="brand" href="#top"><span class="mark" aria-hidden="true"></span><span class="wordmark">Hydraco</span></a>
-    <div class="nav-links">
+    <div class="nav-links" id="navLinks">
       <a href="#why">Why recovery</a>
       <a href="#formula">The formula</a>
       <a href="#inside">What's inside</a>
@@ -1835,6 +1868,14 @@ body.fun-mode .galaxy-bg{opacity:1}
       <a href="#proof">Reviews</a>
       <a href="#order" class="nav-cta">Order</a>
     </div>
+    <button type="button" class="nav-toggle" id="navToggle" aria-label="Open menu" aria-expanded="false" aria-controls="navLinks">
+      <svg class="ti-burger" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true">
+        <path d="M4 7h16M4 12h16M4 17h16"/>
+      </svg>
+      <svg class="ti-close" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true">
+        <path d="M6 6l12 12M18 6L6 18"/>
+      </svg>
+    </button>
     <button type="button" class="theme-toggle" id="themeToggle" aria-label="Switch to dark mode" aria-pressed="false">
       <svg class="ti-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true">
         <circle cx="12" cy="12" r="4.2"/>
@@ -4088,6 +4129,34 @@ document.querySelectorAll(".ingx-bar > span").forEach(el => barIO.observe(el));
   }, { rootMargin: "-45% 0px -50% 0px" });
 
   map.forEach((_, el) => spyIO.observe(el));
+})();
+
+/* ---------- mobile menu ----------
+   The hamburger only exists (is visible) below 760px - see .nav-toggle's
+   media query - so this is inert and harmless above that width. */
+(function navMenu(){
+  const btn   = $("#navToggle");
+  const links = $("#navLinks");
+  if (!btn || !links) { return; }
+
+  const setOpen = (open) => {
+    links.classList.toggle("open", open);
+    btn.setAttribute("aria-expanded", String(open));
+    btn.setAttribute("aria-label", open ? "Close menu" : "Open menu");
+    document.body.style.overflow = open ? "hidden" : "";
+  };
+
+  btn.addEventListener("click", () => setOpen(!links.classList.contains("open")));
+  links.querySelectorAll("a").forEach((a) => a.addEventListener("click", () => setOpen(false)));
+  document.addEventListener("click", (e) => {
+    if (links.classList.contains("open") && !links.contains(e.target) && !btn.contains(e.target)) {
+      setOpen(false);
+    }
+  });
+  document.addEventListener("keydown", (e) => {
+    if (e.key === "Escape" && links.classList.contains("open")) { setOpen(false); btn.focus(); }
+  });
+  window.addEventListener("resize", () => { if (window.innerWidth > 760) { setOpen(false); } });
 })();
 
 /* ---------- manual light/dark toggle ----------
