@@ -958,6 +958,8 @@ body.fun-mode .pack-hint.hidden{transform:rotate(-9deg) translateY(-6px)}
   border:1px solid var(--rule);border-radius:3px;padding:.82em .95em;transition:border-color .2s;
 }
 .field input:focus,.field textarea:focus{border-color:var(--teal)}
+.field input.missing,.field textarea.missing{border-color:var(--pink-ink)}
+.ack.missing{outline:1px solid var(--pink-ink);outline-offset:6px}
 .field textarea{resize:vertical;min-height:88px;line-height:1.56}
 .row2{display:grid;grid-template-columns:1fr 1fr;gap:18px;align-items:end}
 @media (max-width:560px){ .row2{grid-template-columns:1fr} }
@@ -2581,11 +2583,11 @@ body.fun-mode .galaxy-bg{opacity:1}
             confirmed until it arrives.</span>
           </label>
 
+          <p class="order-msg" id="orderMsg" role="status" aria-live="polite"></p>
           <div style="display:flex;flex-wrap:wrap;gap:12px;align-items:center">
             <button type="submit" class="btn btn-solid">Place order</button>
             <button type="button" class="btn btn-ghost" id="copyBtn">Copy order summary</button>
           </div>
-          <p class="order-msg" id="orderMsg" role="status" aria-live="polite"></p>
 
           <div class="pay-panel" id="payPanel" hidden>
             <p class="pay-head" id="payHead">To complete the transaction, send the Zelle</p>
@@ -2989,6 +2991,11 @@ $("#orderForm").addEventListener("submit", async (e) => {
                     ["#fPhone","your phone number"],["#fAddr","your delivery address"]];
   const missing = required.filter(([sel]) => !$(sel).value.trim());
 
+  /* outline whatever is still needed - the message alone is easy to miss
+     when the field it's about has scrolled out of view */
+  required.forEach(([sel]) => $(sel).classList.toggle("missing", !$(sel).value.trim()));
+  $("#fAck").closest(".ack").classList.toggle("missing", !missing.length && !$("#fAck").checked);
+
   if (!missing.length && !$("#fAck").checked){
     msg.className = "order-msg err";
     msg.textContent = payMethod === "card"
@@ -3102,6 +3109,26 @@ $("#orderForm").addEventListener("submit", async (e) => {
   } finally {
     if (btn) { btn.disabled = false; }
     showPayment();
+  }
+});
+
+/* the red outline clears as soon as the thing it flagged is dealt with */
+["#fName","#fEmail","#fPhone","#fAddr"].forEach((sel) => {
+  $(sel).addEventListener("input", () => $(sel).classList.remove("missing"));
+});
+$("#fAck").addEventListener("change", () => $("#fAck").closest(".ack").classList.remove("missing"));
+
+/* Coming back from Stripe with the browser's Back button restores this page
+   exactly as it was left - Place order still disabled, still saying
+   "Sending your order…" - so the button looked dead. Put it back. */
+window.addEventListener("pageshow", (e) => {
+  if (!e.persisted) { return; }
+  const btn = $("#orderForm").querySelector('button[type="submit"]');
+  if (btn && btn.disabled){
+    btn.disabled = false;
+    const msg = $("#orderMsg");
+    msg.className   = "order-msg err";
+    msg.textContent = "Checkout wasn't completed — no payment was made. You can try again below.";
   }
 });
 
