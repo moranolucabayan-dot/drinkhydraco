@@ -927,6 +927,8 @@ body.fun-mode .pack-hint.hidden{transform:rotate(-9deg) translateY(-6px)}
   transition:border-color .2s, box-shadow .2s, transform .2s;display:block;width:100%;
 }
 .pack-opt:hover{border-color:var(--teal);transform:translateY(-3px)}
+.member-head{margin-top:39px;font-size:.78rem;letter-spacing:.18em;text-transform:uppercase;color:var(--slate)}
+.member-packs{margin-top:14px}
 .pack-opt[aria-pressed="true"]{border-color:var(--ink);box-shadow:inset 0 0 0 1px var(--ink),var(--shadow)}
 .pack-opt .size{display:block;font-size:1.5rem;letter-spacing:.11em;text-transform:uppercase;font-weight:400;line-height:1.1}
 .pack-opt .sticks{display:block;font-size:.7rem;letter-spacing:.18em;text-transform:uppercase;color:var(--slate);margin-top:7px}
@@ -967,6 +969,7 @@ body.fun-mode .pack-hint.hidden{transform:rotate(-9deg) translateY(-6px)}
   transition:border-color .2s,color .2s;
 }
 .qty button:hover{border-color:var(--teal);color:var(--teal-ink)}
+.qty button:disabled{opacity:.35;cursor:not-allowed}
 .qty output{font-size:1.25rem;min-width:2.2ch;text-align:center;font-variant-numeric:tabular-nums}
 
 .totals{display:flex;flex-direction:column;gap:11px;font-size:.88rem}
@@ -1082,6 +1085,7 @@ body.fun-mode .pack-hint.hidden{transform:rotate(-9deg) translateY(-6px)}
   color:var(--ink-soft);cursor:pointer;transition:border-color .18s,color .18s,background .18s;
 }
 .pay-method-opt:hover{border-color:var(--teal);color:var(--teal-ink)}
+.pay-method-opt:disabled{opacity:.35;cursor:not-allowed}
 .pay-method-opt[aria-pressed="true"]{border-color:var(--ink);background:var(--ink);color:var(--paper)}
 
 .order-msg{font-size:.84rem;line-height:1.61;color:var(--teal-ink);min-height:1.3em}
@@ -2460,6 +2464,7 @@ body.fun-mode .galaxy-bg{opacity:1}
         <p style="color:var(--ink-soft);font-family:Newsreader,Georgia,serif;font-size:1.14rem;line-height:1.68">
           Made in small batches &mdash; every order goes into the next batch, paid by Zelle, Apple Cash, or card.
           Card payments are handled securely by Stripe &mdash; we never see or store your card details.
+          Or become a member: 41, 59 or 95 stick packs every month from $1.95 a stick, plus member perks like stickers and merch &mdash; billed monthly by card, cancel anytime.
         </p>
       </div>
 
@@ -2494,6 +2499,29 @@ body.fun-mode .galaxy-bg{opacity:1}
           <span class="sticks">45 stick packs</span>
           <span class="price">$89.55</span>
           <span class="unit">$1.99 per stick</span>
+        </button>
+      </div>
+
+      <p class="member-head">Membership &mdash; delivered every month, with member perks</p>
+      <div class="packs member-packs" role="group" aria-label="Monthly membership">
+        <button type="button" class="pack-opt" data-sticks="41" data-unit="2.05" aria-pressed="false">
+          <span class="size">41 / month</span>
+          <span class="sticks">41 stick packs every month</span>
+          <span class="price">$84.05 / mo</span>
+          <span class="unit">$2.05 per stick</span>
+        </button>
+        <button type="button" class="pack-opt" data-sticks="59" data-unit="1.99" aria-pressed="false">
+          <span class="size">59 / month</span>
+          <span class="sticks">59 stick packs every month</span>
+          <span class="price">$117.41 / mo</span>
+          <span class="unit">$1.99 per stick</span>
+        </button>
+        <button type="button" class="pack-opt" data-sticks="95" data-unit="1.95" aria-pressed="false">
+          <span class="flag">Best member price</span>
+          <span class="size">95 / month</span>
+          <span class="sticks">95 stick packs every month</span>
+          <span class="price">$185.25 / mo</span>
+          <span class="unit">$1.95 per stick</span>
         </button>
       </div>
 
@@ -2806,6 +2834,13 @@ function newOrderCode(){
 /* ---------- state ---------- */
 let sticks = 19, unit = 2.09, qty = 1, payMethod = "zelle";
 
+/* These sizes are the monthly membership tiers, not one-off packs: one
+   per order, card only (Zelle and Apple Cash can't bill automatically each
+   month), charged by Stripe every month until cancelled. Must match
+   MEMBERSHIP_STICKS in /api/create-checkout-session.js. */
+const MEMBER_STICKS = [41, 59, 95];
+const isMember = () => MEMBER_STICKS.includes(sticks);
+
 function payMethodInfo(id){
   return CONFIG.paymentMethods.find(m => m.id === id) || CONFIG.paymentMethods[0];
 }
@@ -2816,17 +2851,20 @@ function render(){
   const ship  = CONFIG.deliveryFee;
   const total = +(sub + ship).toFixed(2);
 
-  $("#tLine").textContent  = sticks + "-pack × " + qty;
+  const member    = isMember();
+  const packLabel = member ? "Membership (" + sticks + " sticks / month)" : sticks + "-pack";
+
+  $("#tLine").textContent  = member ? packLabel : packLabel + " × " + qty;
   $("#tSub").textContent   = money(sub);
   $("#tShip").textContent  = ship === 0 ? "Free" : money(ship);
-  $("#tTotal").textContent = money(total);
+  $("#tTotal").textContent = money(total) + (member ? " / month" : "");
   $("#qVal").textContent   = qty;
-  $("#qNote").textContent  = "× " + sticks + "-pack";
+  $("#qNote").textContent  = member ? "× monthly membership" : "× " + sticks + "-pack";
 
   // mirror into the hidden fields the submit handler reads via FormData
   $("#hOrderRef").value    = orderCode;
   $("#hPayMethod").value   = payMethodInfo(payMethod).label;
-  $("#hPack").value     = sticks + "-pack";
+  $("#hPack").value     = packLabel;
   $("#hQty").value      = qty;
   $("#hUnit").value     = money(unit);
   $("#hSub").value      = money(sub);
@@ -2840,8 +2878,8 @@ function render(){
 
   // the sticky mini buy-bar mirrors the same selection
   const sbPack = $("#sbPack"), sbPrice = $("#sbPrice");
-  if (sbPack)  { sbPack.textContent  = sticks + "-pack × " + qty; }
-  if (sbPrice) { sbPrice.textContent = money(sub); }
+  if (sbPack)  { sbPack.textContent  = member ? "Membership" : packLabel + " × " + qty; }
+  if (sbPrice) { sbPrice.textContent = money(sub) + (member ? " / mo" : ""); }
 
   return { packPrice, sub, ship, total };
 }
@@ -2860,7 +2898,12 @@ function selectPack(newSticks){
     b.setAttribute("aria-pressed", (+b.dataset.sticks === sticks) ? "true" : "false"));
   heroPackBtns.forEach(b =>
     b.setAttribute("aria-pressed", (+b.dataset.sticks === sticks) ? "true" : "false"));
-  render();
+
+  const member = isMember();
+  if (member) { qty = 1; }
+  $("#qMinus").disabled = $("#qPlus").disabled = member;
+  payMethodBtns.forEach(b => { b.disabled = member && b.dataset.method !== "card"; });
+  selectPayMethod(member ? "card" : payMethod);   // also refreshes the consent text and re-renders
 }
 
 packOptBtns.forEach((btn) => {
@@ -2894,7 +2937,9 @@ function selectPayMethod(id){
   if (sendToLabel) { sendToLabel.textContent = id === "card" ? "Checkout" : "Send to"; }
   const ackText = $("#ackText");
   if (ackText) {
-    ackText.textContent = id === "card"
+    ackText.textContent = isMember()
+      ? "I understand this is a membership: my card will be charged " + money(+(sticks * unit).toFixed(2)) + " today and again every month until I cancel, which I can do anytime by emailing " + CONFIG.orderEmail + ". I'm ready to enter my card details on Stripe's secure checkout page."
+      : id === "card"
       ? "I'm ready to enter my card details on Stripe's secure checkout page to complete payment."
       : "I understand I need to send the payment myself, using the method I picked above — this page can't charge me, and my order isn't confirmed until it arrives.";
   }
@@ -2918,7 +2963,9 @@ function summary(){
     "HYDRACO RESTORE — ORDER",
     "Order reference: " + orderCode,
     "",
-    "Item:      " + sticks + "-pack (" + sticks + " stick packs) × " + qty,
+    "Item:      " + (isMember()
+      ? "Monthly membership (" + sticks + " stick packs every month)"
+      : sticks + "-pack (" + sticks + " stick packs) × " + qty),
     "Subtotal:  " + money(t.sub),
     "Delivery:  " + (t.ship === 0 ? "Free (service area)" : money(t.ship)),
     "TOTAL DUE: " + money(t.total),

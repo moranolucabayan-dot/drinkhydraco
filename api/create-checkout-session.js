@@ -11,7 +11,15 @@ const PACKS = {
   9:  2.19,
   19: 2.09,
   45: 1.99,
+  41: 2.05,
+  59: 1.99,
+  95: 1.95,
 };
+
+// These sizes aren't one-off purchases - they're the monthly membership
+// tiers, billed by Stripe every month until cancelled. Always exactly one
+// per checkout, whatever quantity the client sends.
+const MEMBERSHIP_STICKS = [41, 59, 95];
 
 module.exports = async (req, res) => {
   if (req.method !== "POST") {
@@ -26,7 +34,8 @@ module.exports = async (req, res) => {
   body = body || {};
 
   const sticks = Number(body.sticks);
-  const qty    = Math.max(1, Math.min(20, Math.floor(Number(body.qty)) || 1));
+  const member = MEMBERSHIP_STICKS.includes(sticks);
+  const qty    = member ? 1 : Math.max(1, Math.min(20, Math.floor(Number(body.qty)) || 1));
   const orderRef = String(body.orderRef || "").slice(0, 40);
   const name   = String(body.name  || "").slice(0, 200);
   const email  = String(body.email || "").slice(0, 200);
@@ -46,13 +55,22 @@ module.exports = async (req, res) => {
   const origin = "https://" + req.headers.host;
 
   const params = new URLSearchParams();
-  params.set("mode", "payment");
+  params.set("mode", member ? "subscription" : "payment");
   params.set("success_url", origin + "/?paid=1&ref=" + encodeURIComponent(orderRef) + "&session_id={CHECKOUT_SESSION_ID}");
   params.set("cancel_url",  origin + "/?cancelled=1#order");
   params.set("line_items[0][quantity]", String(qty));
   params.set("line_items[0][price_data][currency]", "usd");
   params.set("line_items[0][price_data][unit_amount]", String(unitAmountCents));
-  params.set("line_items[0][price_data][product_data][name]", "Hydraco Restore — " + sticks + "-pack");
+  params.set("line_items[0][price_data][product_data][name]", member
+    ? "Hydraco Membership — " + sticks + " stick packs every month"
+    : "Hydraco Restore — " + sticks + "-pack");
+  if (member) {
+    params.set("line_items[0][price_data][recurring][interval]", "month");
+    // session metadata doesn't carry over to the subscription Stripe creates,
+    // so repeat the order reference there for matching renewals later
+    params.set("subscription_data[metadata][order_ref]", orderRef);
+    params.set("subscription_data[metadata][name]", name);
+  }
   if (email) { params.set("customer_email", email); }
   params.set("metadata[order_ref]", orderRef);
   params.set("metadata[name]", name);
