@@ -702,7 +702,7 @@ body.fun-mode .pack-hint.hidden{transform:rotate(-9deg) translateY(-6px)}
 .ink{cursor:pointer}
 .ink-core{transition:opacity .2s ease}
 .ink-core::after{content:" \02026";opacity:.45;font-style:normal}
-.ink.revealed .ink-core,.ink:hover .ink-core,.ink:focus-visible .ink-core{opacity:.4}
+.ink.revealed .ink-core,.ink.near .ink-core,.ink:hover .ink-core,.ink:focus-visible .ink-core{opacity:.4}
 .ink-full-wrap{
   display:grid;grid-template-rows:0fr;
   transition:grid-template-rows .32s cubic-bezier(.22,.8,.32,1) .03s;
@@ -711,10 +711,10 @@ body.fun-mode .pack-hint.hidden{transform:rotate(-9deg) translateY(-6px)}
   display:block;overflow:hidden;padding-top:0;
   transition:padding-top .3s ease;
 }
-.ink.revealed .ink-full-wrap,.ink:hover .ink-full-wrap,.ink:focus-visible .ink-full-wrap{
+.ink.revealed .ink-full-wrap,.ink.near .ink-full-wrap,.ink:hover .ink-full-wrap,.ink:focus-visible .ink-full-wrap{
   grid-template-rows:1fr;transition-delay:.12s; /* still a beat, not an instant flash - but a real hover shows it fast */
 }
-.ink.revealed .ink-full,.ink:hover .ink-full,.ink:focus-visible .ink-full{
+.ink.revealed .ink-full,.ink.near .ink-full,.ink:hover .ink-full,.ink:focus-visible .ink-full{
   padding-top:.3em;transition-delay:.2s;
 }
 /* each letter fades in on its own randomised delay (assigned once, in
@@ -724,7 +724,7 @@ body.fun-mode .pack-hint.hidden{transform:rotate(-9deg) translateY(-6px)}
    h-y-d-r-a-c-o, even though every letter ends up exactly where it
    belongs */
 .ink-char{opacity:0;transition:opacity .22s linear}
-.ink.revealed .ink-char,.ink:hover .ink-char,.ink:focus-visible .ink-char{opacity:1}
+.ink.revealed .ink-char,.ink.near .ink-char,.ink:hover .ink-char,.ink:focus-visible .ink-char{opacity:1}
 .ink:focus-visible{outline:2px solid var(--teal);outline-offset:4px;border-radius:2px}
 @media (prefers-reduced-motion:reduce){
   .ink-core,.ink-full-wrap,.ink-full,.ink-char{transition:none}
@@ -3245,11 +3245,39 @@ if (!REDUCED){
 }
 
 document.querySelectorAll(".ink").forEach((el) => {
+  /* hovering anywhere in the card the ink sits in reveals it, not just the
+     line of text itself - a much bigger target to find by accident */
+  const box = el.parentElement;
+  if (box){
+    box.addEventListener("mouseenter", () => el.classList.add("near"));
+    box.addEventListener("mouseleave", () => el.classList.remove("near"));
+  }
   el.addEventListener("click", () => el.classList.toggle("revealed"));
   el.addEventListener("keydown", (e) => {
     if (e.key === "Enter" || e.key === " "){ e.preventDefault(); el.classList.toggle("revealed"); }
   });
 });
+
+/* ...and nobody has to find it at all: once a passage has been on screen
+   for 3 seconds it reveals itself and stays revealed. Scrolling away before
+   then cancels the wait, so it only fires for ink someone is looking at. */
+if ("IntersectionObserver" in window){
+  const inkTimers = new WeakMap();
+  const inkSeen = new IntersectionObserver((entries) => {
+    entries.forEach((entry) => {
+      const el = entry.target;
+      if (entry.isIntersecting){
+        inkTimers.set(el, setTimeout(() => {
+          el.classList.add("revealed");
+          inkSeen.unobserve(el);
+        }, 3000));
+      } else {
+        clearTimeout(inkTimers.get(el));
+      }
+    });
+  }, { threshold: 0.6 });
+  document.querySelectorAll(".ink").forEach((el) => inkSeen.observe(el));
+}
 
 function confetti(){
   if (REDUCED || !funMode()) { return; }
