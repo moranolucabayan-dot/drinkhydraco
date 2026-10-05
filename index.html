@@ -2595,7 +2595,7 @@ body.fun-mode .galaxy-bg{opacity:1}
             <label for="fAddr">Delivery address</label>
             <textarea id="fAddr" name="address" autocomplete="shipping street-address" required
               placeholder="Street, city, state, ZIP"></textarea>
-            <span class="hint">Free in NYC/MD/D.C./VA &mdash; anywhere else, including internationally, we'll quote delivery first.</span>
+            <span class="hint">Free in NYC/MD/D.C./VA &mdash; anywhere else, including internationally, email us for a delivery quote before ordering.</span>
           </div>
 
           <div class="field">
@@ -2619,7 +2619,7 @@ body.fun-mode .galaxy-bg{opacity:1}
           <div class="pay-panel" id="payPanel" hidden>
             <p class="pay-head" id="payHead">To complete the transaction, send the Zelle</p>
             <p class="pay-body">
-              Your order details are on their way to us. Money doesn't move until
+              Your order isn't placed until you've sent the payment. Money doesn't move until
               <b>you</b> send it. Open your banking app, choose Zelle, and send:
             </p>
             <dl class="pay-grid">
@@ -2629,7 +2629,7 @@ body.fun-mode .galaxy-bg{opacity:1}
             </dl>
             <p class="pay-foot">
               Put the reference in the memo. Outside our delivery area?
-              <b>Wait for our email</b> first.
+              <b>Email us for a quote</b> first.
             </p>
           </div>
         </div>
@@ -2642,7 +2642,7 @@ body.fun-mode .galaxy-bg{opacity:1}
           </div>
           <p class="area-note">
             Free in <b>NYC</b> and <b>Maryland, D.C. &amp; Virginia</b> (within about an hour of our office).
-            Anywhere else &mdash; including internationally &mdash; place the order and we'll <b>email a quote</b> before you pay.
+            Anywhere else &mdash; including internationally &mdash; <b>email us for a quote</b> before you order.
           </p>
 
           <div class="zelle-box">
@@ -2681,11 +2681,11 @@ body.fun-mode .galaxy-bg{opacity:1}
     <div class="modal-in">
       <span class="modal-mark" aria-hidden="true"></span>
 
-      <!-- step 1: the order is in, but nothing has been paid -->
+      <!-- step 1: nothing has been paid, so nothing has been sent to us yet -->
       <div class="modal-step" id="stepPay">
         <h2 id="doneTitle">Almost done</h2>
         <p class="modal-lede" id="modalPayLede">
-          We have your order. To complete the transaction, send the payment by Zelle.
+          Your order isn't placed yet. To place it, send the payment by Zelle, then tap the button below.
         </p>
 
         <div class="modal-pay">
@@ -2701,7 +2701,7 @@ body.fun-mode .galaxy-bg{opacity:1}
 
         <div class="modal-actions">
           <button type="button" class="btn btn-solid" id="paidBtn">I've sent the payment</button>
-          <button type="button" class="btn btn-ghost" id="payLater">I'll pay later</button>
+          <button type="button" class="btn btn-ghost" id="payLater">Not now</button>
         </div>
       </div>
 
@@ -2739,7 +2739,7 @@ body.fun-mode .galaxy-bg{opacity:1}
       </details>
       <details>
         <summary>Where do you deliver, and what does it cost?</summary>
-        <p>Free in NYC and in Maryland, D.C. and Virginia, within about an hour of our office. Outside that? Place the order anyway &mdash; we'll email a quote before you pay.</p>
+        <p>Free in NYC and in Maryland, D.C. and Virginia, within about an hour of our office. Outside that? Email us at hydracompanymd@gmail.com for a delivery quote before you order.</p>
       </details>
       <details>
         <summary>When will my order arrive?</summary>
@@ -3012,6 +3012,36 @@ function summary(){
   ].join("\n");
 }
 
+/* ---------- recording an order ----------
+   An order only reaches the Orders sheet once its payment has been sent:
+   when the customer taps "I've sent the payment" (Zelle / Apple Cash), or
+   when they land back here from a paid Stripe checkout (card). Filling in
+   the form and pressing Place order records nothing by itself, so the
+   sheet holds orders that were paid for, not ones that were only started.
+
+   Two posts, in order: the order row itself, then the paid_claim that
+   marks that row Paid. See the note in the submit handler for why the
+   body is JSON sent as text/plain with mode:"no-cors". */
+let pendingOrder = null;
+const PENDING_KEY = "hydraco-pending-order";
+
+async function recordPaidOrder(order, amount){
+  const post = (body) => fetch(CONFIG.sheetEndpoint, {
+    method:  "POST",
+    mode:    "no-cors",
+    headers: { "Content-Type": "text/plain;charset=utf-8" },
+    body:    JSON.stringify(body)
+  });
+  try {
+    await post(order);
+    await post({ action: "paid_claim", order_ref: order.order_ref,
+                 name: order.name || "", email: order.email || "", amount });
+    return true;
+  } catch (err) {
+    return false;
+  }
+}
+
 /* ---------- submit ---------- */
 $("#orderForm").addEventListener("submit", async (e) => {
   e.preventDefault();
@@ -3070,12 +3100,21 @@ $("#orderForm").addEventListener("submit", async (e) => {
      worth checking there before shipping, the same way a Zelle transfer
      gets checked in the bank app before shipping. */
   if (payMethod === "card") {
-    fetch(CONFIG.sheetEndpoint, {
-      method:  "POST",
-      mode:    "no-cors",
-      headers: { "Content-Type": "text/plain;charset=utf-8" },
-      body:    JSON.stringify(Object.fromEntries(new FormData(form)))
-    }).catch(() => {});
+    /* Held in this browser until Stripe sends them back paid (see
+       handleStripeReturn). If storage is unavailable - private mode, etc -
+       record it now instead: an unpaid row beats a paid order with no
+       delivery address. */
+    const order = Object.fromEntries(new FormData(form));
+    try {
+      localStorage.setItem(PENDING_KEY, JSON.stringify({ order, amount: money(t.total) }));
+    } catch (storageErr) {
+      fetch(CONFIG.sheetEndpoint, {
+        method:  "POST",
+        mode:    "no-cors",
+        headers: { "Content-Type": "text/plain;charset=utf-8" },
+        body:    JSON.stringify(order)
+      }).catch(() => {});
+    }
 
     try {
       const resp = await fetch("/api/create-checkout-session", {
@@ -3100,9 +3139,12 @@ $("#orderForm").addEventListener("submit", async (e) => {
     }
   }
 
-  /* Posts straight to the Google Apps Script, so the order lands in the
-     Orders sheet whether or not the customer has a mail app, and regardless
-     of which platform hosts this page. mailto is only the fallback.
+  /* Zelle / Apple Cash: nothing is sent to us yet. The order is held here
+     and only posted once the customer taps "I've sent the payment" in the
+     modal (see recordPaidOrder). When it is posted, it goes straight to the
+     Google Apps Script, so it lands in the Orders sheet whether or not the
+     customer has a mail app, and regardless of which platform hosts this
+     page. mailto is only the fallback.
 
      The body is JSON text sent as Content-Type: text/plain, not the more
      obvious application/x-www-form-urlencoded - two things forced that:
@@ -3115,30 +3157,13 @@ $("#orderForm").addEventListener("submit", async (e) => {
      mode:"no-cors" also means the response comes back opaque and unreadable
      either way, so a fetch that doesn't throw (no offline error, nothing
      blocked) is the best success signal a browser can give us here. */
-  try {
-    await fetch(CONFIG.sheetEndpoint, {
-      method:  "POST",
-      mode:    "no-cors",
-      headers: { "Content-Type": "text/plain;charset=utf-8" },
-      body:    JSON.stringify(Object.fromEntries(new FormData(form)))
-    });
-    msg.className   = "order-msg";
-    msg.textContent = "Order " + orderCode + " received. To complete the transaction, "
-                    + payMethodInfo(payMethod).verb + " \u2014 details are on screen.";
-    openModal(money(t.total));
-    newOrderCode();          // next order gets its own reference
-  } catch (err) {
-    msg.className   = "order-msg err";
-    msg.textContent = "We couldn't submit that automatically, so we've opened an email "
-                    + "instead \u2014 please press send. Or email " + CONFIG.orderEmail
-                    + " quoting " + orderCode + ".";
-    window.location.href = "mailto:" + CONFIG.orderEmail
-      + "?subject=" + encodeURIComponent("Order " + orderCode + " \u2014 " + money(t.total))
-      + "&body="    + encodeURIComponent(summary());
-  } finally {
-    if (btn) { btn.disabled = false; }
-    showPayment();
-  }
+  pendingOrder = Object.fromEntries(new FormData(form));
+  msg.className   = "order-msg";
+  msg.textContent = "Almost done \u2014 " + payMethodInfo(payMethod).verb
+                  + ", then tap \u201cI've sent the payment\u201d so your order reaches us.";
+  openModal(money(t.total));
+  if (btn) { btn.disabled = false; }
+  showPayment();
 });
 
 /* the red outline clears as soon as the thing it flagged is dealt with */
@@ -3374,7 +3399,7 @@ function openModal(total){
   $("#mAmt").textContent  = total;
   $("#mTo").textContent   = m.sendTo;
   $("#mToLabel").textContent = m.label + " to";
-  $("#modalPayLede").textContent = "We have your order. To complete the transaction, " + m.verb + ".";
+  $("#modalPayLede").textContent = "Your order isn't placed yet. To place it, " + m.verb + ", then tap the button below.";
   $("#mRef").textContent  = orderCode;
   $("#mRef2").textContent = orderCode;
   $("#mCopyMsg").textContent = "";
@@ -3390,31 +3415,36 @@ function closeModal(){
   if (typeof m.close === "function"){ m.close(); } else { m.removeAttribute("open"); }
 }
 
-/* they say the money is on its way - celebrate, and tell us */
-$("#paidBtn").addEventListener("click", () => {
+/* they say the money is on its way - celebrate, and only now tell us
+   about the order at all */
+$("#paidBtn").addEventListener("click", async () => {
   $("#stepPay").hidden  = true;
   $("#stepDone").hidden = false;
   confetti();
 
-  const claim = {
-    action:      "paid_claim",
-    order_ref:   orderCode,
-    name:       ($("#fName").value  || "").trim(),
-    email:      ($("#fEmail").value || "").trim(),
-    amount:      $("#mAmt").textContent
-  };
-  fetch(CONFIG.sheetEndpoint, {
-    method:  "POST",
-    mode:    "no-cors",
-    headers: { "Content-Type": "text/plain;charset=utf-8" },
-    body:    JSON.stringify(claim)
-  }).catch(() => {});   // best-effort: the order itself is already recorded; this
-                         // just flips its row to Paid so it doesn't need typing in by hand
+  const order  = pendingOrder;
+  const amount = $("#mAmt").textContent;
+  pendingOrder = null;
+  if (!order) { return; }
 
   const msg = $("#orderMsg");
-  msg.className   = "order-msg";
-  msg.textContent = "Thanks \u2014 we'll match your payment to " + orderCode
-                  + " and email you to confirm.";
+  const ref = order.order_ref;
+  const mailBody = summary();          // built before the reference below is replaced
+  const ok  = await recordPaidOrder(order, amount);
+  if (ok){
+    msg.className   = "order-msg";
+    msg.textContent = "Thanks \u2014 we'll match your payment to " + ref
+                    + " and email you to confirm.";
+  } else {
+    msg.className   = "order-msg err";
+    msg.textContent = "We couldn't submit that automatically, so we've opened an email "
+                    + "instead \u2014 please press send. Or email " + CONFIG.orderEmail
+                    + " quoting " + ref + ".";
+    window.location.href = "mailto:" + CONFIG.orderEmail
+      + "?subject=" + encodeURIComponent("Order " + ref + " \u2014 " + amount)
+      + "&body="    + encodeURIComponent(mailBody);
+  }
+  newOrderCode();          // next order gets its own reference
 });
 
 $("#payLater").addEventListener("click", closeModal);
@@ -3436,6 +3466,15 @@ $("#doneClose").addEventListener("click", closeModal);
     if (typeof dlg.showModal === "function"){ dlg.showModal(); } else { dlg.setAttribute("open",""); }
     confetti();
     history.replaceState(null, "", location.pathname + location.hash);
+
+    // the order was held in this browser while they paid - send it now
+    try {
+      const held = JSON.parse(localStorage.getItem(PENDING_KEY) || "null");
+      localStorage.removeItem(PENDING_KEY);
+      if (held && held.order && (!ref || held.order.order_ref === ref)) {
+        recordPaidOrder(held.order, held.amount);
+      }
+    } catch (storageErr) { /* nothing held - Stripe's dashboard still has the payment */ }
   } else if (params.get("cancelled") === "1"){
     const msg = $("#orderMsg");
     if (msg){
