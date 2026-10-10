@@ -14,14 +14,21 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Hydraco Restore — Post-Workout Electrolyte Recovery Mix</title>
 <meta name="description" content="Hydraco Restore is a post-workout electrolyte recovery mix — low sugar, no artificial sweeteners, with tart cherry and pomegranate. Designed for recovery, not stimulation.">
-<link rel="canonical" href="https://drinkhydraco.com/">
+<link rel="canonical" href="https://www.drinkhydraco.com/">
 <link rel="icon" type="image/png" href="/images/favicon.png">
+<link rel="apple-touch-icon" href="/images/apple-touch-icon.png">
 <meta property="og:type" content="website">
 <meta property="og:site_name" content="Hydraco">
 <meta property="og:title" content="Hydraco Restore — Post-Workout Electrolyte Recovery Mix">
 <meta property="og:description" content="Hydraco Restore is a post-workout electrolyte recovery mix — low sugar, no artificial sweeteners, with tart cherry and pomegranate. Designed for recovery, not stimulation.">
-<meta property="og:url" content="https://drinkhydraco.com/">
+<meta property="og:url" content="https://www.drinkhydraco.com/">
+<meta property="og:image" content="https://www.drinkhydraco.com/images/og.jpg">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="A Hydraco Restore stick pack beside a glass of the prepared drink in a gym">
 <meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="https://www.drinkhydraco.com/images/og.jpg">
+<script type="application/ld+json">[{"@context": "https://schema.org", "@type": "Organization", "name": "Hydraco", "url": "https://www.drinkhydraco.com/", "logo": "https://www.drinkhydraco.com/images/apple-touch-icon.png", "email": "hydracompanymd@gmail.com", "sameAs": ["https://www.instagram.com/hydracofficial"]}, {"@context": "https://schema.org", "@type": "Product", "name": "Hydraco Restore", "description": "Hydraco Restore is a post-workout electrolyte recovery mix — low sugar, no artificial sweeteners, with tart cherry and pomegranate. Designed for recovery, not stimulation.", "image": "https://www.drinkhydraco.com/images/og.jpg", "brand": {"@type": "Brand", "name": "Hydraco"}, "category": "Electrolyte drink mix", "offers": {"@type": "AggregateOffer", "priceCurrency": "USD", "lowPrice": "2.45", "highPrice": "89.55", "offerCount": 4, "availability": "https://schema.org/InStock", "url": "https://www.drinkhydraco.com/#order"}}, {"@context": "https://schema.org", "@type": "FAQPage", "mainEntity": [{"@type": "Question", "name": "How do I use it?", "acceptedAnswer": {"@type": "Answer", "text": "Pour one stick pack into 16–32 oz of cold water, shake or stir, and drink it after training. One stick is one serving."}}, {"@type": "Question", "name": "How do I pay?", "acceptedAnswer": {"@type": "Answer", "text": "By Zelle, Apple Cash, or card — pick one in the order form. Card payments go through Stripe's secure checkout; we never see or store your card number."}}, {"@type": "Question", "name": "Where do you deliver, and what does it cost?", "acceptedAnswer": {"@type": "Answer", "text": "Delivery is free in NYC and in Maryland, D.C. and Virginia, within about an hour of our office. Anywhere else, including internationally, email us for a delivery quote before you order."}}, {"@type": "Question", "name": "When will my order arrive?", "acceptedAnswer": {"@type": "Answer", "text": "Usually within a few days. Restore is made in small batches and orders are filled in the order they come in; we email you to confirm your delivery date, usually within one business day."}}, {"@type": "Question", "name": "How should I store it?", "acceptedAnswer": {"@type": "Answer", "text": "In a cool, dry place. Best before January 2027."}}, {"@type": "Question", "name": "Is it safe for me?", "acceptedAnswer": {"@type": "Answer", "text": "It's a food, not a medicine. The full notice, allergen and cottage-food details are in the footer below."}}]}]</script>
 <meta name="theme-color" content="#00a9ac">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -120,6 +127,12 @@ body{
 }
 
 img{max-width:100%;display:block}
+.skip-link{
+  position:absolute;left:12px;top:-60px;z-index:200;background:var(--ink);color:var(--paper);
+  padding:.8em 1.2em;border-radius:6px;font-size:.84rem;text-decoration:none;transition:top .15s;
+}
+.skip-link:focus{top:12px}
+main:focus{outline:none}
 
 /* ---------- type scale ---------- */
 .eyebrow{
@@ -552,9 +565,9 @@ body.fun-mode .pack-hint.hidden{transform:rotate(-9deg) translateY(-6px)}
   .flare-spark,.flare-ring,.nova-streak{animation:none}
 }
 @media (prefers-reduced-motion:reduce){ .doodle-arrow,.doodle-underline .doodle-svg{transition:none} }
-.hero-buybox-opts{display:flex;gap:8px;flex-wrap:wrap}
+.hero-buybox-opts{display:grid;grid-template-columns:repeat(2,1fr);gap:8px}
 .hero-pack-opt{
-  flex:1 1 0;min-width:100px;text-align:left;cursor:pointer;font-family:inherit;
+  text-align:left;cursor:pointer;font-family:inherit;
   background:var(--paper);border:1.5px solid var(--rule);border-radius:10px;color:var(--ink);
   padding:10px 12px 11px;transition:border-color .18s,transform .18s;position:relative;
 }
@@ -844,7 +857,7 @@ body.fun-mode .pack-hint.hidden{transform:rotate(-9deg) translateY(-6px)}
   margin-top:2px;
 }
 .nn-icon svg{width:100%;height:100%;display:block}
-.nn-body h4{
+.nn-body h3{
   font-family:"Jost","Futura","Century Gothic",system-ui,sans-serif;
   font-size:.78rem;letter-spacing:.1em;text-transform:uppercase;font-weight:600;
   color:var(--ink);margin:0 0 6px;
@@ -937,6 +950,19 @@ body.fun-mode .pack-hint.hidden{transform:rotate(-9deg) translateY(-6px)}
 .pack-opt .flag{
   position:absolute;top:-9px;right:16px;font-size:.6rem;letter-spacing:.17em;text-transform:uppercase;
   font-weight:600;background:var(--ink);color:var(--paper);padding:.42em .9em;border-radius:999px;
+}
+/* on a phone, seven full-width cards were a long scroll before the form -
+   two compact columns keep every option and the form close together */
+@media (max-width:560px){
+  .packs{grid-template-columns:1fr 1fr;gap:12px}
+  .pack-opt{padding:20px 14px 16px}
+  .pack-opt .size{font-size:1.08rem;letter-spacing:.06em}
+  .pack-opt .sticks{display:none}
+  .pack-opt .price{font-size:1.3rem;font-weight:400;margin-top:10px}
+  .pack-opt .unit{font-size:.64rem;letter-spacing:.06em}
+  .member-packs .pack-opt .size{font-size:.98rem}
+  .member-packs .pack-opt .price{font-size:1.08rem}
+  .pack-opt .flag{right:10px;font-size:.54rem;letter-spacing:.1em;padding:.36em .7em}
 }
 
 .order-panel{
@@ -1031,15 +1057,37 @@ body.fun-mode .pack-hint.hidden{transform:rotate(-9deg) translateY(-6px)}
   font-size:.68rem;letter-spacing:.2em;text-transform:uppercase;
   font-weight:600;color:var(--pink-ink);
 }
-.modal-pay .pay-grid dd{font-size:1.05rem}
 /* the exact moment someone has to switch apps and retype a reference by
-   hand is where a mistyped memo breaks the payment match - one tap
-   instead of that */
-.modal-copy-btn{align-self:flex-start;font-size:.72rem;padding:.62em 1.1em}
+   hand is where a mistyped memo breaks the payment match - one tap per
+   value instead, since a banking app takes each in its own field */
+.pay-rows{display:flex;flex-direction:column}
+.pay-row{display:flex;align-items:center;gap:12px;padding:11px 0;border-top:1px solid var(--rule)}
+.pay-row:first-child{border-top:none;padding-top:0}
+.pay-row-text{display:flex;flex-direction:column;gap:3px;flex:1;min-width:0}
+.pr-k{font-size:.64rem;letter-spacing:.2em;text-transform:uppercase;color:var(--slate)}
+.pr-v{font-size:1.22rem;letter-spacing:.03em;color:var(--ink);font-variant-numeric:tabular-nums;overflow-wrap:anywhere}
+.pr-v.ref{color:var(--pink-ink);font-weight:500}
+.pay-copy{
+  font-family:inherit;font-size:.72rem;letter-spacing:.12em;text-transform:uppercase;font-weight:500;
+  flex:none;min-width:76px;min-height:44px;padding:0 14px;border-radius:999px;
+  border:1.5px solid var(--ink);background:transparent;color:var(--ink);cursor:pointer;
+  transition:background .18s,color .18s;
+}
+.pay-copy:hover,.pay-copy.done{background:var(--ink);color:var(--paper)}
+.modal-open-app{align-self:stretch;justify-content:center}
+.modal-open-app[hidden]{display:none}
+/* on a phone the whole pay step, both buttons included, should fit without scrolling */
+@media (max-width:480px){
+  .modal-in{padding:22px 18px;gap:12px}
+  .modal-step{gap:12px}
+  .modal-mark{display:none}
+  .modal-pay{padding:14px 14px}
+}
 .modal-copy-msg{margin:0;font-size:.74rem;color:var(--teal-ink);min-height:1.2em}
 .modal-step{display:flex;flex-direction:column;gap:16px;align-items:center;width:100%}
 .modal-step[hidden]{display:none}
-.modal-actions{display:flex;flex-wrap:wrap;gap:10px;justify-content:center;margin-top:4px}
+.modal-actions{display:flex;flex-wrap:wrap;gap:10px;justify-content:center;margin-top:4px;width:100%}
+.modal-actions .btn{flex:1 1 200px;justify-content:center;text-align:center}
 .modal-note{font-size:.84rem;line-height:1.66;color:var(--slate)}
 .modal-note b{color:var(--pink-ink);font-weight:500}
 .modal-tag{
@@ -1051,6 +1099,7 @@ body.fun-mode .pack-hint.hidden{transform:rotate(-9deg) translateY(-6px)}
 .ack{display:flex;gap:11px;align-items:flex-start;cursor:pointer;
   font-size:.82rem;line-height:1.61;color:var(--ink-soft)}
 .ack input{width:17px;height:17px;flex:none;margin-top:2px;accent-color:var(--teal)}
+.ack[hidden]{display:none}
 
 .pay-panel{
   border:2px solid var(--pink);border-radius:4px;background:var(--paper);
@@ -1089,23 +1138,26 @@ body.fun-mode .pack-hint.hidden{transform:rotate(-9deg) translateY(-6px)}
 .step p{font-size:.86rem;line-height:1.61;color:var(--ink-soft)}
 .step b{color:var(--ink);font-weight:500}
 
-.zelle-box{
-  background:var(--paper);border:1px dashed var(--pink);border-radius:4px;padding:18px 20px;
-  display:flex;flex-direction:column;gap:6px;
-}
-.zelle-box .k{font-size:.64rem;letter-spacing:.2em;text-transform:uppercase;color:var(--slate)}
-.zelle-box .v{font-size:1.18rem;letter-spacing:.06em;color:var(--ink);font-variant-numeric:tabular-nums}
-.zelle-box .v.code{color:var(--pink-ink);font-weight:500}
-
-.pay-method-picker{display:flex;gap:8px;flex-wrap:wrap;margin-top:2px}
+/* the payment choice sits in the form itself, right above the button that
+   acts on it - three big tap targets, the same on a phone as on a desktop */
+.pay-choose{display:flex;flex-direction:column;gap:10px}
+.pay-method-picker{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
 .pay-method-opt{
-  font-family:inherit;font-size:.72rem;letter-spacing:.06em;font-weight:500;
-  padding:.56em 1.05em;border-radius:999px;border:1.5px solid var(--rule);background:var(--paper);
-  color:var(--ink-soft);cursor:pointer;transition:border-color .18s,color .18s,background .18s;
+  font-family:inherit;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:5px;
+  min-height:84px;padding:14px 6px;border-radius:10px;border:2px solid var(--rule);background:var(--paper);
+  color:var(--ink);cursor:pointer;text-align:center;
+  transition:border-color .18s,color .18s,background .18s,transform .18s;
 }
-.pay-method-opt:hover{border-color:var(--teal);color:var(--teal-ink)}
+.pm-name{font-size:1.06rem;font-weight:600;letter-spacing:.01em;line-height:1.15}
+.pm-sub{font-size:.7rem;line-height:1.3;color:var(--slate)}
+.pay-method-opt:hover{border-color:var(--teal)}
 .pay-method-opt:disabled{opacity:.35;cursor:not-allowed}
 .pay-method-opt[aria-pressed="true"]{border-color:var(--ink);background:var(--ink);color:var(--paper)}
+.pay-method-opt[aria-pressed="true"] .pm-sub{color:inherit;opacity:.82}
+.pay-method-note{font-size:.84rem;line-height:1.56;color:var(--ink-soft)}
+@media (max-width:380px){ .pm-name{font-size:.96rem} .pm-sub{font-size:.66rem} }
+
+.order-submit{width:100%;justify-content:center;text-align:center;font-size:.86rem;letter-spacing:.12em;padding:1.25em 1.2em}
 
 .order-msg{font-size:.84rem;line-height:1.61;color:var(--teal-ink);min-height:1.3em}
 .order-msg.err{color:var(--pink-ink)}
@@ -1120,6 +1172,7 @@ body.fun-mode .pack-hint.hidden{transform:rotate(-9deg) translateY(-6px)}
 .faq summary::-webkit-details-marker{display:none}
 .faq summary::after{content:"+";color:var(--ink);font-size:1.3rem;line-height:1;transition:transform .25s}
 .faq details[open] summary::after{transform:rotate(45deg)}
+.faq details p a{color:var(--teal-ink)}
 .faq details p{margin-top:17px;font-size:.9rem;color:var(--slate);line-height:1.71;max-width:68ch}
 
 /* ---------- footer ---------- */
@@ -1206,6 +1259,10 @@ body.fun-mode .pack-hint.hidden{transform:rotate(-9deg) translateY(-6px)}
   transition:background .2s,color .2s;
 }
 .seg-btn:hover{color:var(--teal-ink)}
+@media (max-width:560px){
+  .seg{display:grid;grid-template-columns:repeat(3,1fr);width:100%;border-radius:14px}
+  .seg-btn{padding:.9em .3em;font-size:.64rem;letter-spacing:.08em;border-radius:10px;line-height:1.3}
+}
 .seg-btn[aria-selected="true"]{background:var(--ink);color:var(--paper)}
 
 .exp{margin-top:34px}
@@ -1743,7 +1800,7 @@ body.fun-mode .galaxy-bg{opacity:1}
   object-fit:cover;object-position:center 32%;
 }
 @media (max-width:900px){
-  .hero-photo{order:-1;height:56vh;min-height:320px}
+  .hero-photo{order:-1;height:44vh;min-height:300px}
 }
 
 /* ---------- formula: the relocated interactive pack, now living
@@ -1878,15 +1935,17 @@ body.fun-mode .galaxy-bg{opacity:1}
   <span class="logo-star" aria-hidden="true" style="top:84.4%;left:70.8%;width:10px;height:15.4px;color:#cfd6d6;animation-delay:5.88s;animation-duration:3.85s"></span>
 </div>
 
+<a class="skip-link" href="#top">Skip to content</a>
+
 <div class="scroll-progress" id="scrollProgress" aria-hidden="true"><span></span></div>
 
 <nav class="nav">
   <div class="wrap nav-in">
     <a class="brand" href="#top"><span class="mark" aria-hidden="true"></span><span class="wordmark">Hydraco</span></a>
     <div class="nav-links" id="navLinks">
-      <a href="#why">Why recovery</a>
       <a href="#formula">The formula</a>
       <a href="#inside">What's inside</a>
+      <a href="#why">Why recovery</a>
       <a href="#story">Our story</a>
       <a href="#proof">Reviews</a>
       <a href="#order" class="nav-cta">Order</a>
@@ -1919,7 +1978,7 @@ body.fun-mode .galaxy-bg{opacity:1}
   </div>
 </div>
 
-<main id="top">
+<main id="top" tabindex="-1">
 
   <!-- ============ HERO ============ -->
   <header class="hero">
@@ -1971,7 +2030,7 @@ body.fun-mode .galaxy-bg{opacity:1}
     </div>
 
     <div class="hero-photo rv">
-      <img src="/images/hero.jpg" class="photo-frame" alt="HYDRACO Restore post-workout electrolyte recovery mix packet, standing beside a glass of the prepared drink" fetchpriority="high">
+      <img src="/images/hero.jpg" class="photo-frame" alt="HYDRACO Restore post-workout electrolyte recovery mix packet, standing beside a glass of the prepared drink" width="853" height="1280" fetchpriority="high">
     </div>
   </header>
 
@@ -2232,7 +2291,7 @@ body.fun-mode .galaxy-bg{opacity:1}
               </svg>
             </span>
             <div class="nn-body">
-              <h4>Sodium &middot; 230mg</h4>
+              <h3>Sodium &middot; 230mg</h3>
               <p><b>What &amp; why</b>The main electrolyte you lose in sweat &mdash; it helps your cells hold onto the water you drink instead of passing it straight through, and keeps nerves and muscles firing correctly.</p>
               <p class="nn-source"><b>In Hydraco</b>From pink Himalayan salt.</p>
             </div>
@@ -2245,7 +2304,7 @@ body.fun-mode .galaxy-bg{opacity:1}
               </svg>
             </span>
             <div class="nn-body">
-              <h4>Calcium &middot; 20mg</h4>
+              <h3>Calcium &middot; 20mg</h3>
               <p><b>What &amp; why</b>Best known for bones, but it's also involved in muscle contraction and nerve signalling.</p>
               <p class="nn-source"><b>In Hydraco</b>Trace amounts from the coconut water and fruit powders &mdash; not a significant source, just naturally present.</p>
             </div>
@@ -2258,7 +2317,7 @@ body.fun-mode .galaxy-bg{opacity:1}
               </svg>
             </span>
             <div class="nn-body">
-              <h4>Potassium &middot; 400mg</h4>
+              <h3>Potassium &middot; 400mg</h3>
               <p><b>What &amp; why</b>Works alongside sodium to move water into your cells rather than past them, and helps your muscles contract properly.</p>
               <p class="nn-source"><b>In Hydraco</b>Mainly from coconut water powder, with a little more from apple powder.</p>
             </div>
@@ -2272,7 +2331,7 @@ body.fun-mode .galaxy-bg{opacity:1}
               </svg>
             </span>
             <div class="nn-body">
-              <h4>Vitamin C &middot; 9mg</h4>
+              <h3>Vitamin C &middot; 9mg</h3>
               <p><b>What &amp; why</b>An antioxidant that supports your immune system and helps your body absorb other nutrients.</p>
               <p class="nn-source"><b>In Hydraco</b>Naturally from lemon juice powder.</p>
             </div>
@@ -2286,7 +2345,7 @@ body.fun-mode .galaxy-bg{opacity:1}
               </svg>
             </span>
             <div class="nn-body">
-              <h4>Magnesium &middot; 15mg</h4>
+              <h3>Magnesium &middot; 15mg</h3>
               <p><b>What &amp; why</b>The mineral your muscles need to relax again after they've worked &mdash; and most people don't get enough of it day to day.</p>
               <p class="nn-source"><b>In Hydraco</b>A plant-based source: pumpkin seed extract powder.</p>
             </div>
@@ -2302,7 +2361,7 @@ body.fun-mode .galaxy-bg{opacity:1}
               </svg>
             </span>
             <div class="nn-body">
-              <h4>Polyphenols &amp; antioxidants</h4>
+              <h3>Polyphenols &amp; antioxidants</h3>
               <p><b>What &amp; why</b>The plant compounds behind tart cherry and pomegranate's antioxidant power &mdash; they help the body manage the oxidative stress hard training produces. Results across the soreness research are mixed, not a guarantee; the individual studies are cited in the formula section above.</p>
               <p class="nn-source"><b>In Hydraco</b>From tart cherry powder and pomegranate extract powder &mdash; the full research behind them is in the formula section above.</p>
             </div>
@@ -2328,7 +2387,7 @@ body.fun-mode .galaxy-bg{opacity:1}
   <section id="why">
    <div class="why-grid">
     <div class="why-photo rv">
-      <img src="/images/why-recovery.jpg" class="photo-frame" alt="HYDRACO Restore electrolyte recovery drink after training" loading="lazy">
+      <img src="/images/why-recovery.jpg" class="photo-frame" alt="HYDRACO Restore electrolyte recovery drink after training" loading="lazy" decoding="async" width="1280" height="853">
     </div>
     <div class="why-text rv">
     <div class="sec-head">
@@ -2366,7 +2425,7 @@ body.fun-mode .galaxy-bg{opacity:1}
 
   <!-- ============ GYM / RECOVERY BAND ============ -->
   <div class="gym-band rv" aria-label="HYDRACO Restore in a post-workout gym setting">
-    <img src="/images/gym-band.jpg" alt="HYDRACO Restore electrolyte packet and drink in a post-workout gym setting" loading="lazy">
+    <img src="/images/gym-band.jpg" alt="HYDRACO Restore electrolyte packet and drink in a post-workout gym setting" loading="lazy" decoding="async" width="1280" height="853">
     <div class="gym-band-copy">
       <p>Built for the hours after, not the minutes during.</p>
     </div>
@@ -2578,17 +2637,17 @@ body.fun-mode .galaxy-bg{opacity:1}
           <div class="row2">
             <div class="field">
               <label for="fName">Full name</label>
-              <input id="fName" name="name" type="text" autocomplete="name" required>
+              <input id="fName" name="name" type="text" autocomplete="name" autocapitalize="words" required>
             </div>
             <div class="field">
-              <label for="fPhone">Phone (for Zelle)</label>
-              <input id="fPhone" name="phone" type="tel" autocomplete="tel" required>
+              <label for="fPhone">Phone</label>
+              <input id="fPhone" name="phone" type="tel" inputmode="tel" autocomplete="tel" required>
             </div>
           </div>
 
           <div class="field">
             <label for="fEmail">Email</label>
-            <input id="fEmail" name="email" type="email" autocomplete="email" required>
+            <input id="fEmail" name="email" type="email" inputmode="email" autocomplete="email" autocapitalize="off" spellcheck="false" required>
           </div>
 
           <div class="field">
@@ -2603,24 +2662,36 @@ body.fun-mode .galaxy-bg{opacity:1}
             <input id="fNotes" name="notes" type="text">
           </div>
 
-          <label class="ack" for="fAck">
+          <div class="pay-choose">
+            <span class="qty-label">How do you want to pay?</span>
+            <div class="pay-method-picker" role="group" aria-label="Payment method">
+              <button type="button" class="pay-method-opt" data-method="zelle" aria-pressed="true">
+                <span class="pm-name">Zelle</span><span class="pm-sub">From your bank app</span>
+              </button>
+              <button type="button" class="pay-method-opt" data-method="applecash" aria-pressed="false">
+                <span class="pm-name">Apple Cash</span><span class="pm-sub">In Messages</span>
+              </button>
+              <button type="button" class="pay-method-opt" data-method="card" aria-pressed="false">
+                <span class="pm-name">Card</span><span class="pm-sub">Secure checkout</span>
+              </button>
+            </div>
+            <p class="pay-method-note" id="payMethodNote"></p>
+          </div>
+
+          <!-- only shown for memberships, where it's consent to a recurring charge -->
+          <label class="ack" for="fAck" hidden>
             <input type="checkbox" id="fAck" name="ack">
-            <span id="ackText">I understand I need to send the payment myself, using the method
-            I picked above &mdash; this page can't charge me, and my order isn't
-            confirmed until it arrives.</span>
+            <span id="ackText"></span>
           </label>
 
           <p class="order-msg" id="orderMsg" role="status" aria-live="polite"></p>
-          <div style="display:flex;flex-wrap:wrap;gap:12px;align-items:center">
-            <button type="submit" class="btn btn-solid">Place order</button>
-            <button type="button" class="btn btn-ghost" id="copyBtn">Copy order summary</button>
-          </div>
+          <button type="submit" class="btn btn-solid order-submit" id="placeBtn">Place order</button>
 
           <div class="pay-panel" id="payPanel" hidden>
             <p class="pay-head" id="payHead">To complete the transaction, send the Zelle</p>
             <p class="pay-body">
               Your order isn't placed until you've sent the payment. Money doesn't move until
-              <b>you</b> send it. Open your banking app, choose Zelle, and send:
+              <b>you</b> send it. <span id="payWhere">Open your banking app, choose Zelle, and send:</span>
             </p>
             <dl class="pay-grid">
               <div><dt>Amount</dt><dd id="payAmt">&mdash;</dd></div>
@@ -2645,23 +2716,10 @@ body.fun-mode .galaxy-bg{opacity:1}
             Anywhere else &mdash; including internationally &mdash; <b>email us for a quote</b> before you order.
           </p>
 
-          <div class="zelle-box">
-            <span class="k">Pay with</span>
-            <div class="pay-method-picker" role="group" aria-label="Payment method">
-              <button type="button" class="pay-method-opt" data-method="zelle" aria-pressed="true">Zelle</button>
-              <button type="button" class="pay-method-opt" data-method="applecash" aria-pressed="false">Apple Cash</button>
-              <button type="button" class="pay-method-opt" data-method="card" aria-pressed="false">Card</button>
-            </div>
-            <span class="k" style="margin-top:8px" id="zSendToLabel">Send to</span>
-            <span class="v" id="zPhone">(202) 271-3548</span>
-            <span class="k" style="margin-top:8px">Memo / reference</span>
-            <span class="v code" id="zCode">&mdash;</span>
-          </div>
-
           <div class="steps">
-            <div class="step"><p>Fill in your details and hit <b>Place order</b>. That sends us the order &mdash; it does <b>not</b> move any money.</p></div>
-            <div class="step"><p id="stepPayText"><b>Open your bank's app and send the Zelle yourself</b>, to the number above, with your order reference in the memo.</p></div>
-            <div class="step"><p>We match your payment to your order and confirm your <b>delivery date</b> by email, usually within one business day.</p></div>
+            <div class="step"><p>Fill in your details and <b>pick how to pay</b>.</p></div>
+            <div class="step"><p id="stepPayText"></p></div>
+            <div class="step"><p>We confirm your <b>delivery date</b> by email, usually within one business day.</p></div>
           </div>
 
           <p style="font-size:.74rem;color:var(--slate);line-height:1.61">
@@ -2690,13 +2748,22 @@ body.fun-mode .galaxy-bg{opacity:1}
 
         <div class="modal-pay">
           <p class="modal-pay-head">Your order isn't confirmed until this arrives</p>
-          <dl class="pay-grid">
-            <div><dt>Amount</dt><dd id="mAmt">&mdash;</dd></div>
-            <div><dt id="mToLabel">Zelle to</dt><dd id="mTo">(202) 271-3548</dd></div>
-            <div><dt>Memo</dt><dd id="mRef" class="ref">&mdash;</dd></div>
-          </dl>
-          <button type="button" class="btn btn-ghost modal-copy-btn" id="mCopyBtn">Copy amount &amp; memo</button>
+          <div class="pay-rows">
+            <div class="pay-row">
+              <span class="pay-row-text"><span class="pr-k" id="mToLabel">Zelle to</span><span class="pr-v" id="mTo">(202) 271-3548</span></span>
+              <button type="button" class="pay-copy" data-copy="#mTo" data-kind="phone" aria-label="Copy the number">Copy</button>
+            </div>
+            <div class="pay-row">
+              <span class="pay-row-text"><span class="pr-k">Amount</span><span class="pr-v" id="mAmt">&mdash;</span></span>
+              <button type="button" class="pay-copy" data-copy="#mAmt" data-kind="amount" aria-label="Copy the amount">Copy</button>
+            </div>
+            <div class="pay-row">
+              <span class="pay-row-text"><span class="pr-k">Memo</span><span class="pr-v ref" id="mRef">&mdash;</span></span>
+              <button type="button" class="pay-copy" data-copy="#mRef" aria-label="Copy the memo">Copy</button>
+            </div>
+          </div>
           <p class="modal-copy-msg" id="mCopyMsg" role="status" aria-live="polite"></p>
+          <a class="btn btn-ghost modal-open-app" id="mOpenMessages" href="sms:+12022713548" hidden>Open Messages</a>
         </div>
 
         <div class="modal-actions">
@@ -2730,32 +2797,28 @@ body.fun-mode .galaxy-bg{opacity:1}
     </div>
     <div class="faq">
       <details>
-        <summary>Why does my order take a few days?</summary>
-        <p>Restore is made in small batches. Every order goes against the next one &mdash; you'll get a confirmation email with your ship date.</p>
+        <summary>How do I use it?</summary>
+        <p>Pour one stick pack into 16&ndash;32 oz of cold water, shake or stir, and drink it after training. One stick is one serving.</p>
       </details>
       <details>
         <summary>How do I pay?</summary>
-        <p>By Zelle, Apple Cash, or card &mdash; whichever you pick in the order panel. Card payments go through Stripe's secure checkout; we never see or store your card number.</p>
+        <p>By Zelle, Apple Cash, or card &mdash; pick one in the order form. Card payments go through Stripe's secure checkout; we never see or store your card number.</p>
       </details>
       <details>
         <summary>Where do you deliver, and what does it cost?</summary>
-        <p>Free in NYC and in Maryland, D.C. and Virginia, within about an hour of our office. Outside that? Email us at hydracompanymd@gmail.com for a delivery quote before you order.</p>
+        <p>Delivery is free in NYC and in Maryland, D.C. and Virginia, within about an hour of our office. Anywhere else, including internationally, <a href="mailto:hydracompanymd@gmail.com">email us</a> for a delivery quote before you order.</p>
       </details>
       <details>
         <summary>When will my order arrive?</summary>
-        <p>In the order received, once the batch is complete &mdash; your confirmation email has the exact date.</p>
-      </details>
-      <details>
-        <summary>How do I use it?</summary>
-        <p>One stick pack, one serving. Instructions are on the packet.</p>
+        <p>Usually within a few days. Restore is made in small batches and orders are filled in the order they come in; we email you to confirm your delivery date, usually within one business day.</p>
       </details>
       <details>
         <summary>How should I store it?</summary>
-        <p>Cool, dry place. Best before January 2027.</p>
+        <p>In a cool, dry place. Best before January 2027.</p>
       </details>
       <details>
         <summary>Is it safe for me?</summary>
-        <p>It's a food, not a medicine &mdash; full notice, allergen and cottage-food details are in the footer below.</p>
+        <p>It's a food, not a medicine. The full notice, allergen and cottage-food details are in the footer below.</p>
       </details>
     </div>
   </section>
@@ -2820,13 +2883,16 @@ const CONFIG = {
   paymentMethods: [
     { id: "zelle",     label: "Zelle",      sendTo: "(202) 271-3548",
       verb: "send the Zelle",
-      how:  "<b>Open your bank's app and send the Zelle yourself</b>, to the number above, with your order reference in the memo." },
+      how:  "<b>Send the Zelle from your bank app.</b> We show you the number, amount and memo, each with a copy button.",
+      note: "Next you'll get our Zelle number, the amount and a memo to send from your bank app." },
     { id: "applecash", label: "Apple Cash", sendTo: "(202) 271-3548",
       verb: "send Apple Cash",
-      how:  "<b>Open Messages and send an Apple Cash payment yourself</b>, to the number above, with your order reference as a note." },
+      how:  "<b>Send Apple Cash in Messages.</b> We show you the number, amount and note, each with a copy button.",
+      note: "Next you'll get our number, the amount and a note to send by Apple Cash in Messages." },
     { id: "card",      label: "Card",       sendTo: "Stripe — secure checkout",
       verb: "pay by card",
-      how:  "You'll be taken to Stripe's secure checkout to enter your card details." }
+      how:  "<b>Pay on Stripe's secure checkout.</b> Your order is placed as soon as the payment goes through.",
+      note: "Next you'll enter your card on Stripe's secure page. We never see or store your card number." }
   ],
 
   // Where orders are emailed.
@@ -2857,7 +2923,6 @@ let orderCode;
 function newOrderCode(){
   orderCode = "HYD-" + Array.from({ length: 4 },
     () => ALPHABET[Math.floor(Math.random() * ALPHABET.length)]).join("");
-  $("#zCode").textContent = orderCode;
   render();
   return orderCode;
 }
@@ -2901,6 +2966,14 @@ function render(){
   $("#hSub").value      = money(sub);
   $("#hShip").value     = ship === 0 ? "Free" : money(ship);
   $("#hTotal").value    = money(total);
+
+  // the button says exactly what pressing it does, and for how much
+  const placeBtn = $("#placeBtn");
+  if (placeBtn) {
+    placeBtn.textContent = member ? "Start membership \u2014 " + money(total) + " / month"
+      : payMethod === "card" ? "Pay " + money(total) + " by card"
+      : "Continue with " + payMethodInfo(payMethod).label + " \u2014 " + money(total);
+  }
 
   // the hero quick-pick buy box shows a single-pack price, in sync with
   // whichever pack is currently selected (hero chip, or the full form below)
@@ -2961,19 +3034,24 @@ function selectPayMethod(id){
   payMethod = id;
   const m = payMethodInfo(id);
   payMethodBtns.forEach(b => b.setAttribute("aria-pressed", b.dataset.method === id ? "true" : "false"));
-  $("#zPhone").textContent = m.sendTo;
+  const member = isMember();
   const stepText = $("#stepPayText");
   if (stepText) { stepText.innerHTML = m.how; }
-  const sendToLabel = $("#zSendToLabel");
-  if (sendToLabel) { sendToLabel.textContent = id === "card" ? "Checkout" : "Send to"; }
-  const ackText = $("#ackText");
-  if (ackText) {
-    ackText.textContent = isMember()
-      ? "I understand this is a membership: my card will be charged " + money(+(sticks * unit).toFixed(2)) + " today and again every month until I cancel, which I can do anytime by emailing " + CONFIG.orderEmail + ". I'm ready to enter my card details on Stripe's secure checkout page."
-      : id === "card"
-      ? "I'm ready to enter my card details on Stripe's secure checkout page to complete payment."
-      : "I understand I need to send the payment myself, using the method I picked above — this page can't charge me, and my order isn't confirmed until it arrives.";
+  const note = $("#payMethodNote");
+  if (note) {
+    note.textContent = member
+      ? "Memberships are billed monthly by card on Stripe's secure page. Cancel anytime by email."
+      : m.note;
   }
+  /* one-off orders need no tick box - the button and the note above it
+     already say what happens next. A membership keeps it, as consent to
+     the recurring charge. */
+  const ack = $("#fAck").closest(".ack");
+  ack.hidden = !member;
+  if (!member) { $("#fAck").checked = false; ack.classList.remove("missing"); }
+  $("#ackText").textContent = member
+    ? "I understand this is a membership: my card will be charged " + money(+(sticks * unit).toFixed(2)) + " today and again every month until I cancel, which I can do anytime by emailing " + CONFIG.orderEmail + "."
+    : "";
   render();
 }
 
@@ -3042,6 +3120,19 @@ async function recordPaidOrder(order, amount){
   }
 }
 
+/* ---------- analytics ----------
+   Two funnel events, so Google Analytics can show how many people who
+   start an order finish paying. No names, emails or addresses are sent -
+   only the pack, the amount and the order reference. */
+function track(event, amount, order){
+  if (typeof gtag !== "function") { return; }
+  const value = parseFloat(String(amount).replace(/[^0-9.]/g, "")) || 0;
+  gtag("event", event, Object.assign({
+    currency: "USD", value,
+    items: [{ item_name: "Hydraco Restore " + order.pack, quantity: +order.quantity || 1 }]
+  }, event === "purchase" ? { transaction_id: order.order_ref } : { payment_type: order.payment_method }));
+}
+
 /* ---------- submit ---------- */
 $("#orderForm").addEventListener("submit", async (e) => {
   e.preventDefault();
@@ -3053,13 +3144,12 @@ $("#orderForm").addEventListener("submit", async (e) => {
   /* outline whatever is still needed - the message alone is easy to miss
      when the field it's about has scrolled out of view */
   required.forEach(([sel]) => $(sel).classList.toggle("missing", !$(sel).value.trim()));
-  $("#fAck").closest(".ack").classList.toggle("missing", !missing.length && !$("#fAck").checked);
+  const needAck = isMember() && !$("#fAck").checked;
+  $("#fAck").closest(".ack").classList.toggle("missing", !missing.length && needAck);
 
-  if (!missing.length && !$("#fAck").checked){
+  if (!missing.length && needAck){
     msg.className = "order-msg err";
-    msg.textContent = payMethod === "card"
-      ? "Tick the box to confirm you're ready to check out with Stripe."
-      : "Tick the box to confirm you'll send the payment yourself — this page can't charge you.";
+    msg.textContent = "Tick the box to confirm the monthly membership charge.";
     $("#fAck").focus();
     return;
   }
@@ -3082,12 +3172,16 @@ $("#orderForm").addEventListener("submit", async (e) => {
     $("#payTo").textContent  = m.sendTo;
     $("#payRef").textContent = orderCode;
     $("#payHead").textContent = "To complete the transaction, " + m.verb;
+    $("#payWhere").textContent = payMethod === "applecash"
+      ? "Open Messages, start an Apple Cash payment, and send:"
+      : "Open your banking app, choose Zelle, and send:";
     panel.hidden = false;
     panel.scrollIntoView({ behavior: "smooth", block: "center" });
   };
 
+  track("begin_checkout", t.total, Object.fromEntries(new FormData(form)));
   msg.className = "order-msg";
-  msg.textContent = "Sending your order\u2026";
+  msg.textContent = payMethod === "card" ? "Opening secure checkout\u2026" : "";
   if (btn) { btn.disabled = true; }
 
   /* ---------- card: hand off to Stripe's own hosted checkout ----------
@@ -3173,8 +3267,8 @@ $("#orderForm").addEventListener("submit", async (e) => {
 $("#fAck").addEventListener("change", () => $("#fAck").closest(".ack").classList.remove("missing"));
 
 /* Coming back from Stripe with the browser's Back button restores this page
-   exactly as it was left - Place order still disabled, still saying
-   "Sending your order…" - so the button looked dead. Put it back. */
+   exactly as it was left - the pay button still disabled, still saying
+   "Opening secure checkout…" - so the button looked dead. Put it back. */
 window.addEventListener("pageshow", (e) => {
   if (!e.persisted) { return; }
   const btn = $("#orderForm").querySelector('button[type="submit"]');
@@ -3186,30 +3280,26 @@ window.addEventListener("pageshow", (e) => {
   }
 });
 
-/* ---------- copy ---------- */
-$("#copyBtn").addEventListener("click", async () => {
-  const msg = $("#orderMsg");
-  try{
-    await navigator.clipboard.writeText(summary());
-    msg.className = "order-msg";
-    msg.textContent = "Order summary copied to your clipboard.";
-  }catch{
-    msg.className = "order-msg err";
-    msg.textContent = "Couldn't reach the clipboard — select the details and copy them manually.";
-  }
-});
-
-/* the amount and memo are exactly what needs to get retyped into a
-   banking app - a copy-paste there beats a hand-typed reference, where
-   one mistyped character breaks the payment match */
-$("#mCopyBtn")?.addEventListener("click", async () => {
-  const msg = $("#mCopyMsg");
-  try{
-    await navigator.clipboard.writeText($("#mAmt").textContent + " — memo " + $("#mRef").textContent);
-    msg.textContent = "Copied.";
-  }catch{
-    msg.textContent = "Couldn't reach the clipboard — copy the amount and memo by hand.";
-  }
+/* ---------- copy ----------
+   Each value has its own button, and copies in the form a banking app's
+   field takes: the number as bare digits, the amount without the "$". */
+document.querySelectorAll(".pay-copy").forEach((btn) => {
+  btn.addEventListener("click", async () => {
+    const msg  = $("#mCopyMsg");
+    const kind = btn.dataset.kind;
+    let text   = $(btn.dataset.copy).textContent.trim();
+    if (kind === "phone")  { text = text.replace(/\D/g, ""); }
+    if (kind === "amount") { text = text.replace(/[^0-9.]/g, ""); }
+    try{
+      await navigator.clipboard.writeText(text);
+      document.querySelectorAll(".pay-copy").forEach(b => { b.textContent = "Copy"; b.classList.remove("done"); });
+      btn.textContent = "Copied";
+      btn.classList.add("done");
+      msg.textContent = "";
+    }catch{
+      msg.textContent = "Couldn't reach the clipboard \u2014 copy it by hand.";
+    }
+  });
 });
 
 /* ---------- fill in config-driven bits ---------- */
@@ -3403,6 +3493,12 @@ function openModal(total){
   $("#mRef").textContent  = orderCode;
   $("#mRef2").textContent = orderCode;
   $("#mCopyMsg").textContent = "";
+  document.querySelectorAll(".pay-copy").forEach(b => { b.textContent = "Copy"; b.classList.remove("done"); });
+  /* Apple Cash is sent from Messages, which a link can open straight to
+     our number; Zelle has no such link - every bank's app is different */
+  const openApp = $("#mOpenMessages");
+  openApp.hidden = payMethod !== "applecash";
+  openApp.href   = "sms:+1" + m.sendTo.replace(/\D/g, "");
   $("#stepPay").hidden  = false;
   $("#stepDone").hidden = true;
 
@@ -3426,6 +3522,7 @@ $("#paidBtn").addEventListener("click", async () => {
   const amount = $("#mAmt").textContent;
   pendingOrder = null;
   if (!order) { return; }
+  track("purchase", amount, order);
 
   const msg = $("#orderMsg");
   const ref = order.order_ref;
@@ -3473,6 +3570,7 @@ $("#doneClose").addEventListener("click", closeModal);
       localStorage.removeItem(PENDING_KEY);
       if (held && held.order && (!ref || held.order.order_ref === ref)) {
         recordPaidOrder(held.order, held.amount);
+        track("purchase", held.amount, held.order);
       }
     } catch (storageErr) { /* nothing held - Stripe's dashboard still has the payment */ }
   } else if (params.get("cancelled") === "1"){
@@ -3494,7 +3592,7 @@ if (!REDUCED){
   const DOODLE_TARGETS =
     'a.btn, button, .pack-opt, .hero-pack-opt, .nav-links a, .theme-toggle, ' +
     '#qMinus, #qPlus, .seg-btn, .ingx-row summary, .faq summary, ' +
-    '.beat, .benefit, .bar-row, #copyBtn';
+    '.beat, .benefit, .bar-row';
 
   const DOODLE_PATHS = [
     'M12 2 L13.4 9.6 L21 12 L13.4 14.4 L12 22 L10.6 14.4 L3 12 L10.6 9.6 Z',           // sparkle
@@ -4393,7 +4491,15 @@ document.querySelectorAll(".ingx-bar > span").forEach(el => barIO.observe(el));
   if (!bar || !heroTarget || !orderTarget) { return; }
 
   let heroVisible = true, orderVisible = false;
-  const update = () => bar.classList.toggle("show", !heroVisible && !orderVisible);
+  /* while it's off screen its Order link must not be reachable by keyboard
+     or screen reader either */
+  const update = () => {
+    const show = !heroVisible && !orderVisible;
+    bar.classList.toggle("show", show);
+    bar.inert = !show;
+    bar.setAttribute("aria-hidden", String(!show));
+  };
+  update();
 
   new IntersectionObserver((es) => { heroVisible = es[0].isIntersecting; update(); },
     { rootMargin: "-72px 0px 0px 0px" }).observe(heroTarget);
