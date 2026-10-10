@@ -318,11 +318,8 @@ section{padding-block:clamp(68px,9vw,132px)}
   letter-spacing:.1em;text-transform:uppercase;font-weight:400;
   line-height:.98;color:#0e1414;position:relative;z-index:1;
 }
-.hero-kicker{
-  font-size:.8rem;letter-spacing:.3em;text-transform:uppercase;
-  color:var(--slate);margin-bottom:1.5rem;font-weight:500;
-}
 .hero-sub{
+  display:block;line-height:1.5;
   font-style:italic;font-weight:500;font-size:clamp(.95rem,2.2vw,1.12rem);
   letter-spacing:.13em;text-transform:uppercase;margin-top:1.6rem;color:var(--ink);
 }
@@ -330,7 +327,6 @@ section{padding-block:clamp(68px,9vw,132px)}
   margin-top:1.5rem;max-width:44ch;color:var(--ink-soft);
   font-family:"Newsreader",Georgia,serif;font-size:1.15rem;line-height:1.68;
 }
-.hero-actions{display:flex;flex-wrap:wrap;gap:14px;align-items:center;margin-top:1.4rem}
 
 /* ---------- hero quick-pick buy box ---------- */
 .hero-buybox{
@@ -897,6 +893,9 @@ body.fun-mode .pack-hint.hidden{transform:rotate(-9deg) translateY(-6px)}
 }
 /* no real quotes yet -> no empty bordered box sitting on the page */
 .quotes-grid:empty{display:none;margin-top:0;border:none}
+.proof-empty .sec-head{display:none}
+.quote-form[hidden]{display:none}
+.nav-links a[hidden]{display:none}
 .quote-card{
   margin:0;background:var(--paper);padding:clamp(24px,3vw,30px);
   display:flex;flex-direction:column;gap:14px;
@@ -1943,11 +1942,11 @@ body.fun-mode .galaxy-bg{opacity:1}
   <div class="wrap nav-in">
     <a class="brand" href="#top"><span class="mark" aria-hidden="true"></span><span class="wordmark">Hydraco</span></a>
     <div class="nav-links" id="navLinks">
+      <a href="#why">Why recovery</a>
       <a href="#formula">The formula</a>
       <a href="#inside">What's inside</a>
-      <a href="#why">Why recovery</a>
       <a href="#story">Our story</a>
-      <a href="#proof">Reviews</a>
+      <a href="#proof" id="navProof" hidden>Reviews</a>
       <a href="#order" class="nav-cta">Order</a>
     </div>
     <button type="button" class="nav-toggle" id="navToggle" aria-label="Open menu" aria-expanded="false" aria-controls="navLinks">
@@ -1983,10 +1982,8 @@ body.fun-mode .galaxy-bg{opacity:1}
   <!-- ============ HERO ============ -->
   <header class="hero">
     <div class="hero-copy">
-      <p class="hero-kicker">Hydraco Restore &nbsp;·&nbsp; Post-workout electrolyte recovery mix</p>
-      <h1><span class="hero-stroke">Restore</span></h1>
-      <p class="hero-sub">Designed for recovery, not stimulation</p>
-      <p class="hero-lede">Built for the hours after, not the minutes during.</p>
+      <h1><span class="hero-stroke">Restore</span><span class="hero-sub">Post-workout electrolyte recovery mix</span></h1>
+      <p class="hero-lede">Designed for recovery, not stimulation.</p>
 
       <div class="hero-buybox" role="group" aria-label="Quick pack picker">
         <div class="hero-buybox-opts">
@@ -2021,9 +2018,6 @@ body.fun-mode .galaxy-bg{opacity:1}
         </svg>
       </div>
 
-      <div class="hero-actions">
-        <a href="#inside" class="btn btn-ghost">See what's inside</a>
-      </div>
       <p class="hero-note"><span class="dot" aria-hidden="true"></span> Free local delivery &mdash; every order ships from the next small batch</p>
 
       <div class="hero-quotes" id="heroQuotes" hidden></div>
@@ -2033,6 +2027,66 @@ body.fun-mode .galaxy-bg{opacity:1}
       <img src="/images/hero.jpg" class="photo-frame" alt="HYDRACO Restore post-workout electrolyte recovery mix packet, standing beside a glass of the prepared drink" width="853" height="1280" fetchpriority="high">
     </div>
   </header>
+
+  <!-- ============ STRIP ============ -->
+  <div class="strip" aria-hidden="true">
+    <div class="strip-track">
+      <span>No chemicals</span><span>Pure ingredients</span><span>Low sugar</span><span>No artificial sweeteners</span>
+      <span>Tart cherry</span><span>Pomegranate</span><span>Coconut water</span><span>Pink Himalayan salt</span>
+      <span>Monk fruit</span><span>30 calories</span>
+      <span>No chemicals</span><span>Pure ingredients</span><span>Low sugar</span><span>No artificial sweeteners</span>
+      <span>Tart cherry</span><span>Pomegranate</span><span>Coconut water</span><span>Pink Himalayan salt</span>
+      <span>Monk fruit</span><span>30 calories</span>
+    </div>
+  </div>
+
+  <!-- ============ BENEFITS ============ -->
+  <section id="why">
+   <div class="why-grid">
+    <div class="why-photo rv">
+      <img src="/images/why-recovery.jpg" class="photo-frame" alt="HYDRACO Restore electrolyte recovery drink after training" loading="lazy" decoding="async" width="1280" height="853">
+    </div>
+    <div class="why-text rv">
+    <div class="sec-head">
+      <span class="tag">Key benefits</span>
+      <h2>Recovery is the workout you <span class="doodle-underline">skip<svg class="doodle-svg" viewBox="0 0 120 18" fill="none" stroke="var(--pink-ink)" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" filter="url(#sketch-sm)"><path d="M3 10 C 25 2, 50 15, 75 6 C 92 1, 108 12, 117 8"/></svg></span></h2>
+      <p style="color:var(--ink-soft);font-family:Newsreader,Georgia,serif;font-size:1.14rem;line-height:1.68">
+        Four things, in amounts that matter.
+      </p>
+    </div>
+    <div class="benefits">
+      <div class="benefit">
+        <span class="n">Hydration</span>
+        <h3>At the cellular level</h3>
+        <p class="ink" tabindex="0"><span class="ink-core">Electrolytes, plus a touch of glucose</span><span class="ink-full-wrap"><span class="ink-full">A balanced electrolyte load paired with a small amount of glucose, so the water you drink actually gets where it's going.</span></span></p>
+      </div>
+      <div class="benefit">
+        <span class="n">Muscle</span>
+        <h3>Less delayed-onset soreness</h3>
+        <p class="ink" tabindex="0"><span class="ink-core">Tart cherry &amp; pomegranate, at real doses</span><span class="ink-full-wrap"><span class="ink-full">The two fruits most consistently studied for reducing DOMS after hard training, at concentrations you can taste.</span></span></p>
+      </div>
+      <div class="benefit">
+        <span class="n">Inflammation</span>
+        <h3>Lower oxidative stress</h3>
+        <p class="ink" tabindex="0"><span class="ink-core">Real antioxidants, from real fruit</span><span class="ink-full-wrap"><span class="ink-full">Real fruit extracts, rich in natural antioxidants, to help neutralize the oxidative stress hard training produces.</span></span></p>
+      </div>
+      <div class="benefit">
+        <span class="n">Function</span>
+        <h3>Nerve &amp; muscle support</h3>
+        <p class="ink" tabindex="0"><span class="ink-core">Sodium &middot; potassium &middot; magnesium</span><span class="ink-full-wrap"><span class="ink-full">230&nbsp;mg sodium, 400&nbsp;mg potassium and 15&nbsp;mg magnesium &mdash; a gentle profile, not a salt bomb.</span></span></p>
+      </div>
+    </div>
+   </div>
+   </div>
+  </section>
+
+  <!-- ============ GYM / RECOVERY BAND ============ -->
+  <div class="gym-band rv" aria-label="HYDRACO Restore in a post-workout gym setting">
+    <img src="/images/gym-band.jpg" alt="HYDRACO Restore electrolyte packet and drink in a post-workout gym setting" loading="lazy" decoding="async" width="1280" height="853">
+    <div class="gym-band-copy">
+      <p>Built for the hours after, not the minutes during.</p>
+    </div>
+  </div>
 
   <!-- ============ FORMULA / IN THE POUCH ============ -->
   <section id="formula" class="formula">
@@ -2120,23 +2174,12 @@ body.fun-mode .galaxy-bg{opacity:1}
         <li class="ingx-row">
           <details>
             <summary>
-              <span class="ingx-sumhead"><span class="ingx-name">Organic cane sugar</span><span class="ingx-pct">10&ndash;15%</span></span>
+              <span class="ingx-sumhead"><span class="ingx-name">Organic cane sugar</span><span class="ingx-pct">20&ndash;25%</span></span>
               <span class="ingx-plus" aria-hidden="true">+</span>
-              <span class="ingx-bar"><span data-w="14"></span></span>
+              <span class="ingx-bar"><span data-w="21"></span></span>
             </summary>
-            <p class="ingx-role"><b>What it&rsquo;s for</b>A small amount of real sugar &mdash; 2&nbsp;g.</p>
+            <p class="ingx-role"><b>What it&rsquo;s for</b>A small amount of real sugar &mdash; 3&nbsp;g.</p>
             <p class="ingx-why"><b>Why it helps</b>A little sugar helps your body absorb the water and salts faster than plain water does. Just enough to do that, not enough to taste like a soda.</p>
-          </details>
-        </li>
-        <li class="ingx-row">
-          <details>
-            <summary>
-              <span class="ingx-sumhead"><span class="ingx-name">Apple powder</span><span class="ingx-pct">10&ndash;15%</span></span>
-              <span class="ingx-plus" aria-hidden="true">+</span>
-              <span class="ingx-bar"><span data-w="13"></span></span>
-            </summary>
-            <p class="ingx-role"><b>What it&rsquo;s for</b>Flavour and natural fruit tartness.</p>
-            <p class="ingx-why"><b>Why it helps</b>Rounds out the taste so the drink isn&rsquo;t sharp, and brings a little more potassium with it.</p>
           </details>
         </li>
         <li class="ingx-row">
@@ -2187,12 +2230,23 @@ body.fun-mode .galaxy-bg{opacity:1}
         <li class="ingx-row">
           <details>
             <summary>
-              <span class="ingx-sumhead"><span class="ingx-name">Monk fruit extract</span><span class="ingx-pct">5&ndash;10%</span></span>
+              <span class="ingx-sumhead"><span class="ingx-name">Apple powder</span><span class="ingx-pct">5&ndash;10%</span></span>
               <span class="ingx-plus" aria-hidden="true">+</span>
-              <span class="ingx-bar"><span data-w="8"></span></span>
+              <span class="ingx-bar"><span data-w="9"></span></span>
+            </summary>
+            <p class="ingx-role"><b>What it&rsquo;s for</b>Flavour and natural fruit tartness.</p>
+            <p class="ingx-why"><b>Why it helps</b>Rounds out the taste so the drink isn&rsquo;t sharp, and brings a little more potassium with it.</p>
+          </details>
+        </li>
+        <li class="ingx-row">
+          <details>
+            <summary>
+              <span class="ingx-sumhead"><span class="ingx-name">Monk fruit extract</span><span class="ingx-pct">Under 5%</span></span>
+              <span class="ingx-plus" aria-hidden="true">+</span>
+              <span class="ingx-bar"><span data-w="5"></span></span>
             </summary>
             <p class="ingx-role"><b>What it&rsquo;s for</b>Sweetness without the sugar.</p>
-            <p class="ingx-why"><b>Why it helps</b>Monk fruit is a natural fruit sweetener &mdash; it&rsquo;s how the drink tastes sweet with only 2&nbsp;g of real sugar and no artificial sweeteners.</p>
+            <p class="ingx-why"><b>Why it helps</b>Monk fruit is a natural fruit sweetener &mdash; it&rsquo;s how the drink tastes sweet with only 3&nbsp;g of real sugar and no artificial sweeteners.</p>
           </details>
         </li>
         <li class="ingx-row">
@@ -2265,8 +2319,8 @@ body.fun-mode .galaxy-bg{opacity:1}
             <div class="nf-row"><b>Total Fat 0g</b><b>0%</b></div>
             <div class="nf-row" data-nutrient="sodium" tabindex="0"><b>Sodium 230mg</b><b>10%</b></div>
             <div class="nf-row"><b>Total Carbohydrate 7g</b><b>3%</b></div>
-            <div class="nf-row"><span class="in1">Total Sugars 2g</span><span></span></div>
-            <div class="nf-row"><span class="in2">Includes 2g Added Sugars</span><b>4%</b></div>
+            <div class="nf-row"><span class="in1">Total Sugars 3g</span><span></span></div>
+            <div class="nf-row"><span class="in2">Includes 3g Added Sugars</span><b>6%</b></div>
             <div class="nf-row"><b>Protein 0g</b><span></span></div>
             <div class="med"></div>
             <div class="nf-row plain" data-nutrient="calcium" tabindex="0"><span>Calcium 20mg</span><span>2%</span></div>
@@ -2371,66 +2425,6 @@ body.fun-mode .galaxy-bg{opacity:1}
     </div>
   </section>
 
-  <!-- ============ STRIP ============ -->
-  <div class="strip" aria-hidden="true">
-    <div class="strip-track">
-      <span>No chemicals</span><span>Pure ingredients</span><span>Low sugar</span><span>No artificial sweeteners</span>
-      <span>Tart cherry</span><span>Pomegranate</span><span>Coconut water</span><span>Pink Himalayan salt</span>
-      <span>Monk fruit</span><span>30 calories</span>
-      <span>No chemicals</span><span>Pure ingredients</span><span>Low sugar</span><span>No artificial sweeteners</span>
-      <span>Tart cherry</span><span>Pomegranate</span><span>Coconut water</span><span>Pink Himalayan salt</span>
-      <span>Monk fruit</span><span>30 calories</span>
-    </div>
-  </div>
-
-  <!-- ============ BENEFITS ============ -->
-  <section id="why">
-   <div class="why-grid">
-    <div class="why-photo rv">
-      <img src="/images/why-recovery.jpg" class="photo-frame" alt="HYDRACO Restore electrolyte recovery drink after training" loading="lazy" decoding="async" width="1280" height="853">
-    </div>
-    <div class="why-text rv">
-    <div class="sec-head">
-      <span class="tag">Key benefits</span>
-      <h2>Recovery is the workout you <span class="doodle-underline">skip<svg class="doodle-svg" viewBox="0 0 120 18" fill="none" stroke="var(--pink-ink)" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" filter="url(#sketch-sm)"><path d="M3 10 C 25 2, 50 15, 75 6 C 92 1, 108 12, 117 8"/></svg></span></h2>
-      <p style="color:var(--ink-soft);font-family:Newsreader,Georgia,serif;font-size:1.14rem;line-height:1.68">
-        Four things, in amounts that matter.
-      </p>
-    </div>
-    <div class="benefits">
-      <div class="benefit">
-        <span class="n">Hydration</span>
-        <h3>At the cellular level</h3>
-        <p class="ink" tabindex="0"><span class="ink-core">Electrolytes, plus a touch of glucose</span><span class="ink-full-wrap"><span class="ink-full">A balanced electrolyte load paired with a small amount of glucose, so the water you drink actually gets where it's going.</span></span></p>
-      </div>
-      <div class="benefit">
-        <span class="n">Muscle</span>
-        <h3>Less delayed-onset soreness</h3>
-        <p class="ink" tabindex="0"><span class="ink-core">Tart cherry &amp; pomegranate, at real doses</span><span class="ink-full-wrap"><span class="ink-full">The two fruits most consistently studied for reducing DOMS after hard training, at concentrations you can taste.</span></span></p>
-      </div>
-      <div class="benefit">
-        <span class="n">Inflammation</span>
-        <h3>Lower oxidative stress</h3>
-        <p class="ink" tabindex="0"><span class="ink-core">Real antioxidants, from real fruit</span><span class="ink-full-wrap"><span class="ink-full">Real fruit extracts, rich in natural antioxidants, to help neutralize the oxidative stress hard training produces.</span></span></p>
-      </div>
-      <div class="benefit">
-        <span class="n">Function</span>
-        <h3>Nerve &amp; muscle support</h3>
-        <p class="ink" tabindex="0"><span class="ink-core">Sodium &middot; potassium &middot; magnesium</span><span class="ink-full-wrap"><span class="ink-full">230&nbsp;mg sodium, 400&nbsp;mg potassium and 15&nbsp;mg magnesium &mdash; a gentle profile, not a salt bomb.</span></span></p>
-      </div>
-    </div>
-   </div>
-   </div>
-  </section>
-
-  <!-- ============ GYM / RECOVERY BAND ============ -->
-  <div class="gym-band rv" aria-label="HYDRACO Restore in a post-workout gym setting">
-    <img src="/images/gym-band.jpg" alt="HYDRACO Restore electrolyte packet and drink in a post-workout gym setting" loading="lazy" decoding="async" width="1280" height="853">
-    <div class="gym-band-copy">
-      <p>Built for the hours after, not the minutes during.</p>
-    </div>
-  </div>
-
   <!-- ============ STORY ============ -->
   <section id="story" class="wrap rv">
     <div class="founder-grid">
@@ -2500,11 +2494,10 @@ body.fun-mode .galaxy-bg{opacity:1}
        both visually (dashed borders, explicit "swap this" attributions)
        and in this comment so nobody mistakes it for genuine social proof
        before it's replaced. -->
-  <section id="proof" class="wrap rv proof">
+  <section id="proof" class="wrap rv proof proof-empty">
     <div class="sec-head">
       <span class="tag">In the wild</span>
       <h2>What people are saying</h2>
-      <p class="sec-lede" id="quotesPlaceholderFlag">No customer quotes published yet &mdash; real ones, approved by hand, will appear here. Already ordered? Be the first to share yours below.</p>
     </div>
 
     <div class="quotes-grid"></div>
@@ -2550,9 +2543,8 @@ body.fun-mode .galaxy-bg{opacity:1}
         <span class="tag">Order</span>
         <h2>Choose <span class="doodle-underline">your pack<svg class="doodle-svg" viewBox="0 0 120 18" fill="none" stroke="var(--pink-ink)" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" filter="url(#sketch-sm)"><path d="M3 10 C 25 2, 50 15, 75 6 C 92 1, 108 12, 117 8"/></svg></span></h2>
         <p style="color:var(--ink-soft);font-family:Newsreader,Georgia,serif;font-size:1.14rem;line-height:1.68">
-          Made in small batches &mdash; every order goes into the next batch, paid by Zelle, Apple Cash, or card.
-          Card payments are handled securely by Stripe &mdash; we never see or store your card details.
-          Or become a member: 41, 59 or 95 stick packs every month from $1.95 a stick, plus member perks like stickers and merch &mdash; billed monthly by card, cancel anytime.
+          Made in small batches. Pay by Zelle, Apple Cash or card.
+          Or join as a member: 41, 59 or 95 sticks a month from $1.95 a stick, billed monthly, cancel anytime.
         </p>
       </div>
 
@@ -4106,7 +4098,9 @@ function escapeHtml(s){
           "<cite>— " + escapeHtml(q.name) + (q.context ? ", " + escapeHtml(q.context) : "") + "</cite>" +
         "</blockquote>"
       )).join("");
-      $("#quotesPlaceholderFlag")?.remove();
+      /* the heading and the nav link only exist once there's something under them */
+      $("#proof").classList.remove("proof-empty");
+      $("#navProof").hidden = false;
     })
     .catch(() => { /* fetch failed or CORS blocked it - grid just stays empty, no harm done */ });
 })();
@@ -4537,9 +4531,9 @@ const EXPLORER = {
   },
   sugar: {
     unit: "g", max: 24,
-    caption: "Restore is a low-sugar base: 2 g of added sugar and 30 calories per stick. A 12 oz sports drink is around ten times the sugar.",
+    caption: "Restore is a low-sugar base: 3 g of added sugar and 30 calories per stick. A 12 oz sports drink is around seven times the sugar.",
     rows: [
-      { name: "Hydraco Restore",            value: 2,  ref: false, blurb: "2&nbsp;g added sugar &middot; 30&nbsp;calories per stick. No artificial sweeteners &mdash; monk fruit does the rest." },
+      { name: "Hydraco Restore",            value: 3,  ref: false, blurb: "3&nbsp;g added sugar &middot; 30&nbsp;calories per stick. No artificial sweeteners &mdash; monk fruit does the rest." },
       { name: "Typical 12 oz sports drink", value: 21, ref: true,  blurb: "Around 21&nbsp;g sugar and ~80&nbsp;calories a serving, and still no recovery fruit." }
     ]
   }
