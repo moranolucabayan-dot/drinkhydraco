@@ -1218,6 +1218,9 @@ body.fun-mode .pack-hint.hidden{transform:rotate(-9deg) translateY(-6px)}
   transition:color .2s,border-color .2s,transform .3s;
 }
 .fun-toggle svg{width:13px;height:13px}
+/* still looks small, but a fingertip gets a full-size target */
+.foot-end .fun-toggle{position:relative}
+.foot-end .fun-toggle::after{content:"";position:absolute;inset:-12px}
 .fun-toggle:hover,.fun-toggle:focus-visible{color:var(--pink-ink);border-color:var(--rule)}
 .fun-toggle.on{color:var(--pink-ink);transform:rotate(-12deg)}
 @media (prefers-reduced-motion:reduce){ .fun-toggle{transition:none} }
@@ -4484,11 +4487,11 @@ document.querySelectorAll(".ingx-bar > span").forEach(el => barIO.observe(el));
   const orderTarget = document.getElementById("order");
   if (!bar || !heroTarget || !orderTarget) { return; }
 
-  let heroVisible = true, orderVisible = false;
+  let heroVisible = true, orderVisible = false, footEndVisible = false;
   /* while it's off screen its Order link must not be reachable by keyboard
      or screen reader either */
   const update = () => {
-    const show = !heroVisible && !orderVisible;
+    const show = !heroVisible && !orderVisible && !footEndVisible;
     bar.classList.toggle("show", show);
     bar.inert = !show;
     bar.setAttribute("aria-hidden", String(!show));
@@ -4500,6 +4503,15 @@ document.querySelectorAll(".ingx-bar > span").forEach(el => barIO.observe(el));
 
   new IntersectionObserver((es) => { orderVisible = es[0].isIntersecting; update(); },
     { threshold: 0.12 }).observe(orderTarget);
+
+  /* at the very bottom of the page the bar sat on top of the footer's last
+     line - the fun toggle and the Order / Contact links - so nothing there
+     could be tapped. Step aside once that line is on screen. */
+  const footEnd = document.querySelector(".foot-end");
+  if (footEnd) {
+    new IntersectionObserver((es) => { footEndVisible = es[0].isIntersecting; update(); })
+      .observe(footEnd);
+  }
 })();
 /* ================================================================
    Dosage Explorer + ingredient explorer.
