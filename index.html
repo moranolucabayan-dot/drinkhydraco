@@ -2077,7 +2077,7 @@ body.fun-mode .galaxy-bg{opacity:1}
       <div class="benefit">
         <span class="n">Function</span>
         <h3>Nerve &amp; muscle support</h3>
-        <p class="ink" tabindex="0"><span class="ink-core">Sodium &middot; potassium &middot; magnesium</span><span class="ink-full-wrap"><span class="ink-full">230&nbsp;mg sodium, 230&nbsp;mg potassium and 15&nbsp;mg magnesium &mdash; a gentle profile, not a salt bomb.</span></span></p>
+        <p class="ink" tabindex="0"><span class="ink-core">Sodium &middot; potassium &middot; magnesium</span><span class="ink-full-wrap"><span class="ink-full">270&nbsp;mg sodium, 230&nbsp;mg potassium and 20&nbsp;mg magnesium &mdash; a gentle profile, not a salt bomb.</span></span></p>
       </div>
     </div>
    </div>
@@ -2321,7 +2321,7 @@ body.fun-mode .galaxy-bg{opacity:1}
             <div class="med"></div>
             <p class="nf-dv">% Daily Value*</p>
             <div class="nf-row"><b>Total Fat 0g</b><b>0%</b></div>
-            <div class="nf-row" data-nutrient="sodium" tabindex="0"><b>Sodium 230mg</b><b>10%</b></div>
+            <div class="nf-row" data-nutrient="sodium" tabindex="0"><b>Sodium 270mg</b><b>12%</b></div>
             <div class="nf-row"><b>Total Carbohydrate 11g</b><b>4%</b></div>
             <div class="nf-row"><span class="in1">Total Sugars 8g</span><span></span></div>
             <div class="nf-row"><span class="in2">Includes 3g Added Sugars</span><b>6%</b></div>
@@ -2330,7 +2330,7 @@ body.fun-mode .galaxy-bg{opacity:1}
             <div class="nf-row plain" data-nutrient="calcium" tabindex="0"><span>Calcium 20mg</span><span>2%</span></div>
             <div class="nf-row" data-nutrient="potassium" tabindex="0"><span>Potassium 230mg</span><span>4%</span></div>
             <div class="nf-row" data-nutrient="vitaminc" tabindex="0"><span>Vitamin C 9mg</span><span>10%</span></div>
-            <div class="nf-row" data-nutrient="magnesium" tabindex="0"><span>Magnesium 15mg</span><span>4%</span></div>
+            <div class="nf-row" data-nutrient="magnesium" tabindex="0"><span>Magnesium 20mg</span><span>4%</span></div>
             <p class="nf-foot">Not a significant source of saturated fat, trans fat, cholesterol, dietary fiber, vitamin D and iron.</p>
             <p class="nf-foot" style="border-top:none;padding-top:2px">* The % Daily Value (DV) tells you how much a nutrient in a serving of food contributes to a daily diet. 2,000 calories a day is used for general nutrition advice.</p>
           </div>
@@ -2349,9 +2349,9 @@ body.fun-mode .galaxy-bg{opacity:1}
               </svg>
             </span>
             <div class="nn-body">
-              <h3>Sodium &middot; 230mg</h3>
+              <h3>Sodium &middot; 270mg</h3>
               <p><b>What &amp; why</b>The main electrolyte you lose in sweat &mdash; it helps your cells hold onto the water you drink instead of passing it straight through, and keeps nerves and muscles firing correctly.</p>
-              <p class="nn-source"><b>In Hydraco</b>From pink Himalayan salt.</p>
+              <p class="nn-source"><b>In Hydraco</b>Mostly from pink Himalayan salt, with a little more from coconut water powder.</p>
             </div>
           </div>
 
@@ -2403,9 +2403,9 @@ body.fun-mode .galaxy-bg{opacity:1}
               </svg>
             </span>
             <div class="nn-body">
-              <h3>Magnesium &middot; 15mg</h3>
+              <h3>Magnesium &middot; 20mg</h3>
               <p><b>What &amp; why</b>The mineral your muscles need to relax again after they've worked &mdash; and most people don't get enough of it day to day.</p>
-              <p class="nn-source"><b>In Hydraco</b>A plant-based source: pumpkin seed extract powder.</p>
+              <p class="nn-source"><b>In Hydraco</b>Plant-based sources: coconut water powder and pumpkin seed extract powder.</p>
             </div>
           </div>
 
@@ -4542,14 +4542,14 @@ const EXPLORER = {
   },
   lyte: {
     unit: "mg",
-    caption: "Each electrolyte next to a leading 20&nbsp;oz sports drink. Restore brings magnesium the big brands leave out, about three times the potassium, and keeps sodium a touch lower &mdash; a gentle profile, not a salt bomb.",
+    caption: "Each electrolyte next to a leading 20&nbsp;oz sports drink. Restore brings magnesium the big brands leave out, about three times the potassium, and about the same sodium &mdash; a balanced profile, not a salt bomb.",
     rows: [
-      { name: "Magnesium",           value: 15,  barMax: 15,  dv: "4% Daily Value",  ref: false, blurb: "From pumpkin seed extract. Most sports drinks carry none at all &mdash; it&rsquo;s the mineral muscles need to relax again after they&rsquo;ve worked." },
-      { name: "Leading sports drink", value: 0,   barMax: 15,  ref: true,  blurb: "A typical 20&nbsp;oz sports drink has no magnesium." },
+      { name: "Magnesium",           value: 20,  barMax: 20,  dv: "4% Daily Value",  ref: false, blurb: "From coconut water powder and pumpkin seed extract. Most sports drinks carry none at all &mdash; it&rsquo;s the mineral muscles need to relax again after they&rsquo;ve worked." },
+      { name: "Leading sports drink", value: 0,   barMax: 20,  ref: true,  blurb: "A typical 20&nbsp;oz sports drink has no magnesium." },
       { name: "Potassium",           value: 230, barMax: 230, dv: "4% Daily Value",  ref: false, blurb: "From coconut water powder &mdash; the electrolyte the big brands skimp on. Works with sodium to move water into cells." },
       { name: "Leading sports drink", value: 75,  barMax: 230, ref: true,  blurb: "Around 75&nbsp;mg of potassium in a 20&nbsp;oz bottle." },
-      { name: "Sodium",              value: 230, barMax: 270, dv: "10% Daily Value", ref: false, blurb: "From pink Himalayan salt. Enough to replace what you sweat out, without the salt-bomb load." },
-      { name: "Leading sports drink", value: 270, barMax: 270, ref: true,  blurb: "Around 270&nbsp;mg of sodium in a 20&nbsp;oz bottle &mdash; a little more than Restore." }
+      { name: "Sodium",              value: 270, barMax: 270, dv: "12% Daily Value", ref: false, blurb: "Mostly from pink Himalayan salt. Enough to replace what you sweat out, without the salt-bomb load." },
+      { name: "Leading sports drink", value: 270, barMax: 270, ref: true,  blurb: "Around 270&nbsp;mg of sodium in a 20&nbsp;oz bottle &mdash; about the same as Restore." }
     ]
   },
   sugar: {
