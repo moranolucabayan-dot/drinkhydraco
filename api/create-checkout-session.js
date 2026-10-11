@@ -62,8 +62,8 @@ module.exports = async (req, res) => {
   params.set("line_items[0][price_data][currency]", "usd");
   params.set("line_items[0][price_data][unit_amount]", String(unitAmountCents));
   params.set("line_items[0][price_data][product_data][name]", member
-    ? "Hydraco Membership — " + sticks + " stick packs every month"
-    : "Hydraco Restore — " + sticks + "-pack");
+    ? "Hydraco Membership — " + sticks + " Strawberry Lemonade stick packs every month"
+    : "Hydraco Restore, Strawberry Lemonade — " + sticks + "-pack");
   if (member) {
     params.set("line_items[0][price_data][recurring][interval]", "month");
     // session metadata doesn't carry over to the subscription Stripe creates,
