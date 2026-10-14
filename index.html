@@ -32,7 +32,7 @@
 <meta name="theme-color" content="#00a9ac">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Jost:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400;1,500&family=Newsreader:ital,opsz,wght@0,6..72,300;0,6..72,400;1,6..72,300;1,6..72,400&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Jost:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400;1,500&family=Newsreader:ital,opsz,wght@0,6..72,400;1,6..72,400&display=swap">
 <style>*,*::before,*::after{box-sizing:border-box}body{margin:0}</style>
 <style>
 :root{
@@ -1521,7 +1521,7 @@ img[data-photo].swapping{opacity:.35}
    copy shows. With no script the page is plain Restore. */
 :root[data-product="hydrapro"] [data-only="restore"],
 :root:not([data-product="hydrapro"]) [data-only="hydrapro"]{display:none!important}
-.prod-switch.three{grid-template-columns:1fr 1fr 1fr}
+.prod-switch.three{grid-template-columns:repeat(3,minmax(0,1fr))}
 .prod-opt[data-pick-product="mix"]:not([aria-pressed="true"]){
   border-color:transparent;
   background:linear-gradient(var(--paper),var(--paper)) padding-box,
@@ -2287,6 +2287,36 @@ body.fun-mode .galaxy-bg{opacity:1}
 .preorder-photo{margin-top:clamp(44px,6vw,72px)}
 .preorder-photo img{max-width:340px;margin-inline:auto}
 
+
+/* ---------- speed + legibility pass (2026-10-14) ----------
+   Decorations that can't be seen don't animate: the fun-mode starfield is
+   switched off entirely outside fun mode, and sections scrolled out of view
+   pause their loops (the script adds .is-off). */
+.galaxy-bg{visibility:hidden;transition:opacity .8s ease,visibility 0s linear .8s}
+body.fun-mode .galaxy-bg{visibility:visible;transition:opacity .8s ease}
+body:not(.fun-mode) .galaxy-bg *{animation-play-state:paused!important}
+.is-off,.is-off *{animation-play-state:paused!important}
+
+/* Nothing anyone needs to read is under 12px: eyebrow labels sit at 12px,
+   supporting text at 13px. */
+.flag,.hp-flag,.prod-new,.nav-switch i,.benefit .n,.ingx-role b,.ingx-why b,.nn-body b,
+.beat h3,.prod-label,.foot-contact-label,.pay-choose span,.qty-label,.grand span,
+.mode-pill-btn,.legal b,.seg-btn,.prod-opt span{font-size:.75rem!important}
+.brand{padding-block:8px}
+.unit,.sticks,.hp-meta,.pm-sub,.pay-method-opt span,.ingx-cite,.ingx-src,.ingx-src em,.nf-note,.legal p,
+.order-side p,.foot-end,.foot-end a,.sig span,.bar-head span,.mode-pill > span,
+.field label,.order-form label,.order-form .field > span{font-size:.8125rem!important}
+.hp-meta,.unit{letter-spacing:.02em;text-transform:none!important}
+/* badges: readable size, sentence case so they stay short */
+.flag,.hp-flag,.prod-new{text-transform:none!important;letter-spacing:.02em!important;padding:.2em .75em!important;top:-11px!important}
+
+/* Phones: every tap target at least 44px tall */
+@media (max-width:760px){
+  .faq summary{min-height:44px;padding-block:6px}
+  .foot-contact a,.foot-end a{display:inline-flex;align-items:center;min-height:44px}
+  .quote-submit-toggle{min-height:44px}
+  .prod-desc a{display:inline-flex;align-items:center;min-height:44px}
+}
 </style>
 
 <!-- Vercel Speed Insights - static-site install (no npm/build step here,
@@ -2409,7 +2439,7 @@ body.fun-mode .galaxy-bg{opacity:1}
       <p class="hero-flavor"><span>Flavor</span> Strawberry Lemonade</p>
 
       <div class="hero-buybox" role="group" aria-label="Quick pack picker">
-        <p class="prod-label">Pick your mix &mdash; Restore, Hydrapro or both</p>
+        <p class="prod-label">Pick your mix</p>
         <div class="prod-switch three" role="group" aria-label="Choose a product">
           <button type="button" class="prod-opt" data-pick-product="restore" aria-pressed="true"><b>Restore</b><span>The original recovery mix</span></button>
           <button type="button" class="prod-opt" data-pick-product="hydrapro" aria-pressed="false"><i class="prod-new">New</i><b>Hydrapro</b><span>Restore + more electrolytes + a probiotic</span></button>
@@ -2494,8 +2524,8 @@ body.fun-mode .galaxy-bg{opacity:1}
       <div class="hero-quotes" id="heroQuotes" hidden></div>
     </div>
 
-    <div class="hero-photo rv">
-      <img data-photo="hero" src="/images/hero.webp?v=pack7" class="photo-frame" alt="HYDRACO Restore post-workout electrolyte recovery mix packet, standing beside a glass of the prepared drink" width="853" height="1280" fetchpriority="high">
+    <div class="hero-photo">
+      <img data-photo="hero" src="/images/hero.webp?v=pack8" class="photo-frame" alt="HYDRACO Restore post-workout electrolyte recovery mix packet, standing beside a glass of the prepared drink" width="853" height="1280" fetchpriority="high">
     </div>
   </header>
 
@@ -2521,7 +2551,7 @@ body.fun-mode .galaxy-bg{opacity:1}
   <section id="why">
    <div class="why-grid">
     <div class="why-photo rv">
-      <img data-photo="why-recovery" src="/images/why-recovery.webp?v=pack7" class="photo-frame" alt="HYDRACO Restore electrolyte recovery drink after training" loading="lazy" decoding="async" width="1280" height="853">
+      <img data-photo="why-recovery" src="/images/why-recovery.webp?v=pack8" class="photo-frame" alt="HYDRACO Restore electrolyte recovery drink after training" loading="lazy" decoding="async" width="1280" height="853">
     </div>
     <div class="why-text rv">
     <div class="sec-head">
@@ -2583,7 +2613,7 @@ body.fun-mode .galaxy-bg{opacity:1}
 
   <!-- ============ GYM / RECOVERY BAND ============ -->
   <div class="gym-band rv" aria-label="HYDRACO Restore in a post-workout gym setting">
-    <img data-photo="gym-band" src="/images/gym-band.webp?v=pack7" alt="HYDRACO Restore electrolyte packet and drink in a post-workout gym setting" loading="lazy" decoding="async" width="1280" height="853">
+    <img data-photo="gym-band" src="/images/gym-band.webp?v=pack8" alt="HYDRACO Restore electrolyte packet and drink in a post-workout gym setting" loading="lazy" decoding="async" width="1280" height="853">
     <div class="gym-band-copy">
       <p data-only="restore">Built for the hours after, not the minutes during.</p>
       <p data-only="hydrapro">For the long, sweaty sessions &mdash; and the hours after.</p>
@@ -2915,8 +2945,8 @@ body.fun-mode .galaxy-bg{opacity:1}
         </div>
 
         <div class="inside-photos rv">
-          <img data-photo="inside-packet" src="/images/inside-packet.webp?v=pack7" class="photo-frame" alt="HYDRACO Restore electrolyte packet beside a glass of the prepared electrolyte drink" loading="lazy" width="608" height="760">
-          <img data-photo="inside-pour" src="/images/inside-pour.webp?v=pack7" class="photo-frame" alt="HYDRACO Restore electrolyte powder being poured into an iced drink" loading="lazy" width="760" height="506">
+          <img data-photo="inside-packet" src="/images/inside-packet.webp?v=pack8" class="photo-frame" alt="HYDRACO Restore electrolyte packet beside a glass of the prepared electrolyte drink" loading="lazy" width="608" height="760">
+          <img data-photo="inside-pour" src="/images/inside-pour.webp?v=pack8" class="photo-frame" alt="HYDRACO Restore electrolyte powder being poured into an iced drink" loading="lazy" width="760" height="506">
         </div>
       </div>
 
@@ -3133,8 +3163,8 @@ body.fun-mode .galaxy-bg{opacity:1}
       </div>
 
       <div class="hp-photos">
-        <img data-photo="inside-packet" src="/images/inside-packet.webp?v=pack7" class="photo-frame" alt="HYDRACO Hydrapro electrolyte packet beside a glass of the prepared drink" loading="lazy" width="608" height="760">
-        <img data-photo="inside-pour" src="/images/inside-pour.webp?v=pack7" class="photo-frame" alt="HYDRACO Hydrapro powder being poured into an iced drink" loading="lazy" width="760" height="506">
+        <img data-photo="inside-packet" src="/images/inside-packet.webp?v=pack8" class="photo-frame" alt="HYDRACO Hydrapro electrolyte packet beside a glass of the prepared drink" loading="lazy" width="608" height="760">
+        <img data-photo="inside-pour" src="/images/inside-pour.webp?v=pack8" class="photo-frame" alt="HYDRACO Hydrapro powder being poured into an iced drink" loading="lazy" width="760" height="506">
       </div>
 
       <!-- HYDRAPRO NUTRITION: the Nutrition Facts panel and the sodium / potassium / magnesium
@@ -3266,7 +3296,7 @@ body.fun-mode .galaxy-bg{opacity:1}
         </p>
       </div>
 
-      <p class="prod-label">Pick your mix &mdash; Restore, Hydrapro or both</p>
+      <p class="prod-label">Pick your mix</p>
         <div class="prod-switch three" role="group" aria-label="Choose a product">
         <button type="button" class="prod-opt" data-pick-product="restore" aria-pressed="true"><b>Restore</b><span>The original recovery mix</span></button>
         <button type="button" class="prod-opt" data-pick-product="hydrapro" aria-pressed="false"><i class="prod-new">New</i><b>Hydrapro</b><span>Restore + more electrolytes + a probiotic</span></button>
@@ -3520,7 +3550,7 @@ body.fun-mode .galaxy-bg{opacity:1}
       </form>
 
       <div class="preorder-photo rv">
-        <img data-photo="preorder" src="/images/preorder.webp?v=pack7" class="photo-frame" alt="Three HYDRACO Restore electrolyte recovery mix packets" loading="lazy" width="720" height="900">
+        <img data-photo="preorder" src="/images/preorder.webp?v=pack8" class="photo-frame" alt="Three HYDRACO Restore electrolyte recovery mix packets" loading="lazy" width="720" height="900">
       </div>
 
     </div>
@@ -3861,7 +3891,7 @@ const PRODUCT_DESC = {
 const calmMotion = () => window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 const START_PACK = { restore: 19, hydrapro: 19, mix: 19 };
 const photoSrc = (name, p) => p === "hydrapro"
-  ? "/images/hp/" + name + ".webp?v=hp2" : "/images/" + name + ".webp?v=pack7";
+  ? "/images/hp/" + name + ".webp?v=hp3" : "/images/" + name + ".webp?v=pack8";
 
 function paintProduct(){
   document.documentElement.dataset.product = mode;
@@ -5150,6 +5180,11 @@ const io = new IntersectionObserver((entries) => {
   entries.forEach(en => { if (en.isIntersecting){ en.target.classList.add("in"); io.unobserve(en.target); } });
 }, { rootMargin: "0px 0px -12% 0px" });
 document.querySelectorAll(".rv").forEach(el => io.observe(el));
+/* sections out of view pause their CSS loops (see .is-off) */
+const offIO = new IntersectionObserver((entries) => {
+  entries.forEach(en => en.target.classList.toggle("is-off", !en.isIntersecting));
+}, { rootMargin: "200px 0px" });
+document.querySelectorAll("main > section, main > header, main > div, .foot").forEach(el => offIO.observe(el));
 const chgEl = document.getElementById("hpChg");
 if (chgEl) { io.observe(chgEl); }   // the "in" class grows the bars
 
