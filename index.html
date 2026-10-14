@@ -1454,20 +1454,20 @@ body.fun-mode .pack-hint.hidden{transform:rotate(-9deg) translateY(-6px)}
 
 /* ---------- Hydrapro mode ----------
    Picking Hydrapro stamps data-product="hydrapro" on <html>: the pink
-   accent becomes Hydrapro's aqua (#02D8E9) everywhere it is used, the
+   accent becomes Hydrapro's aqua (a softened #02D8E9) everywhere it is used, the
    painted brush textures swap to aqua copies, and the script swaps each
    product photo for one with an aqua band on the pack. The drink itself
    stays pink - it is still strawberry lemonade. */
 :root[data-product="hydrapro"]{
-  --pink:#02d8e9;--pink-ink:#007c89;--pink-soft:#8eeaf3;
-  --brush-wide:url('/images/hp/brush-wide.webp?v=hp1');
-  --brush-tag:url('/images/hp/brush-tag.webp?v=hp1');
-  --brush-band:url('/images/hp/brush-band.webp?v=hp1');
+  --pink:#42c4d2;--pink-ink:#00707b;--pink-soft:#a5e1e8;
+  --brush-wide:url('/images/hp/brush-wide.webp?v=hp2');
+  --brush-tag:url('/images/hp/brush-tag.webp?v=hp2');
+  --brush-band:url('/images/hp/brush-band.webp?v=hp2');
 }
 @media (prefers-color-scheme: dark){
-  :root[data-product="hydrapro"]:not([data-theme="light"]){--pink:#02d8e9;--pink-ink:#6fe9f4;--pink-soft:#2fc4d3}
+  :root[data-product="hydrapro"]:not([data-theme="light"]){--pink:#42c4d2;--pink-ink:#7fdfe9;--pink-soft:#2aa3b0}
 }
-:root[data-product="hydrapro"][data-theme="dark"]{--pink:#02d8e9;--pink-ink:#6fe9f4;--pink-soft:#2fc4d3}
+:root[data-product="hydrapro"][data-theme="dark"]{--pink:#42c4d2;--pink-ink:#7fdfe9;--pink-soft:#2aa3b0}
 /* the sketched glass keeps its pink drink in either mode */
 :root[data-product="hydrapro"] #pourArt{--pink:#fb4fc0}
 img[data-photo]{transition:opacity .25s}
@@ -3528,7 +3528,7 @@ const PRODUCT_HERO = {
               lede: "More electrolytes. Over 1 billion CFU of probiotics in every stick." }
 };
 const photoSrc = (name, p) => p === "hydrapro"
-  ? "/images/hp/" + name + ".webp?v=hp1" : "/images/" + name + ".webp?v=pack7";
+  ? "/images/hp/" + name + ".webp?v=hp2" : "/images/" + name + ".webp?v=pack7";
 
 function paintProduct(){
   document.documentElement.dataset.product = product;
