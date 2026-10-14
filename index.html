@@ -1452,6 +1452,27 @@ body.fun-mode .pack-hint.hidden{transform:rotate(-9deg) translateY(-6px)}
 }
 .exp-wrap{margin-top:clamp(40px,5vw,64px)}
 
+/* ---------- Hydrapro mode ----------
+   Picking Hydrapro stamps data-product="hydrapro" on <html>: the pink
+   accent becomes Hydrapro's aqua (#02D8E9) everywhere it is used, the
+   painted brush textures swap to aqua copies, and the script swaps each
+   product photo for one with an aqua band on the pack. The drink itself
+   stays pink - it is still strawberry lemonade. */
+:root[data-product="hydrapro"]{
+  --pink:#02d8e9;--pink-ink:#007c89;--pink-soft:#8eeaf3;
+  --brush-wide:url('/images/hp/brush-wide.webp?v=hp1');
+  --brush-tag:url('/images/hp/brush-tag.webp?v=hp1');
+  --brush-band:url('/images/hp/brush-band.webp?v=hp1');
+}
+@media (prefers-color-scheme: dark){
+  :root[data-product="hydrapro"]:not([data-theme="light"]){--pink:#02d8e9;--pink-ink:#6fe9f4;--pink-soft:#2fc4d3}
+}
+:root[data-product="hydrapro"][data-theme="dark"]{--pink:#02d8e9;--pink-ink:#6fe9f4;--pink-soft:#2fc4d3}
+/* the sketched glass keeps its pink drink in either mode */
+:root[data-product="hydrapro"] #pourArt{--pink:#fb4fc0}
+img[data-photo]{transition:opacity .25s}
+img[data-photo].swapping{opacity:.35}
+
 /* ---------- two products: the Restore / Hydrapro switch ----------
    One switch in the hero buy box and one above the order packs; both
    drive the same state, and pack buttons carry data-product so only the
@@ -2231,8 +2252,8 @@ body.fun-mode .galaxy-bg{opacity:1}
   <!-- ============ HERO ============ -->
   <header class="hero">
     <div class="hero-copy">
-      <h1><span class="hero-stroke">Restore</span><span class="hero-sub">Post-workout electrolyte recovery mix</span></h1>
-      <p class="hero-lede">Designed for recovery, not stimulation.</p>
+      <h1><span class="hero-stroke" id="heroName">Restore</span><span class="hero-sub" id="heroSub">Post-workout electrolyte recovery mix</span></h1>
+      <p class="hero-lede" id="heroLede">Designed for recovery, not stimulation.</p>
       <p class="hero-flavor"><span>Flavor</span> Strawberry Lemonade</p>
 
       <div class="hero-buybox" role="group" aria-label="Quick pack picker">
@@ -2301,7 +2322,7 @@ body.fun-mode .galaxy-bg{opacity:1}
     </div>
 
     <div class="hero-photo rv">
-      <img src="/images/hero.webp?v=pack7" class="photo-frame" alt="HYDRACO Restore post-workout electrolyte recovery mix packet, standing beside a glass of the prepared drink" width="853" height="1280" fetchpriority="high">
+      <img data-photo="hero" src="/images/hero.webp?v=pack7" class="photo-frame" alt="HYDRACO Restore post-workout electrolyte recovery mix packet, standing beside a glass of the prepared drink" width="853" height="1280" fetchpriority="high">
     </div>
   </header>
 
@@ -2321,7 +2342,7 @@ body.fun-mode .galaxy-bg{opacity:1}
   <section id="why">
    <div class="why-grid">
     <div class="why-photo rv">
-      <img src="/images/why-recovery.webp?v=pack7" class="photo-frame" alt="HYDRACO Restore electrolyte recovery drink after training" loading="lazy" decoding="async" width="1280" height="853">
+      <img data-photo="why-recovery" src="/images/why-recovery.webp?v=pack7" class="photo-frame" alt="HYDRACO Restore electrolyte recovery drink after training" loading="lazy" decoding="async" width="1280" height="853">
     </div>
     <div class="why-text rv">
     <div class="sec-head">
@@ -2359,7 +2380,7 @@ body.fun-mode .galaxy-bg{opacity:1}
 
   <!-- ============ GYM / RECOVERY BAND ============ -->
   <div class="gym-band rv" aria-label="HYDRACO Restore in a post-workout gym setting">
-    <img src="/images/gym-band.webp?v=pack7" alt="HYDRACO Restore electrolyte packet and drink in a post-workout gym setting" loading="lazy" decoding="async" width="1280" height="853">
+    <img data-photo="gym-band" src="/images/gym-band.webp?v=pack7" alt="HYDRACO Restore electrolyte packet and drink in a post-workout gym setting" loading="lazy" decoding="async" width="1280" height="853">
     <div class="gym-band-copy">
       <p>Built for the hours after, not the minutes during.</p>
     </div>
@@ -2574,8 +2595,8 @@ body.fun-mode .galaxy-bg{opacity:1}
         </div>
 
         <div class="inside-photos rv">
-          <img src="/images/inside-packet.webp?v=pack7" class="photo-frame" alt="HYDRACO Restore electrolyte packet beside a glass of the prepared electrolyte drink" loading="lazy" width="608" height="760">
-          <img src="/images/inside-pour.webp?v=pack7" class="photo-frame" alt="HYDRACO Restore electrolyte powder being poured into an iced drink" loading="lazy" width="760" height="506">
+          <img data-photo="inside-packet" src="/images/inside-packet.webp?v=pack7" class="photo-frame" alt="HYDRACO Restore electrolyte packet beside a glass of the prepared electrolyte drink" loading="lazy" width="608" height="760">
+          <img data-photo="inside-pour" src="/images/inside-pour.webp?v=pack7" class="photo-frame" alt="HYDRACO Restore electrolyte powder being poured into an iced drink" loading="lazy" width="760" height="506">
         </div>
       </div>
 
@@ -3188,7 +3209,7 @@ body.fun-mode .galaxy-bg{opacity:1}
       </form>
 
       <div class="preorder-photo rv">
-        <img src="/images/preorder.webp?v=pack7" class="photo-frame" alt="Three HYDRACO Restore electrolyte recovery mix packets" loading="lazy" width="720" height="900">
+        <img data-photo="preorder" src="/images/preorder.webp?v=pack7" class="photo-frame" alt="Three HYDRACO Restore electrolyte recovery mix packets" loading="lazy" width="720" height="900">
       </div>
 
     </div>
@@ -3498,8 +3519,37 @@ heroPackBtns.forEach((btn) => {
    its 19-pack, the size both products share as the popular one. */
 const prodBtns = document.querySelectorAll("[data-pick-product]");
 
+/* What the page says and shows in each mode. Photos: the Hydrapro copies
+   in /images/hp/ are the same shots with the pack's band in aqua. */
+const PRODUCT_HERO = {
+  restore:  { name: "Restore",  sub: "Post-workout electrolyte recovery mix",
+              lede: "Designed for recovery, not stimulation." },
+  hydrapro: { name: "Hydrapro", sub: "Electrolyte recovery mix + probiotics",
+              lede: "More electrolytes. Over 1 billion CFU of probiotics in every stick." }
+};
+const photoSrc = (name, p) => p === "hydrapro"
+  ? "/images/hp/" + name + ".webp?v=hp1" : "/images/" + name + ".webp?v=pack7";
+
+function paintProduct(){
+  document.documentElement.dataset.product = product;
+  const h = PRODUCT_HERO[product];
+  $("#heroName").textContent = h.name;
+  $("#heroSub").textContent  = h.sub;
+  $("#heroLede").textContent = h.lede;
+  document.querySelectorAll("img[data-photo]").forEach(img => {
+    const next = photoSrc(img.dataset.photo, product);
+    if (img.getAttribute("src") === next) { return; }
+    // load the other copy first, then swap, so the photo never blanks out
+    const pre = new Image();
+    img.classList.add("swapping");
+    pre.onload = pre.onerror = () => { img.src = next; img.classList.remove("swapping"); };
+    pre.src = next;
+  });
+}
+
 function selectProduct(next){
   product = next === "hydrapro" ? "hydrapro" : "restore";
+  paintProduct();
   prodBtns.forEach(b => {
     if (b.classList.contains("prod-opt")) {
       b.setAttribute("aria-pressed", b.dataset.pickProduct === product ? "true" : "false");
