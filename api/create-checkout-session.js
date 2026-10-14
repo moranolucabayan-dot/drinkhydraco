@@ -16,19 +16,34 @@ const PACKS = {
     59: 1.99,
     95: 1.95,
   },
-  // Hydrapro: Restore with more electrolytes + Bacillus coagulans. No membership tiers.
+  // Hydrapro: Restore with more electrolytes + Bacillus coagulans.
   hydrapro: {
     5:  2.99,
     9:  2.79,
     19: 2.59,
     45: 2.49,
+    41: 2.45,
+    59: 2.38,
+    95: 2.19,
+  },
+  // Mix: half Restore, half Hydrapro in one box (10 = 5 + 5, and so on).
+  mix: {
+    10: 2.49,
+    20: 2.35,
+    46: 2.25,
+    60: 2.19,
   },
 };
 
 // These sizes aren't one-off purchases - they're the monthly membership
 // tiers, billed by Stripe every month until cancelled. Always exactly one
 // per checkout, whatever quantity the client sends.
-const MEMBERSHIP_STICKS = [41, 59, 95];
+const MEMBERSHIP_STICKS = {
+  restore:  [41, 59, 95],
+  hydrapro: [41, 59, 95],
+  mix:      [60],
+};
+const PRODUCT_NAME = { restore: "Restore", hydrapro: "Hydrapro", mix: "Mix (half Restore, half Hydrapro)" };
 
 module.exports = async (req, res) => {
   if (req.method !== "POST") {
@@ -42,15 +57,15 @@ module.exports = async (req, res) => {
   }
   body = body || {};
 
-  const product = body.product === "hydrapro" ? "hydrapro" : "restore";
+  const product = ["restore", "hydrapro", "mix"].includes(body.product) ? body.product : "restore";
   const sticks = Number(body.sticks);
-  const member = product === "restore" && MEMBERSHIP_STICKS.includes(sticks);
+  const member = MEMBERSHIP_STICKS[product].includes(sticks);
   const qty    = member ? 1 : Math.max(1, Math.min(20, Math.floor(Number(body.qty)) || 1));
   const orderRef = String(body.orderRef || "").slice(0, 40);
   const name   = String(body.name  || "").slice(0, 200);
   const email  = String(body.email || "").slice(0, 200);
 
-  const unit = PACKS[product][sticks];
+  const unit = Object.prototype.hasOwnProperty.call(PACKS[product], sticks) ? PACKS[product][sticks] : 0;
   if (!unit) {
     res.status(400).json({ error: "Unknown pack size" });
     return;
@@ -72,14 +87,15 @@ module.exports = async (req, res) => {
   params.set("line_items[0][price_data][currency]", "usd");
   params.set("line_items[0][price_data][unit_amount]", String(unitAmountCents));
   params.set("line_items[0][price_data][product_data][name]", member
-    ? "Hydraco Membership — " + sticks + " Strawberry Lemonade stick packs every month"
-    : "Hydraco " + (product === "hydrapro" ? "Hydrapro" : "Restore") + ", Strawberry Lemonade — " + sticks + "-pack");
+    ? "Hydraco " + PRODUCT_NAME[product] + " Membership — " + sticks + " Strawberry Lemonade stick packs every month"
+    : "Hydraco " + PRODUCT_NAME[product] + ", Strawberry Lemonade — " + sticks + "-pack");
   if (member) {
     params.set("line_items[0][price_data][recurring][interval]", "month");
     // session metadata doesn't carry over to the subscription Stripe creates,
     // so repeat the order reference there for matching renewals later
     params.set("subscription_data[metadata][order_ref]", orderRef);
     params.set("subscription_data[metadata][name]", name);
+    params.set("subscription_data[metadata][product]", product);
   }
   if (email) { params.set("customer_email", email); }
   params.set("metadata[order_ref]", orderRef);

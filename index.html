@@ -1513,6 +1513,129 @@ img[data-photo].swapping{opacity:.35}
 .hp-diff li{padding-left:16px;border-left:2px solid var(--pink);font-size:.92rem;line-height:1.78;color:var(--ink-soft)}
 .hp-diff b{display:block;font-size:.72rem;letter-spacing:.16em;text-transform:uppercase;font-weight:600;color:var(--ink);margin-bottom:4px}
 .hp-cta{margin-top:clamp(28px,4vw,40px)}
+
+/* ---------- whole-site product mode ----------
+   Picking Restore or Hydrapro re-themes the whole page, not just the order
+   form. Every block that differs carries both versions, marked
+   data-only="restore" / data-only="hydrapro", and only the current mode's
+   copy shows. With no script the page is plain Restore. */
+:root[data-product="hydrapro"] [data-only="restore"],
+:root:not([data-product="hydrapro"]) [data-only="hydrapro"]{display:none!important}
+.prod-switch.three{grid-template-columns:1fr 1fr 1fr}
+.prod-opt[data-pick-product="mix"]:not([aria-pressed="true"]){
+  border-color:transparent;
+  background:linear-gradient(var(--paper),var(--paper)) padding-box,
+             linear-gradient(90deg,#fb4fc0,#42c4d2) border-box;
+}
+@media (max-width:420px){ .prod-switch.three .prod-opt span{font-size:.66rem} }
+
+/* switching mode: the new look spreads out in a circle from the button
+   that was pressed (browsers without view transitions just swap) */
+::view-transition-old(root),::view-transition-new(root){animation:none;mix-blend-mode:normal}
+::view-transition-new(root){animation:mode-wipe .75s cubic-bezier(.6,0,.2,1)}
+@keyframes mode-wipe{
+  from{clip-path:circle(0 at var(--vt-x,50%) var(--vt-y,30%))}
+  to{clip-path:circle(150vmax at var(--vt-x,50%) var(--vt-y,30%))}
+}
+
+/* the mode switch that follows you down the page */
+.mode-pill{
+  position:fixed;left:16px;bottom:16px;z-index:61;display:flex;align-items:center;gap:10px;
+  padding:6px 6px 6px 14px;border-radius:999px;background:var(--paper);
+  border:1.5px solid var(--pink);box-shadow:0 10px 30px -14px rgba(14,20,20,.45);
+  font-size:.72rem;letter-spacing:.06em;color:var(--ink-soft);
+  transform:translateY(calc(100% + 30px));opacity:0;
+  transition:transform .35s cubic-bezier(.2,.7,.2,1),opacity .25s,bottom .32s cubic-bezier(.2,.7,.2,1);
+}
+.mode-pill.show{transform:none;opacity:1}
+.mode-pill.lift{bottom:82px}
+.mode-pill b{color:var(--ink);letter-spacing:.12em;text-transform:uppercase;font-weight:600}
+.mode-pill-btn{
+  appearance:none;border:0;cursor:pointer;font:inherit;font-weight:600;letter-spacing:.08em;
+  text-transform:uppercase;font-size:.66rem;padding:.8em 1.2em;border-radius:999px;color:#fff;
+}
+.mode-pill-btn[data-pick-product="hydrapro"]{background:#00838f}
+.mode-pill-btn[data-pick-product="restore"]{background:#c2187f}
+.mode-pill-btn:hover{filter:brightness(1.1)}
+@media (max-width:420px){ .mode-pill{left:50%;translate:-50% 0;white-space:nowrap} }
+
+/* nav links that switch the whole site */
+.nav-links a.nav-switch{color:var(--pink-ink);font-weight:600}
+.nav-switch i{font-style:normal;font-size:.56rem;letter-spacing:.12em;text-transform:uppercase;
+  background:#42c4d2;color:#06262a;border-radius:999px;padding:.2em .6em;margin-left:.4em;vertical-align:2px}
+
+/* Hydrapro hero: bubbles rising behind the headline */
+.hero-copy{position:relative}
+.hp-bubbles{position:absolute;inset:0;overflow:hidden;pointer-events:none;z-index:0}
+.hp-bubbles span{
+  position:absolute;bottom:-40px;border-radius:50%;
+  border:1.5px solid var(--pink);background:color-mix(in srgb,var(--pink) 12%,transparent);
+  animation:hp-rise linear infinite;opacity:0;
+}
+@keyframes hp-rise{
+  0%{transform:translate(0,0);opacity:0}
+  12%{opacity:.75}
+  50%{transform:translate(14px,-45vh)}
+  100%{transform:translate(-8px,-95vh);opacity:0}
+}
+.hero-copy > *:not(.hp-bubbles){position:relative;z-index:1}
+
+/* meet-Hydrapro teaser, shown on the Restore site */
+.meet-hp{padding-block:clamp(56px,8vw,96px)}
+.meet-hp-card{
+  display:grid;grid-template-columns:auto 1fr;gap:clamp(24px,5vw,64px);align-items:center;
+  border:1.5px solid #42c4d2;border-radius:22px;padding:clamp(24px,4vw,48px);
+  background:color-mix(in srgb,#42c4d2 7%,var(--paper));
+}
+.meet-hp .pack-stage{width:clamp(120px,16vw,170px)}
+.meet-hp{--pink:#42c4d2;--pink-soft:#a5e1e8;--brush-tag:url('/images/hp/brush-tag.webp?v=hp2');--brush-band:url('/images/hp/brush-band.webp?v=hp2')}
+.meet-hp h2{margin-top:10px}
+.meet-hp p{color:var(--ink-soft);line-height:1.75;max-width:56ch}
+.meet-hp .btn{margin-top:22px;background:#00838f;border-color:#00838f;color:#fff}
+@media (max-width:640px){ .meet-hp-card{grid-template-columns:1fr;text-align:left} .meet-hp .pack-stage{width:120px} }
+
+/* Hydrapro: what changed from Restore */
+.hp-new{padding-block:clamp(64px,9vw,120px)}
+.chg{display:grid;gap:22px;margin-top:clamp(28px,4vw,44px);max-width:760px}
+.chg-row{display:grid;grid-template-columns:minmax(150px,1fr) 2.4fr;gap:10px 22px;align-items:center}
+.chg-name{font-size:.9rem;font-weight:600;color:var(--ink)}
+.chg-name small{display:block;font-weight:400;font-size:.76rem;color:var(--slate);margin-top:2px}
+.chg-bars{display:grid;gap:6px}
+.chg-bar{position:relative;height:18px;border-radius:999px;background:color-mix(in srgb,var(--ink) 6%,transparent);overflow:hidden}
+.chg-bar i{position:absolute;inset:0 auto 0 0;width:0;border-radius:inherit;transition:width 1.1s cubic-bezier(.2,.7,.2,1)}
+.chg-bar.r i{background:color-mix(in srgb,#fb4fc0 70%,var(--paper))}
+.chg-bar.h i{background:var(--pink)}
+.chg.in .chg-bar i{width:var(--w)}
+.chg-bar b{position:absolute;left:10px;top:50%;translate:0 -50%;font-size:.6rem;letter-spacing:.1em;text-transform:uppercase;font-weight:700;color:#06262a}
+.chg-key{display:flex;gap:18px;margin-top:14px;font-size:.74rem;color:var(--slate)}
+.chg-key span::before{content:"";display:inline-block;width:12px;height:12px;border-radius:50%;margin-right:6px;vertical-align:-1px}
+.chg-key .r::before{background:color-mix(in srgb,#fb4fc0 70%,var(--paper))}
+.chg-key .h::before{background:var(--pink)}
+.chg-new{display:inline-block;padding:.35em .9em;border-radius:999px;background:var(--pink);color:#06262a;font-size:.72rem;font-weight:700;letter-spacing:.08em}
+@media (max-width:560px){ .chg-row{grid-template-columns:1fr} }
+
+/* the probiotic, explained in three steps, with drifting cultures */
+.pro-card{
+  position:relative;overflow:hidden;margin-top:clamp(40px,6vw,72px);
+  border-radius:22px;padding:clamp(24px,4vw,48px);
+  background:color-mix(in srgb,var(--pink) 10%,var(--paper));border:1px solid var(--rule);
+}
+.pro-card h3{font-size:clamp(1.3rem,2.6vw,1.8rem);letter-spacing:.06em;text-transform:uppercase;font-weight:400;position:relative;z-index:1}
+.pro-steps{list-style:none;margin:22px 0 0;padding:0;display:grid;grid-template-columns:repeat(auto-fit,minmax(210px,1fr));gap:18px;position:relative;z-index:1}
+.pro-steps li{background:var(--paper);border-radius:16px;padding:20px;border:1px solid var(--rule);line-height:1.7;font-size:.9rem;color:var(--ink-soft)}
+.pro-steps b{display:block;color:var(--ink);font-size:.74rem;letter-spacing:.16em;text-transform:uppercase;margin-bottom:6px}
+.pro-steps .num{display:inline-grid;place-items:center;width:30px;height:30px;border-radius:50%;background:var(--pink);color:#06262a;font-weight:700;margin-bottom:10px}
+.cultures{position:absolute;inset:0;pointer-events:none;z-index:0}
+.cultures svg{position:absolute;color:var(--pink-ink);opacity:.28;animation:drift 14s ease-in-out infinite alternate}
+@keyframes drift{
+  0%{transform:translate(0,0) rotate(var(--r,0deg))}
+  50%{transform:translate(18px,-14px) rotate(calc(var(--r,0deg) + 20deg))}
+  100%{transform:translate(-12px,10px) rotate(calc(var(--r,0deg) - 15deg))}
+}
+.hp-photos{display:grid;grid-template-columns:1fr 1.25fr;gap:18px;margin-top:clamp(40px,6vw,72px)}
+.hp-photos img{width:100%;height:100%;object-fit:cover}
+@media (max-width:640px){ .hp-photos{grid-template-columns:1fr} }
+.hp-soon{margin-top:22px;font-size:.84rem;color:var(--slate);max-width:62ch;line-height:1.7}
 .seg{
   display:inline-flex;flex-wrap:wrap;gap:4px;padding:4px;
   border:1px solid var(--rule);border-radius:999px;background:var(--paper);
@@ -2224,10 +2347,12 @@ body.fun-mode .galaxy-bg{opacity:1}
   <div class="wrap nav-in">
     <a class="brand" href="#top"><span class="mark" aria-hidden="true"></span><span class="wordmark">Hydraco</span></a>
     <div class="nav-links" id="navLinks">
-      <a href="#why">Why recovery</a>
+      <a href="#why"><span data-only="restore">Why recovery</span><span data-only="hydrapro">Why Hydrapro</span></a>
       <a href="#formula">The formula</a>
-      <a href="#inside">What's inside</a>
-      <a href="#hydrapro">Hydrapro</a>
+      <a href="#inside" data-only="restore">What's inside</a>
+      <a href="#hydrapro" data-only="hydrapro">What's new</a>
+      <a href="#top" class="nav-switch" data-pick-product="hydrapro" data-only="restore">Hydrapro<i>New</i></a>
+      <a href="#top" class="nav-switch" data-pick-product="restore" data-only="hydrapro">Restore</a>
       <a href="#story">Our story</a>
       <a href="#proof" id="navProof" hidden>Reviews</a>
       <a href="#order" class="nav-cta">Order</a>
@@ -2260,20 +2385,28 @@ body.fun-mode .galaxy-bg{opacity:1}
   </div>
 </div>
 
+<div class="mode-pill" id="modePill" role="group" aria-label="Switch between Restore and Hydrapro">
+  <span>Viewing <b data-only="restore">Restore</b><b data-only="hydrapro">Hydrapro</b></span>
+  <button type="button" class="mode-pill-btn" data-pick-product="hydrapro" data-only="restore">Switch to Hydrapro</button>
+  <button type="button" class="mode-pill-btn" data-pick-product="restore" data-only="hydrapro">Switch to Restore</button>
+</div>
+
 <main id="top" tabindex="-1">
 
   <!-- ============ HERO ============ -->
   <header class="hero">
     <div class="hero-copy">
+      <div class="hp-bubbles" data-only="hydrapro" aria-hidden="true"><span style="left:6%;width:14px;height:14px;animation-duration:11s;animation-delay:0s"></span><span style="left:18%;width:8px;height:8px;animation-duration:9s;animation-delay:2.5s"></span><span style="left:29%;width:20px;height:20px;animation-duration:14s;animation-delay:5s"></span><span style="left:41%;width:10px;height:10px;animation-duration:10s;animation-delay:1.2s"></span><span style="left:55%;width:16px;height:16px;animation-duration:13s;animation-delay:3.6s"></span><span style="left:66%;width:7px;height:7px;animation-duration:8s;animation-delay:6s"></span><span style="left:74%;width:22px;height:22px;animation-duration:15s;animation-delay:0.6s"></span><span style="left:84%;width:11px;height:11px;animation-duration:11s;animation-delay:4.4s"></span><span style="left:92%;width:15px;height:15px;animation-duration:12s;animation-delay:7.5s"></span><span style="left:12%;width:6px;height:6px;animation-duration:7s;animation-delay:8.2s"></span><span style="left:48%;width:9px;height:9px;animation-duration:9s;animation-delay:9.1s"></span></div>
       <h1><span class="hero-stroke" id="heroName">Restore</span><span class="hero-sub" id="heroSub">Post-workout electrolyte recovery mix</span></h1>
       <p class="hero-lede" id="heroLede">Designed for recovery, not stimulation.</p>
       <p class="hero-flavor"><span>Flavor</span> Strawberry Lemonade</p>
 
       <div class="hero-buybox" role="group" aria-label="Quick pack picker">
-        <p class="prod-label">Two mixes &mdash; tap one</p>
-        <div class="prod-switch" role="group" aria-label="Choose a product">
+        <p class="prod-label">Pick your mix &mdash; Restore, Hydrapro or both</p>
+        <div class="prod-switch three" role="group" aria-label="Choose a product">
           <button type="button" class="prod-opt" data-pick-product="restore" aria-pressed="true"><b>Restore</b><span>The original recovery mix</span></button>
           <button type="button" class="prod-opt" data-pick-product="hydrapro" aria-pressed="false"><i class="prod-new">New</i><b>Hydrapro</b><span>Restore + more electrolytes + a probiotic</span></button>
+          <button type="button" class="prod-opt" data-pick-product="mix" aria-pressed="false"><b>Mix</b><span>Half Restore, half Hydrapro</span></button>
         </div>
         <p class="prod-desc" aria-live="polite"></p>
         <div class="hero-buybox-opts">
@@ -2323,6 +2456,24 @@ body.fun-mode .galaxy-bg{opacity:1}
             <span class="hp-price">$112.05</span>
             <span class="hp-meta">$2.49 per stick</span>
           </button>
+          <button type="button" class="hero-pack-opt" data-product="mix" data-sticks="10" data-unit="2.49" aria-pressed="false" hidden>
+            <span class="hp-flag">Try both</span>
+            <span class="hp-name">10-pack</span>
+            <span class="hp-price">$24.90</span>
+            <span class="hp-meta">5 + 5 &middot; $2.49 per stick</span>
+          </button>
+          <button type="button" class="hero-pack-opt" data-product="mix" data-sticks="20" data-unit="2.35" aria-pressed="false" hidden>
+            <span class="hp-flag">Popular</span>
+            <span class="hp-name">20-pack</span>
+            <span class="hp-price">$47.00</span>
+            <span class="hp-meta">10 + 10 &middot; $2.35 per stick</span>
+          </button>
+          <button type="button" class="hero-pack-opt" data-product="mix" data-sticks="46" data-unit="2.25" aria-pressed="false" hidden>
+            <span class="hp-flag">Best value</span>
+            <span class="hp-name">46-pack</span>
+            <span class="hp-price">$103.50</span>
+            <span class="hp-meta">23 + 23 &middot; $2.25 per stick</span>
+          </button>
         </div>
         <a href="#order" class="btn btn-solid hero-buy-cta" id="heroBuyBtn">Order &mdash; <span id="heroBuyPrice">$39.71</span></a>
         <svg class="doodle-arrow" viewBox="0 0 60 46" width="44" height="34" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" filter="url(#sketch-sm)" style="top:-28px;right:8px;transform:rotate(6deg)">
@@ -2342,7 +2493,13 @@ body.fun-mode .galaxy-bg{opacity:1}
   </header>
 
   <!-- ============ STRIP ============ -->
-  <div class="strip" aria-hidden="true">
+  <div class="strip" data-only="hydrapro" aria-hidden="true">
+    <div class="strip-track">
+      <span>1 billion+ CFU</span><span>Probiotic</span><span>More electrolytes</span><span>Strawberry lemonade</span><span><i>Bacillus coagulans</i></span><span>Coconut water</span><span>Pink Himalayan salt</span><span>No fridge needed</span><span>Tart cherry</span><span>Pomegranate</span><span>Low sugar</span><span>No artificial sweeteners</span>
+      <span>1 billion+ CFU</span><span>Probiotic</span><span>More electrolytes</span><span>Strawberry lemonade</span><span><i>Bacillus coagulans</i></span><span>Coconut water</span><span>Pink Himalayan salt</span><span>No fridge needed</span><span>Tart cherry</span><span>Pomegranate</span><span>Low sugar</span><span>No artificial sweeteners</span>
+    </div>
+  </div>
+  <div class="strip" data-only="restore" aria-hidden="true">
     <div class="strip-track">
       <span>Strawberry lemonade</span><span>No chemicals</span><span>Pure ingredients</span><span>Low sugar</span><span>No artificial sweeteners</span>
       <span>Tart cherry</span><span>Pomegranate</span><span>Coconut water</span><span>Pink Himalayan salt</span>
@@ -2362,12 +2519,36 @@ body.fun-mode .galaxy-bg{opacity:1}
     <div class="why-text rv">
     <div class="sec-head">
       <span class="tag">Key benefits</span>
-      <h2>Recovery is the workout you <span class="doodle-underline">skip<svg class="doodle-svg" viewBox="0 0 120 18" fill="none" stroke="var(--pink-ink)" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" filter="url(#sketch-sm)"><path d="M3 10 C 25 2, 50 15, 75 6 C 92 1, 108 12, 117 8"/></svg></span></h2>
+      <h2 data-only="hydrapro">Recovery, <span class="doodle-underline">built up<svg class="doodle-svg" viewBox="0 0 120 18" fill="none" stroke="var(--pink-ink)" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" filter="url(#sketch-sm)"><path d="M3 10 C 25 2, 50 15, 75 6 C 92 1, 108 12, 117 8"/></svg></span></h2>
+      <h2 data-only="restore">Recovery is the workout you <span class="doodle-underline">skip<svg class="doodle-svg" viewBox="0 0 120 18" fill="none" stroke="var(--pink-ink)" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" filter="url(#sketch-sm)"><path d="M3 10 C 25 2, 50 15, 75 6 C 92 1, 108 12, 117 8"/></svg></span></h2>
       <p style="color:var(--ink-soft);font-family:Newsreader,Georgia,serif;font-size:1.14rem;line-height:1.78">
-        Four things, in amounts that matter.
+        <span data-only="restore">Four things, in amounts that matter.</span>
+        <span data-only="hydrapro">Everything Restore does, with more of the minerals you sweat out and a probiotic on top.</span>
       </p>
     </div>
-    <div class="benefits">
+    <div class="benefits" data-only="hydrapro">
+      <div class="benefit">
+        <span class="n">Hydration</span>
+        <h3>More electrolytes per stick</h3>
+        <p class="ink" tabindex="0"><span class="ink-core">A quarter more coconut water, a third more salt</span><span class="ink-full-wrap"><span class="ink-full">Built up from Restore for heavier sweat and longer sessions: more coconut water for potassium, more pink Himalayan salt for sodium, more pumpkin seed for magnesium.</span></span></p>
+      </div>
+      <div class="benefit">
+        <span class="n">Probiotic</span>
+        <h3>Over 1 billion CFU per stick</h3>
+        <p class="ink" tabindex="0"><span class="ink-core"><em>Bacillus coagulans</em>, in every serving</span><span class="ink-full-wrap"><span class="ink-full">A spore-forming probiotic. It stays dormant in the dry powder, so the sticks keep in a cupboard &mdash; no fridge needed.</span></span></p>
+      </div>
+      <div class="benefit">
+        <span class="n">Muscle</span>
+        <h3>The same recovery fruits</h3>
+        <p class="ink" tabindex="0"><span class="ink-core">Tart cherry &amp; pomegranate, as in Restore</span><span class="ink-full-wrap"><span class="ink-full">The two fruits most consistently studied for soreness after hard training &mdash; the same tart cherry as Restore, and a little more pomegranate.</span></span></p>
+      </div>
+      <div class="benefit">
+        <span class="n">Taste</span>
+        <h3>Still low sugar</h3>
+        <p class="ink" tabindex="0"><span class="ink-core">3&nbsp;g cane sugar, no artificial sweeteners</span><span class="ink-full-wrap"><span class="ink-full">The same strawberry lemonade, sweetened with monk fruit and only 3&nbsp;g of cane sugar.</span></span></p>
+      </div>
+    </div>
+    <div class="benefits" data-only="restore">
       <div class="benefit">
         <span class="n">Hydration</span>
         <h3>At the cellular level</h3>
@@ -2397,7 +2578,8 @@ body.fun-mode .galaxy-bg{opacity:1}
   <div class="gym-band rv" aria-label="HYDRACO Restore in a post-workout gym setting">
     <img data-photo="gym-band" src="/images/gym-band.webp?v=pack7" alt="HYDRACO Restore electrolyte packet and drink in a post-workout gym setting" loading="lazy" decoding="async" width="1280" height="853">
     <div class="gym-band-copy">
-      <p>Built for the hours after, not the minutes during.</p>
+      <p data-only="restore">Built for the hours after, not the minutes during.</p>
+      <p data-only="hydrapro">For the long, sweaty sessions &mdash; and the hours after.</p>
     </div>
   </div>
 
@@ -2446,18 +2628,22 @@ body.fun-mode .galaxy-bg{opacity:1}
           <path d="M11 20 L16 23 L15 16"/>
         </svg>
       </span>
-      <div class="pack" role="button" tabindex="0" aria-label="Hydraco Restore stick pack, 14.4 grams, post-workout electrolyte recovery mix, a paper label on a matte aluminium pouch. Click to tear it open">
+      <div class="pack" id="formulaPack" role="button" tabindex="0" aria-label="Hydraco Restore stick pack, 14.4 grams, post-workout electrolyte recovery mix, a paper label on a matte aluminium pouch. Click to tear it open">
         <span class="pack-tear" aria-hidden="true"></span>
         <div class="pack-sticker">
           <span class="pack-name">Hydraco</span>
           <span class="pack-mark" aria-hidden="true"></span>
           <div class="pack-band">
-            <strong>RESTORE</strong>
-            <em>Post-workout electrolyte recovery mix</em>
+            <strong data-only="restore">RESTORE</strong>
+            <strong data-only="hydrapro">HYDRAPRO</strong>
+            <em data-only="restore">Post-workout electrolyte recovery mix</em>
+            <em data-only="hydrapro">Electrolyte recovery mix + probiotics</em>
           </div>
           <div class="pack-foot">
-            <b>Low sugar.<br>No artificial sweeteners.</b>
-            <span>NET WT. 14.4g (0.51 oz)</span>
+            <b data-only="restore">Low sugar.<br>No artificial sweeteners.</b>
+            <b data-only="hydrapro">1 billion+ CFU.<br>Low sugar.</b>
+            <span data-only="restore">NET WT. 14.4g (0.51 oz)</span>
+            <span data-only="hydrapro">NET WT. 15.6g (0.55 oz)</span>
           </div>
         </div>
         <span class="pack-seal" aria-hidden="true"></span>
@@ -2470,9 +2656,9 @@ body.fun-mode .galaxy-bg{opacity:1}
         <div class="sec-head" style="margin-bottom:0">
           <span class="tag">Active formula</span>
           <h2>What&rsquo;s in the powder &mdash; and what it delivers</h2>
-          <p class="sec-lede">Nine real ingredients, each earning its place. <span class="doodle-underline">Tap any one<svg class="doodle-svg" viewBox="0 0 120 18" fill="none" stroke="var(--pink-ink)" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" filter="url(#sketch-sm)"><path d="M3 10 C 25 2, 50 15, 75 6 C 92 1, 108 12, 117 8"/></svg></span> for the mechanism behind it, then scroll down for exactly what one stick delivers.</p>
+          <p class="sec-lede"><span data-only="restore">Nine real ingredients, each earning its place.</span><span data-only="hydrapro">Restore&rsquo;s nine ingredients, built up, plus a probiotic.</span> <span class="doodle-underline">Tap any one<svg class="doodle-svg" viewBox="0 0 120 18" fill="none" stroke="var(--pink-ink)" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" filter="url(#sketch-sm)"><path d="M3 10 C 25 2, 50 15, 75 6 C 92 1, 108 12, 117 8"/></svg></span> for the mechanism behind it, then scroll down for exactly what one stick delivers.</p>
         </div>
-        <ol class="ingx">
+        <ol class="ingx" data-only="restore">
         <li class="ingx-row">
           <details>
             <summary>
@@ -2585,11 +2771,123 @@ body.fun-mode .galaxy-bg{opacity:1}
           </details>
         </li>
         </ol>
+        <ol class="ingx" data-only="hydrapro">
+        <li class="ingx-row">
+          <details>
+            <summary>
+              <span class="ingx-sumhead"><span class="ingx-name">Coconut water powder</span><span class="ingx-pct">The largest share</span></span>
+              <span class="ingx-plus" aria-hidden="true">+</span>
+              <span class="ingx-bar"><span data-w="26"></span></span>
+            </summary>
+            <p class="ingx-role"><b>What it&rsquo;s for</b>The base of the mix &mdash; a quarter more than in Restore.</p>
+            <p class="ingx-why"><b>Why it helps</b>Coconut water is naturally rich in potassium. More of it here means more potassium in every stick.</p>
+          </details>
+        </li>
+        <li class="ingx-row">
+          <details>
+            <summary>
+              <span class="ingx-sumhead"><span class="ingx-name">Organic cane sugar</span><span class="ingx-pct">15&ndash;20%</span></span>
+              <span class="ingx-plus" aria-hidden="true">+</span>
+              <span class="ingx-bar"><span data-w="19"></span></span>
+            </summary>
+            <p class="ingx-role"><b>What it&rsquo;s for</b>A small amount of real sugar &mdash; 3&nbsp;g, the same as Restore.</p>
+            <p class="ingx-why"><b>Why it helps</b>A little sugar helps your body absorb the water and salts faster than plain water does.</p>
+          </details>
+        </li>
+        <li class="ingx-row">
+          <details>
+            <summary>
+              <span class="ingx-sumhead"><span class="ingx-name">Tart cherry powder</span><span class="ingx-pct">10&ndash;15%</span></span>
+              <span class="ingx-plus" aria-hidden="true">+</span>
+              <span class="ingx-bar"><span data-w="12"></span></span>
+            </summary>
+            <p class="ingx-role"><b>What it&rsquo;s for</b>The first of the two recovery fruits.</p>
+            <p class="ingx-why"><b>Why it helps</b>The same amount as Restore: tart cherry is one of the most studied fruits for soreness after hard training.</p>
+          </details>
+        </li>
+        <li class="ingx-row">
+          <details>
+            <summary>
+              <span class="ingx-sumhead"><span class="ingx-name">Lemon juice powder</span><span class="ingx-pct">10&ndash;15%</span></span>
+              <span class="ingx-plus" aria-hidden="true">+</span>
+              <span class="ingx-bar"><span data-w="12"></span></span>
+            </summary>
+            <p class="ingx-role"><b>What it&rsquo;s for</b>The lemonade side of the flavour.</p>
+            <p class="ingx-why"><b>Why it helps</b>Keeps the drink bright rather than sweet, and it&rsquo;s a natural source of vitamin&nbsp;C.</p>
+          </details>
+        </li>
+        <li class="ingx-row">
+          <details>
+            <summary>
+              <span class="ingx-sumhead"><span class="ingx-name">Pomegranate extract powder</span><span class="ingx-pct">5&ndash;10%</span></span>
+              <span class="ingx-plus" aria-hidden="true">+</span>
+              <span class="ingx-bar"><span data-w="10"></span></span>
+            </summary>
+            <p class="ingx-role"><b>What it&rsquo;s for</b>The second recovery fruit &mdash; slightly more than in Restore.</p>
+            <p class="ingx-why"><b>Why it helps</b>Pomegranate&rsquo;s polyphenols are studied alongside tart cherry for post-exercise oxidative stress.</p>
+          </details>
+        </li>
+        <li class="ingx-row">
+          <details>
+            <summary>
+              <span class="ingx-sumhead"><span class="ingx-name">Apple powder</span><span class="ingx-pct">5&ndash;10%</span></span>
+              <span class="ingx-plus" aria-hidden="true">+</span>
+              <span class="ingx-bar"><span data-w="8"></span></span>
+            </summary>
+            <p class="ingx-role"><b>What it&rsquo;s for</b>Flavour and natural fruit tartness.</p>
+            <p class="ingx-why"><b>Why it helps</b>Rounds out the taste so the drink isn&rsquo;t sharp, and brings a little more potassium with it.</p>
+          </details>
+        </li>
+        <li class="ingx-row">
+          <details>
+            <summary>
+              <span class="ingx-sumhead"><span class="ingx-name">Pink Himalayan salt</span><span class="ingx-pct">About 5%</span></span>
+              <span class="ingx-plus" aria-hidden="true">+</span>
+              <span class="ingx-bar"><span data-w="5"></span></span>
+            </summary>
+            <p class="ingx-role"><b>What it&rsquo;s for</b>Where the sodium comes from &mdash; a third more than in Restore.</p>
+            <p class="ingx-why"><b>Why it helps</b>Salt is what you lose most of when you sweat, so Hydrapro puts more of it back. Built for heavier sweat and longer sessions.</p>
+          </details>
+        </li>
+        <li class="ingx-row">
+          <details>
+            <summary>
+              <span class="ingx-sumhead"><span class="ingx-name">Monk fruit extract</span><span class="ingx-pct">Under 5%</span></span>
+              <span class="ingx-plus" aria-hidden="true">+</span>
+              <span class="ingx-bar"><span data-w="5"></span></span>
+            </summary>
+            <p class="ingx-role"><b>What it&rsquo;s for</b>Sweetness without the sugar.</p>
+            <p class="ingx-why"><b>Why it helps</b>A natural fruit sweetener &mdash; how the drink tastes sweet with only 3&nbsp;g of added sugar and no artificial sweeteners.</p>
+          </details>
+        </li>
+        <li class="ingx-row">
+          <details>
+            <summary>
+              <span class="ingx-sumhead"><span class="ingx-name">Pumpkin seed extract powder</span><span class="ingx-pct">Under 5%</span></span>
+              <span class="ingx-plus" aria-hidden="true">+</span>
+              <span class="ingx-bar"><span data-w="5"></span></span>
+            </summary>
+            <p class="ingx-role"><b>What it&rsquo;s for</b>A plant source of magnesium &mdash; a little more than in Restore.</p>
+            <p class="ingx-why"><b>Why it helps</b>Magnesium is the mineral muscles need to relax again after they&rsquo;ve worked.</p>
+          </details>
+        </li>
+        <li class="ingx-row">
+          <details>
+            <summary>
+              <span class="ingx-sumhead"><span class="ingx-name"><em style="font-style:italic">Bacillus coagulans</em></span><span class="ingx-pct">1 billion+ CFU</span></span>
+              <span class="ingx-plus" aria-hidden="true">+</span>
+              <span class="ingx-bar"><span data-w="2"></span></span>
+            </summary>
+            <p class="ingx-role"><b>What it&rsquo;s for</b>The probiotic &mdash; over 1&nbsp;billion live cultures in every stick.</p>
+            <p class="ingx-why"><b>Why it helps</b>Probiotics are live microbes that add to the ones already living in your gut. This one forms a protective spore, so it stays dormant in the dry powder, needs no refrigeration, and holds up in stomach acid better than most.</p>
+          </details>
+        </li>
+        </ol>
         <p class="ingx-note ink" tabindex="0"><span class="ink-core">Full recipe, right on the pack</span><span class="ink-full-wrap"><span class="ink-full">Amounts are rounded and shown as ranges &mdash; the full recipe is ours, but nothing in it is a secret ingredient. Every one is on the pack.</span></span></p>
       </div>
     </div>
 
-    <div id="inside" class="inside">
+    <div id="inside" class="inside" data-only="restore">
       <div class="wrap rv">
         <div class="sec-head">
           <span class="tag">What it delivers</span>
@@ -2738,162 +3036,103 @@ body.fun-mode .galaxy-bg{opacity:1}
     </div>
   </section>
 
-  <!-- ============ HYDRAPRO ============ -->
-  <section id="hydrapro" class="formula">
-    <div class="wrap formula-grid rv">
-      <div class="formula-viz">
-        <div class="formula-pack-inset">
-          <div class="pack-stage">
-            <div class="pack pack-static" role="img" aria-label="Hydraco Hydrapro stick pack, 15.6 grams, electrolyte recovery mix with probiotics">
-              <span class="pack-tear" aria-hidden="true"></span>
-              <div class="pack-sticker">
-                <span class="pack-name">Hydraco</span>
-                <span class="pack-mark" aria-hidden="true"></span>
-                <div class="pack-band">
-                  <strong>HYDRAPRO</strong>
-                  <em>Electrolyte recovery mix + probiotics</em>
-                </div>
-                <div class="pack-foot">
-                  <b>1 billion+ CFU.<br>Low sugar.</b>
-                  <span>NET WT. 15.6g (0.55 oz)</span>
-                </div>
-              </div>
-              <span class="pack-seal" aria-hidden="true"></span>
+  <!-- ============ MEET HYDRAPRO (Restore site) ============ -->
+  <section class="wrap rv meet-hp" data-only="restore" aria-label="Meet Hydrapro">
+    <div class="meet-hp-card">
+      <div class="pack-stage">
+        <div class="pack pack-static" role="img" aria-label="Hydraco Hydrapro stick pack, 15.6 grams, electrolyte recovery mix with probiotics" style="--pink:#42c4d2;--pink-soft:#a5e1e8;--brush-band:url('/images/hp/brush-band.webp?v=hp2')">
+          <span class="pack-tear" aria-hidden="true"></span>
+          <div class="pack-sticker">
+            <span class="pack-name">Hydraco</span>
+            <span class="pack-mark" aria-hidden="true"></span>
+            <div class="pack-band">
+              <strong>HYDRAPRO</strong>
+              <em>Electrolyte recovery mix + probiotics</em>
+            </div>
+            <div class="pack-foot">
+              <b>1 billion+ CFU.<br>Low sugar.</b>
+              <span>NET WT. 15.6g (0.55 oz)</span>
             </div>
           </div>
+          <span class="pack-seal" aria-hidden="true"></span>
         </div>
-        <p class="formula-flavor"><span class="tag">Strawberry Lemonade</span></p>
-        <p class="formula-cap">
-          One stick into 16&ndash;32&nbsp;oz of cool or warm water, the same as Restore.
-        </p>
       </div>
-      <div class="formula-body">
-        <div class="sec-head" style="margin-bottom:0">
-          <span class="tag">New &middot; Hydrapro</span>
-          <h2>Restore, with more electrolytes and a probiotic</h2>
-          <p class="sec-lede">The same strawberry lemonade recovery mix, built up: more coconut water, more pink Himalayan salt, more pumpkin seed, and over 1&nbsp;billion CFU of <em>Bacillus coagulans</em> in every stick.</p>
-        </div>
-        <ul class="hp-diff">
+      <div>
+        <span class="tag">New &middot; Hydrapro</span>
+        <h2>Restore, with more electrolytes and a probiotic</h2>
+        <p>The same strawberry lemonade, built up: a quarter more coconut water, a third more pink Himalayan salt, and over 1&nbsp;billion CFU of <em>Bacillus coagulans</em> in every stick. Or get a Mix box &mdash; half Restore, half Hydrapro.</p>
+        <a href="#top" class="btn btn-solid" data-pick-product="hydrapro">See Hydrapro &rarr;</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ HYDRAPRO: WHAT'S NEW (Hydrapro site) ============ -->
+  <section id="hydrapro" class="hp-new" data-only="hydrapro">
+    <div class="wrap rv">
+      <div class="sec-head" style="margin-bottom:0">
+        <span class="tag">What&rsquo;s new</span>
+        <h2>Restore, <span class="doodle-underline">built up<svg class="doodle-svg" viewBox="0 0 120 18" fill="none" stroke="var(--pink-ink)" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" filter="url(#sketch-sm)"><path d="M3 10 C 25 2, 50 15, 75 6 C 92 1, 108 12, 117 8"/></svg></span></h2>
+        <p class="sec-lede">Hydrapro starts from the Restore recipe. Here&rsquo;s what changed, per stick.</p>
+      </div>
+      <div class="chg" id="hpChg">
+          <div class="chg-row">
+            <span class="chg-name">Coconut water powder<small>More potassium</small></span>
+            <span class="chg-bars">
+              <span class="chg-bar r"><i style="--w:75%"></i><b>Restore</b></span>
+              <span class="chg-bar h"><i style="--w:94%"></i><b>Hydrapro +25%</b></span>
+            </span>
+          </div>
+          <div class="chg-row">
+            <span class="chg-name">Pink Himalayan salt<small>More sodium</small></span>
+            <span class="chg-bars">
+              <span class="chg-bar r"><i style="--w:70%"></i><b>Restore</b></span>
+              <span class="chg-bar h"><i style="--w:94%"></i><b>Hydrapro +33%</b></span>
+            </span>
+          </div>
+          <div class="chg-row">
+            <span class="chg-name">Pumpkin seed extract<small>More magnesium</small></span>
+            <span class="chg-bars">
+              <span class="chg-bar r"><i style="--w:80%"></i><b>Restore</b></span>
+              <span class="chg-bar h"><i style="--w:94%"></i><b>Hydrapro +17%</b></span>
+            </span>
+          </div>
+          <div class="chg-row">
+            <span class="chg-name">Pomegranate extract<small>Recovery fruit</small></span>
+            <span class="chg-bars">
+              <span class="chg-bar r"><i style="--w:87%"></i><b>Restore</b></span>
+              <span class="chg-bar h"><i style="--w:94%"></i><b>Hydrapro +7%</b></span>
+            </span>
+          </div>
+          <div class="chg-row">
+            <span class="chg-name"><em>Bacillus coagulans</em><small>The probiotic</small></span>
+            <span><span class="chg-new">New &middot; 1 billion+ CFU</span></span>
+          </div>
+        <p class="chg-key"><span class="r">Restore</span><span class="h">Hydrapro</span></p>
+      </div>
+        <ul class="hp-diff" style="margin-top:clamp(40px,6vw,64px)">
           <li><b>More electrolytes</b>A quarter more coconut water powder and a third more pink Himalayan salt than Restore, plus extra pumpkin seed &mdash; more potassium, sodium and magnesium in each stick.</li>
           <li><b>1 billion+ CFU probiotic</b><em>Bacillus coagulans</em>, a probiotic that sits dormant as a spore in the dry powder, so the stick needs no refrigeration.</li>
           <li><b>Same recovery fruits</b>The tart cherry, lemon and apple are unchanged, with a little more pomegranate. Still 3&nbsp;g of cane sugar and no artificial sweeteners.</li>
         </ul>
-        <ol class="ingx">
-        <li class="ingx-row">
-          <details>
-            <summary>
-              <span class="ingx-sumhead"><span class="ingx-name">Coconut water powder</span><span class="ingx-pct">The largest share</span></span>
-              <span class="ingx-plus" aria-hidden="true">+</span>
-              <span class="ingx-bar"><span data-w="26"></span></span>
-            </summary>
-            <p class="ingx-role"><b>What it&rsquo;s for</b>The base of the mix &mdash; a quarter more than in Restore.</p>
-            <p class="ingx-why"><b>Why it helps</b>Coconut water is naturally rich in potassium. More of it here means more potassium in every stick.</p>
-          </details>
-        </li>
-        <li class="ingx-row">
-          <details>
-            <summary>
-              <span class="ingx-sumhead"><span class="ingx-name">Organic cane sugar</span><span class="ingx-pct">15&ndash;20%</span></span>
-              <span class="ingx-plus" aria-hidden="true">+</span>
-              <span class="ingx-bar"><span data-w="19"></span></span>
-            </summary>
-            <p class="ingx-role"><b>What it&rsquo;s for</b>A small amount of real sugar &mdash; 3&nbsp;g, the same as Restore.</p>
-            <p class="ingx-why"><b>Why it helps</b>A little sugar helps your body absorb the water and salts faster than plain water does.</p>
-          </details>
-        </li>
-        <li class="ingx-row">
-          <details>
-            <summary>
-              <span class="ingx-sumhead"><span class="ingx-name">Tart cherry powder</span><span class="ingx-pct">10&ndash;15%</span></span>
-              <span class="ingx-plus" aria-hidden="true">+</span>
-              <span class="ingx-bar"><span data-w="12"></span></span>
-            </summary>
-            <p class="ingx-role"><b>What it&rsquo;s for</b>The first of the two recovery fruits.</p>
-            <p class="ingx-why"><b>Why it helps</b>The same amount as Restore: tart cherry is one of the most studied fruits for soreness after hard training.</p>
-          </details>
-        </li>
-        <li class="ingx-row">
-          <details>
-            <summary>
-              <span class="ingx-sumhead"><span class="ingx-name">Lemon juice powder</span><span class="ingx-pct">10&ndash;15%</span></span>
-              <span class="ingx-plus" aria-hidden="true">+</span>
-              <span class="ingx-bar"><span data-w="12"></span></span>
-            </summary>
-            <p class="ingx-role"><b>What it&rsquo;s for</b>The lemonade side of the flavour.</p>
-            <p class="ingx-why"><b>Why it helps</b>Keeps the drink bright rather than sweet, and it&rsquo;s a natural source of vitamin&nbsp;C.</p>
-          </details>
-        </li>
-        <li class="ingx-row">
-          <details>
-            <summary>
-              <span class="ingx-sumhead"><span class="ingx-name">Pomegranate extract powder</span><span class="ingx-pct">5&ndash;10%</span></span>
-              <span class="ingx-plus" aria-hidden="true">+</span>
-              <span class="ingx-bar"><span data-w="10"></span></span>
-            </summary>
-            <p class="ingx-role"><b>What it&rsquo;s for</b>The second recovery fruit &mdash; slightly more than in Restore.</p>
-            <p class="ingx-why"><b>Why it helps</b>Pomegranate&rsquo;s polyphenols are studied alongside tart cherry for post-exercise oxidative stress.</p>
-          </details>
-        </li>
-        <li class="ingx-row">
-          <details>
-            <summary>
-              <span class="ingx-sumhead"><span class="ingx-name">Apple powder</span><span class="ingx-pct">5&ndash;10%</span></span>
-              <span class="ingx-plus" aria-hidden="true">+</span>
-              <span class="ingx-bar"><span data-w="8"></span></span>
-            </summary>
-            <p class="ingx-role"><b>What it&rsquo;s for</b>Flavour and natural fruit tartness.</p>
-            <p class="ingx-why"><b>Why it helps</b>Rounds out the taste so the drink isn&rsquo;t sharp, and brings a little more potassium with it.</p>
-          </details>
-        </li>
-        <li class="ingx-row">
-          <details>
-            <summary>
-              <span class="ingx-sumhead"><span class="ingx-name">Pink Himalayan salt</span><span class="ingx-pct">About 5%</span></span>
-              <span class="ingx-plus" aria-hidden="true">+</span>
-              <span class="ingx-bar"><span data-w="5"></span></span>
-            </summary>
-            <p class="ingx-role"><b>What it&rsquo;s for</b>Where the sodium comes from &mdash; a third more than in Restore.</p>
-            <p class="ingx-why"><b>Why it helps</b>Salt is what you lose most of when you sweat, so Hydrapro puts more of it back. Built for heavier sweat and longer sessions.</p>
-          </details>
-        </li>
-        <li class="ingx-row">
-          <details>
-            <summary>
-              <span class="ingx-sumhead"><span class="ingx-name">Monk fruit extract</span><span class="ingx-pct">Under 5%</span></span>
-              <span class="ingx-plus" aria-hidden="true">+</span>
-              <span class="ingx-bar"><span data-w="5"></span></span>
-            </summary>
-            <p class="ingx-role"><b>What it&rsquo;s for</b>Sweetness without the sugar.</p>
-            <p class="ingx-why"><b>Why it helps</b>A natural fruit sweetener &mdash; how the drink tastes sweet with only 3&nbsp;g of added sugar and no artificial sweeteners.</p>
-          </details>
-        </li>
-        <li class="ingx-row">
-          <details>
-            <summary>
-              <span class="ingx-sumhead"><span class="ingx-name">Pumpkin seed extract powder</span><span class="ingx-pct">Under 5%</span></span>
-              <span class="ingx-plus" aria-hidden="true">+</span>
-              <span class="ingx-bar"><span data-w="5"></span></span>
-            </summary>
-            <p class="ingx-role"><b>What it&rsquo;s for</b>A plant source of magnesium &mdash; a little more than in Restore.</p>
-            <p class="ingx-why"><b>Why it helps</b>Magnesium is the mineral muscles need to relax again after they&rsquo;ve worked.</p>
-          </details>
-        </li>
-        <li class="ingx-row">
-          <details>
-            <summary>
-              <span class="ingx-sumhead"><span class="ingx-name"><em style="font-style:italic">Bacillus coagulans</em></span><span class="ingx-pct">1 billion+ CFU</span></span>
-              <span class="ingx-plus" aria-hidden="true">+</span>
-              <span class="ingx-bar"><span data-w="2"></span></span>
-            </summary>
-            <p class="ingx-role"><b>What it&rsquo;s for</b>The probiotic &mdash; over 1&nbsp;billion live cultures in every stick.</p>
-            <p class="ingx-why"><b>Why it helps</b>Probiotics are live microbes that add to the ones already living in your gut. This one forms a protective spore, so it stays dormant in the dry powder, needs no refrigeration, and holds up in stomach acid better than most.</p>
-          </details>
-        </li>
+
+      <div class="pro-card">
+        <div class="cultures" aria-hidden="true"><svg viewBox="0 0 40 16" width="44" style="left:4%;top:10%;--r:-20deg;animation-delay:-0s" fill="none" stroke="currentColor" stroke-width="1.6" filter="url(#sketch-sm)"><rect x="2" y="2" width="36" height="12" rx="6"/><circle cx="12" cy="8" r="1.4" fill="currentColor"/><circle cx="26" cy="8" r="1.4" fill="currentColor"/></svg><svg viewBox="0 0 40 16" width="30" style="left:88%;top:14%;--r:35deg;animation-delay:-3s" fill="none" stroke="currentColor" stroke-width="1.6" filter="url(#sketch-sm)"><rect x="2" y="2" width="36" height="12" rx="6"/><circle cx="12" cy="8" r="1.4" fill="currentColor"/><circle cx="26" cy="8" r="1.4" fill="currentColor"/></svg><svg viewBox="0 0 40 16" width="52" style="left:78%;top:70%;--r:10deg;animation-delay:-6s" fill="none" stroke="currentColor" stroke-width="1.6" filter="url(#sketch-sm)"><rect x="2" y="2" width="36" height="12" rx="6"/><circle cx="12" cy="8" r="1.4" fill="currentColor"/><circle cx="26" cy="8" r="1.4" fill="currentColor"/></svg><svg viewBox="0 0 40 16" width="26" style="left:8%;top:78%;--r:60deg;animation-delay:-9s" fill="none" stroke="currentColor" stroke-width="1.6" filter="url(#sketch-sm)"><rect x="2" y="2" width="36" height="12" rx="6"/><circle cx="12" cy="8" r="1.4" fill="currentColor"/><circle cx="26" cy="8" r="1.4" fill="currentColor"/></svg><svg viewBox="0 0 40 16" width="36" style="left:48%;top:6%;--r:-45deg;animation-delay:-4s" fill="none" stroke="currentColor" stroke-width="1.6" filter="url(#sketch-sm)"><rect x="2" y="2" width="36" height="12" rx="6"/><circle cx="12" cy="8" r="1.4" fill="currentColor"/><circle cx="26" cy="8" r="1.4" fill="currentColor"/></svg><svg viewBox="0 0 40 16" width="22" style="left:62%;top:88%;--r:15deg;animation-delay:-11s" fill="none" stroke="currentColor" stroke-width="1.6" filter="url(#sketch-sm)"><rect x="2" y="2" width="36" height="12" rx="6"/><circle cx="12" cy="8" r="1.4" fill="currentColor"/><circle cx="26" cy="8" r="1.4" fill="currentColor"/></svg><svg viewBox="0 0 40 16" width="40" style="left:94%;top:52%;--r:-30deg;animation-delay:-7s" fill="none" stroke="currentColor" stroke-width="1.6" filter="url(#sketch-sm)"><rect x="2" y="2" width="36" height="12" rx="6"/><circle cx="12" cy="8" r="1.4" fill="currentColor"/><circle cx="26" cy="8" r="1.4" fill="currentColor"/></svg></div>
+        <h3>The probiotic, in three steps</h3>
+        <ol class="pro-steps">
+          <li><span class="num">1</span><b>Dormant in the stick</b><em>Bacillus coagulans</em> forms a spore, a protective shell, so it sits dormant in the dry powder. The sticks keep in a cupboard &mdash; no fridge.</li>
+          <li><span class="num">2</span><b>Into your water</b>Mix one stick into 16&ndash;32&nbsp;oz of cool or warm water, the same as Restore. Shake or stir and drink.</li>
+          <li><span class="num">3</span><b>1 billion+ CFU</b>Every stick carries over 1&nbsp;billion CFU &mdash; colony-forming units, the standard way probiotics are counted.</li>
         </ol>
-        <!-- HYDRAPRO NUTRITION: the Nutrition Facts panel and the sodium / potassium / magnesium
-             figures go here once the numbers for the 15.6 g stick are confirmed. -->
-        <p class="hp-cta"><a href="#order" class="btn btn-solid" data-pick-product="hydrapro">Order Hydrapro &mdash; from $2.49 a stick</a></p>
       </div>
+
+      <div class="hp-photos">
+        <img data-photo="inside-packet" src="/images/inside-packet.webp?v=pack7" class="photo-frame" alt="HYDRACO Hydrapro electrolyte packet beside a glass of the prepared drink" loading="lazy" width="608" height="760">
+        <img data-photo="inside-pour" src="/images/inside-pour.webp?v=pack7" class="photo-frame" alt="HYDRACO Hydrapro powder being poured into an iced drink" loading="lazy" width="760" height="506">
+      </div>
+
+      <!-- HYDRAPRO NUTRITION: the Nutrition Facts panel and the sodium / potassium / magnesium
+           figures go here once the numbers for the 15.6 g stick are confirmed. -->
+      <p class="hp-cta"><a href="#order" class="btn btn-solid">Order Hydrapro &mdash; from $2.19 a stick on a membership</a></p>
     </div>
   </section>
 
@@ -3015,15 +3254,16 @@ body.fun-mode .galaxy-bg{opacity:1}
         <span class="tag">Order</span>
         <h2>Choose <span class="doodle-underline">your pack<svg class="doodle-svg" viewBox="0 0 120 18" fill="none" stroke="var(--pink-ink)" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" filter="url(#sketch-sm)"><path d="M3 10 C 25 2, 50 15, 75 6 C 92 1, 108 12, 117 8"/></svg></span></h2>
         <p style="color:var(--ink-soft);font-family:Newsreader,Georgia,serif;font-size:1.14rem;line-height:1.78">
-          Restore or Hydrapro, both in Strawberry Lemonade, made in small batches. Pay by Zelle, Apple Cash or card.
-          Or join as a Restore member: 41, 59 or 95 sticks a month from $1.95 a stick, billed monthly, cancel anytime.
+          Restore, Hydrapro or a Mix of both, all in Strawberry Lemonade, made in small batches. Pay by Zelle, Apple Cash or card.
+          Or join as a member: 41, 59 or 95 sticks a month (or 60 a month of the Mix), billed monthly, cancel anytime.
         </p>
       </div>
 
-      <p class="prod-label">Two mixes &mdash; tap one</p>
-        <div class="prod-switch" role="group" aria-label="Choose a product">
+      <p class="prod-label">Pick your mix &mdash; Restore, Hydrapro or both</p>
+        <div class="prod-switch three" role="group" aria-label="Choose a product">
         <button type="button" class="prod-opt" data-pick-product="restore" aria-pressed="true"><b>Restore</b><span>The original recovery mix</span></button>
         <button type="button" class="prod-opt" data-pick-product="hydrapro" aria-pressed="false"><i class="prod-new">New</i><b>Hydrapro</b><span>Restore + more electrolytes + a probiotic</span></button>
+          <button type="button" class="prod-opt" data-pick-product="mix" aria-pressed="false"><b>Mix</b><span>Half Restore, half Hydrapro</span></button>
       </div>
         <p class="prod-desc" aria-live="polite"></p>
       <div class="packs" role="group" aria-label="Pack size">
@@ -3081,6 +3321,27 @@ body.fun-mode .galaxy-bg{opacity:1}
           <span class="price">$112.05</span>
           <span class="unit">$2.49 per stick</span>
         </button>
+        <button type="button" class="pack-opt" data-product="mix" data-sticks="10" data-unit="2.49" aria-pressed="false" hidden>
+          <span class="flag">Try both</span>
+          <span class="size">10-pack</span>
+          <span class="sticks">5 Restore + 5 Hydrapro</span>
+          <span class="price">$24.90</span>
+          <span class="unit">$2.49 per stick</span>
+        </button>
+        <button type="button" class="pack-opt" data-product="mix" data-sticks="20" data-unit="2.35" aria-pressed="false" hidden>
+          <span class="flag">Most popular</span>
+          <span class="size">20-pack</span>
+          <span class="sticks">10 Restore + 10 Hydrapro</span>
+          <span class="price">$47.00</span>
+          <span class="unit">$2.35 per stick</span>
+        </button>
+        <button type="button" class="pack-opt" data-product="mix" data-sticks="46" data-unit="2.25" aria-pressed="false" hidden>
+          <span class="flag">Best value</span>
+          <span class="size">46-pack</span>
+          <span class="sticks">23 Restore + 23 Hydrapro</span>
+          <span class="price">$103.50</span>
+          <span class="unit">$2.25 per stick</span>
+        </button>
       </div>
 
       <p class="member-head" id="memberHead">Membership &mdash; delivered every month, with member perks</p>
@@ -3103,6 +3364,32 @@ body.fun-mode .galaxy-bg{opacity:1}
           <span class="sticks">95 stick packs every month</span>
           <span class="price">$185.25 / mo</span>
           <span class="unit">$1.95 per stick</span>
+        </button>
+        <button type="button" class="pack-opt" data-product="hydrapro" data-sticks="41" data-unit="2.45" aria-pressed="false" hidden>
+          <span class="size">41 / month</span>
+          <span class="sticks">41 Hydrapro sticks every month</span>
+          <span class="price">$100.45 / mo</span>
+          <span class="unit">$2.45 per stick</span>
+        </button>
+        <button type="button" class="pack-opt" data-product="hydrapro" data-sticks="59" data-unit="2.38" aria-pressed="false" hidden>
+          <span class="size">59 / month</span>
+          <span class="sticks">59 Hydrapro sticks every month</span>
+          <span class="price">$140.42 / mo</span>
+          <span class="unit">$2.38 per stick</span>
+        </button>
+        <button type="button" class="pack-opt" data-product="hydrapro" data-sticks="95" data-unit="2.19" aria-pressed="false" hidden>
+          <span class="flag">Best member price</span>
+          <span class="size">95 / month</span>
+          <span class="sticks">95 Hydrapro sticks every month</span>
+          <span class="price">$208.05 / mo</span>
+          <span class="unit">$2.19 per stick</span>
+        </button>
+        <button type="button" class="pack-opt" data-product="mix" data-sticks="60" data-unit="2.19" aria-pressed="false" hidden>
+          <span class="flag">Both, every month</span>
+          <span class="size">60 / month</span>
+          <span class="sticks">30 Restore + 30 Hydrapro every month</span>
+          <span class="price">$131.40 / mo</span>
+          <span class="unit">$2.19 per stick</span>
         </button>
       </div>
 
@@ -3310,11 +3597,15 @@ body.fun-mode .galaxy-bg{opacity:1}
       </details>
       <details>
         <summary>When will my order arrive?</summary>
-        <p>Usually within a few days. Restore is made in small batches and orders are filled in the order they come in; we email you to confirm your delivery date, usually within one business day.</p>
+        <p>Usually within a few days. Every mix is made in small batches and orders are filled in the order they come in; we email you to confirm your delivery date, usually within one business day.</p>
       </details>
       <details>
         <summary>How should I store it?</summary>
-        <p>In a cool, dry place. Best before January 2027.</p>
+        <p>In a cool, dry place<span data-only="restore">. Best before January 2027</span>. Hydrapro needs no fridge either: its probiotic is a spore that stays dormant in the dry powder.</p>
+      </details>
+      <details>
+        <summary>What&rsquo;s the difference between Restore and Hydrapro?</summary>
+        <p>Hydrapro is Restore with a quarter more coconut water, a third more pink Himalayan salt, a little more pumpkin seed and pomegranate, and over 1&nbsp;billion CFU of the probiotic <em>Bacillus coagulans</em> per stick. Same strawberry lemonade, same 3&nbsp;g of cane sugar. Can&rsquo;t decide? The Mix box is half of each.</p>
       </details>
       <details>
         <summary>Is it safe for me?</summary>
@@ -3435,14 +3726,19 @@ let sticks = 19, unit = 2.09, qty = 1, payMethod = "zelle";
    The product travels to the Orders sheet inside the pack name
    ("Hydrapro 19-pack"); a plain "19-pack" is Restore, as it always was. */
 let product = "restore";
-const PRODUCT_NAME = { restore: "Restore", hydrapro: "Hydrapro" };
+const PRODUCT_NAME = { restore: "Restore", hydrapro: "Hydrapro", mix: "Mix" };
+/* The look of the whole page follows the last of Restore / Hydrapro that was
+   picked. Mix is an order option only: picking it leaves the page as it is. */
+let mode = "restore";
 
 /* These sizes are the monthly membership tiers, not one-off packs: one
    per order, card only (Zelle and Apple Cash can't bill automatically each
    month), charged by Stripe every month until cancelled. Must match
    MEMBERSHIP_STICKS in /api/create-checkout-session.js. */
-const MEMBER_STICKS = [41, 59, 95];
-const isMember = () => MEMBER_STICKS.includes(sticks);
+const MEMBER_STICKS = { restore: [41, 59, 95], hydrapro: [41, 59, 95], mix: [60] };
+const isMember = () => MEMBER_STICKS[product].includes(sticks);
+/* Mix boxes are half and half: a 20-pack is 10 Restore + 10 Hydrapro */
+const mixSplit = () => " (" + sticks / 2 + " Restore + " + sticks / 2 + " Hydrapro)";
 
 function payMethodInfo(id){
   return CONFIG.paymentMethods.find(m => m.id === id) || CONFIG.paymentMethods[0];
@@ -3455,8 +3751,11 @@ function render(){
   const total = +(sub + ship).toFixed(2);
 
   const member    = isMember();
-  const packLabel = member ? "Membership (" + sticks + " sticks / month)"
-    : (product === "hydrapro" ? "Hydrapro " : "") + sticks + "-pack";
+  const packLabel = member
+    ? (product === "restore" ? "" : PRODUCT_NAME[product] + " ") + "Membership (" + sticks + " sticks / month"
+      + (product === "mix" ? ": " + sticks / 2 + " Restore + " + sticks / 2 + " Hydrapro" : "") + ")"
+    : (product === "restore" ? "" : PRODUCT_NAME[product] + " ") + sticks + "-pack"
+      + (product === "mix" ? mixSplit() : "");
 
   $("#tLine").textContent  = member ? packLabel : packLabel + " × " + qty;
   $("#tSub").textContent   = money(sub);
@@ -3490,7 +3789,7 @@ function render(){
 
   // the sticky mini buy-bar mirrors the same selection
   const sbPack = $("#sbPack"), sbPrice = $("#sbPrice");
-  if (sbPack)  { sbPack.textContent  = member ? "Membership" : packLabel + " × " + qty; }
+  if (sbPack)  { sbPack.textContent  = member ? PRODUCT_NAME[product] + " membership" : packLabel + " × " + qty; }
   if (sbPrice) { sbPrice.textContent = money(sub) + (member ? " / mo" : ""); }
 
   return { packPrice, sub, ship, total };
@@ -3533,31 +3832,50 @@ heroPackBtns.forEach((btn) => {
 
 /* ---------- product switch ----------
    Shows only the chosen product's pack sizes in both pickers and lands on
-   its 19-pack, the size both products share as the popular one. */
+   its most popular size. Restore and Hydrapro also re-theme the whole page
+   (see "whole-site product mode" in the CSS); Mix only changes the order. */
 const prodBtns = document.querySelectorAll("[data-pick-product]");
 
-/* What the page says and shows in each mode. Photos: the Hydrapro copies
-   in /images/hp/ are the same shots with the pack's band in aqua. */
+/* What the hero says in each mode. Photos: the Hydrapro copies in
+   /images/hp/ are the same shots with the pack's band in aqua. */
 const PRODUCT_HERO = {
   restore:  { name: "Restore",  sub: "Post-workout electrolyte recovery mix",
-              lede: "Designed for recovery, not stimulation.",
-              desc: 'Our original: electrolytes with tart cherry and pomegranate, for after training. <a href="#formula">What\u2019s in it \u2192</a>' },
+              lede: "Designed for recovery, not stimulation." },
   hydrapro: { name: "Hydrapro", sub: "Electrolyte recovery mix + probiotics",
-              lede: "More electrolytes. Over 1 billion CFU of probiotics in every stick.",
-              desc: 'Everything in Restore, plus a quarter more coconut water, a third more salt, and a probiotic for your gut. <a href="#hydrapro">What\u2019s in it \u2192</a>' }
+              lede: "More electrolytes. Over 1 billion CFU of probiotics in every stick." }
 };
+const PRODUCT_DESC = {
+  restore:  'Our original: electrolytes with tart cherry and pomegranate, for after training. <a href="#formula">What’s in it →</a>',
+  hydrapro: 'Everything in Restore, plus a quarter more coconut water, a third more salt, and a probiotic for your gut. <a href="#hydrapro">What’s new →</a>',
+  mix:      'Can’t pick? Half Restore, half Hydrapro in one box: packs of 10, 20 or 46, or 60 a month as a membership.'
+};
+const calmMotion = () => window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+const START_PACK = { restore: 19, hydrapro: 19, mix: 20 };
 const photoSrc = (name, p) => p === "hydrapro"
   ? "/images/hp/" + name + ".webp?v=hp2" : "/images/" + name + ".webp?v=pack7";
 
 function paintProduct(){
-  document.documentElement.dataset.product = product;
-  const h = PRODUCT_HERO[product];
-  $("#heroName").textContent = h.name;
+  document.documentElement.dataset.product = mode;
+  const h = PRODUCT_HERO[mode];
+  if ($("#heroName").textContent !== h.name) {
+    $("#heroName").textContent = h.name;
+    // the brush stroke behind the name paints itself in again
+    const stroke = $("#heroName");
+    if (!calmMotion() && stroke) { stroke.classList.remove("painting"); void stroke.offsetWidth; stroke.classList.add("painting"); }
+  }
   $("#heroSub").textContent  = h.sub;
   $("#heroLede").textContent = h.lede;
-  document.querySelectorAll(".prod-desc").forEach(el => { el.innerHTML = h.desc; });
+  document.querySelectorAll(".prod-desc").forEach(el => { el.innerHTML = PRODUCT_DESC[product]; });
+  const pack = $("#formulaPack");
+  if (pack) {
+    pack.setAttribute("aria-label", mode === "hydrapro"
+      ? "Hydraco Hydrapro stick pack, 15.6 grams, electrolyte recovery mix with probiotics. Click to tear it open"
+      : "Hydraco Restore stick pack, 14.4 grams, post-workout electrolyte recovery mix, a paper label on a matte aluminium pouch. Click to tear it open");
+  }
   document.querySelectorAll("img[data-photo]").forEach(img => {
-    const next = photoSrc(img.dataset.photo, product);
+    if (!img.dataset.alt) { img.dataset.alt = img.alt; }
+    img.alt = mode === "hydrapro" ? img.dataset.alt.replace(/Restore/g, "Hydrapro") : img.dataset.alt;
+    const next = photoSrc(img.dataset.photo, mode);
     if (img.getAttribute("src") === next) { return; }
     // load the other copy first, then swap, so the photo never blanks out
     const pre = new Image();
@@ -3568,7 +3886,8 @@ function paintProduct(){
 }
 
 function selectProduct(next){
-  product = next === "hydrapro" ? "hydrapro" : "restore";
+  product = PRODUCT_NAME[next] ? next : "restore";
+  if (product !== "mix") { mode = product; }
   paintProduct();
   prodBtns.forEach(b => {
     if (b.classList.contains("prod-opt")) {
@@ -3576,16 +3895,60 @@ function selectProduct(next){
     }
   });
   [packOptBtns, heroPackBtns].forEach(set => set.forEach(b => { b.hidden = b.dataset.product !== product; }));
-  const memberHead = $("#memberHead");
-  if (memberHead) { memberHead.hidden = product !== "restore"; }
-  const start = Array.from(packOptBtns).find(b => b.dataset.product === product && +b.dataset.sticks === 19);
+  const start = Array.from(packOptBtns).find(b => b.dataset.product === product && +b.dataset.sticks === START_PACK[product]);
   unit = +start.dataset.unit;
-  selectPack(19);
+  selectPack(START_PACK[product]);
+}
+
+/* Switching the whole page changes what is above the reader, so keep
+   whatever they were looking at where it was. If that block only exists
+   in the other mode, land on the section it sat in instead. */
+function viewAnchor(){
+  const y = 90;
+  const cands = Array.from(document.querySelectorAll("main > *, main > section > *, main > section > * > *"))
+    .filter(el => { const r = el.getBoundingClientRect(); return r.height && r.top <= y && r.bottom > y; });
+  cands.sort((a, b) => a.getBoundingClientRect().height - b.getBoundingClientRect().height);
+  const el = cands[0];
+  return el ? { el, top: el.getBoundingClientRect().top } : null;
+}
+function keepAnchor(a){
+  if (!a) { return; }
+  let el = a.el, top = a.top;
+  while (el && !el.getClientRects().length) {
+    el = el.parentElement && el.parentElement.tagName !== "MAIN" ? el.parentElement : el.nextElementSibling;
+    top = 80;
+  }
+  if (el) { window.scrollBy(0, el.getBoundingClientRect().top - top); }
+}
+
+function switchTo(next, from){
+  const nextMode = next === "mix" ? mode : next;
+  if (nextMode === mode || !from) { selectProduct(next); return; }
+  const anchor = viewAnchor();
+  const run = () => { selectProduct(next); keepAnchor(anchor); };
+  try {
+    const u = new URL(location.href);
+    if (nextMode === "hydrapro") { u.searchParams.set("product", "hydrapro"); } else { u.searchParams.delete("product"); }
+    history.replaceState(null, "", u);
+  } catch (e) { /* the page still switches */ }
+  if (document.startViewTransition && !calmMotion()) {
+    const r = from.getBoundingClientRect();
+    document.documentElement.style.setProperty("--vt-x", Math.round(r.left + r.width / 2) + "px");
+    document.documentElement.style.setProperty("--vt-y", Math.round(r.top + r.height / 2) + "px");
+    document.startViewTransition(run);
+  } else { run(); }
 }
 
 prodBtns.forEach((btn) => {
-  btn.addEventListener("click", () => selectProduct(btn.dataset.pickProduct));
+  btn.addEventListener("click", () => switchTo(btn.dataset.pickProduct, btn));
 });
+/* a link with ?product=hydrapro (or straight to #hydrapro) opens on the Hydrapro site.
+   The look is painted straight away; the order form is set once the rest
+   of this script (payment methods etc.) has loaded. */
+const linkProduct = /[?&]product=hydrapro\b/.test(location.search) || location.hash === "#hydrapro" ? "hydrapro"
+  : /[?&]product=mix\b/.test(location.search) ? "mix" : "";
+if (linkProduct === "hydrapro") { mode = "hydrapro"; }
+if (linkProduct) { product = linkProduct; queueMicrotask(() => selectProduct(linkProduct)); }
 paintProduct();   // fills in the one-line description under each switch
 
 /* ---------- payment method ----------
@@ -3637,8 +4000,9 @@ function summary(){
     "Order reference: " + orderCode,
     "",
     "Item:      " + (isMember()
-      ? "Monthly membership (" + sticks + " stick packs every month)"
-      : PRODUCT_NAME[product] + " " + sticks + "-pack (" + sticks + " stick packs) × " + qty),
+      ? PRODUCT_NAME[product] + " monthly membership (" + sticks + " stick packs every month"
+        + (product === "mix" ? ": " + sticks / 2 + " Restore + " + sticks / 2 + " Hydrapro" : "") + ")"
+      : PRODUCT_NAME[product] + " " + sticks + "-pack" + (product === "mix" ? mixSplit() : " (" + sticks + " stick packs)") + " × " + qty),
     "Subtotal:  " + money(t.sub),
     "Delivery:  " + (t.ship === 0 ? "Free (service area)" : money(t.ship)),
     "TOTAL DUE: " + money(t.total),
@@ -3693,7 +4057,7 @@ function track(event, amount, order){
   const value = parseFloat(String(amount).replace(/[^0-9.]/g, "")) || 0;
   gtag("event", event, Object.assign({
     currency: "USD", value,
-    items: [{ item_name: "Hydraco " + (/^Hydrapro/.test(order.pack) ? "" : "Restore ") + order.pack, quantity: +order.quantity || 1 }]
+    items: [{ item_name: "Hydraco " + (/^(Hydrapro|Mix)/.test(order.pack) ? "" : "Restore ") + order.pack, quantity: +order.quantity || 1 }]
   }, event === "purchase" ? { transaction_id: order.order_ref } : { payment_type: order.payment_method }));
 }
 
@@ -4777,6 +5141,8 @@ const io = new IntersectionObserver((entries) => {
   entries.forEach(en => { if (en.isIntersecting){ en.target.classList.add("in"); io.unobserve(en.target); } });
 }, { rootMargin: "0px 0px -12% 0px" });
 document.querySelectorAll(".rv").forEach(el => io.observe(el));
+const chgEl = document.getElementById("hpChg");
+if (chgEl) { io.observe(chgEl); }   // the "in" class grows the bars
 
 /* ---------- nutrient notes: reveal one at a time, not all at once ----------
    Scrolling the panel into view staggers each note in with a short delay
@@ -5257,7 +5623,7 @@ document.querySelectorAll(".ingx-bar > span").forEach(el => barIO.observe(el));
 
 /* ---------- active-section nav highlighting ---------- */
 (function navHighlight(){
-  const links = Array.from(document.querySelectorAll(".nav-links a:not(.nav-cta)"));
+  const links = Array.from(document.querySelectorAll(".nav-links a:not(.nav-cta):not(.nav-switch)"));
   const map = new Map();
   links.forEach(a => {
     const el = document.getElementById(a.getAttribute("href").slice(1));
@@ -5353,8 +5719,14 @@ document.querySelectorAll(".ingx-bar > span").forEach(el => barIO.observe(el));
   let heroVisible = true, orderVisible = false, footEndVisible = false;
   /* while it's off screen its Order link must not be reachable by keyboard
      or screen reader either */
+  const pill = $("#modePill");
   const update = () => {
     const show = !heroVisible && !orderVisible && !footEndVisible;
+    if (pill) {
+      pill.classList.toggle("show", !heroVisible && !footEndVisible);
+      pill.classList.toggle("lift", show);
+      pill.inert = heroVisible || footEndVisible;
+    }
     bar.classList.toggle("show", show);
     bar.inert = !show;
     bar.setAttribute("aria-hidden", String(!show));
