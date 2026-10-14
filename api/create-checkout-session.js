@@ -7,13 +7,22 @@
 // for a penny. The client only tells us which pack + quantity they want.
 
 const PACKS = {
-  1:  2.45,
-  9:  2.19,
-  19: 2.09,
-  45: 1.99,
-  41: 2.05,
-  59: 1.99,
-  95: 1.95,
+  restore: {
+    1:  2.45,
+    9:  2.19,
+    19: 2.09,
+    45: 1.99,
+    41: 2.05,
+    59: 1.99,
+    95: 1.95,
+  },
+  // Hydrapro: Restore with more electrolytes + Bacillus coagulans. No membership tiers.
+  hydrapro: {
+    5:  2.99,
+    9:  2.79,
+    19: 2.59,
+    45: 2.49,
+  },
 };
 
 // These sizes aren't one-off purchases - they're the monthly membership
@@ -33,14 +42,15 @@ module.exports = async (req, res) => {
   }
   body = body || {};
 
+  const product = body.product === "hydrapro" ? "hydrapro" : "restore";
   const sticks = Number(body.sticks);
-  const member = MEMBERSHIP_STICKS.includes(sticks);
+  const member = product === "restore" && MEMBERSHIP_STICKS.includes(sticks);
   const qty    = member ? 1 : Math.max(1, Math.min(20, Math.floor(Number(body.qty)) || 1));
   const orderRef = String(body.orderRef || "").slice(0, 40);
   const name   = String(body.name  || "").slice(0, 200);
   const email  = String(body.email || "").slice(0, 200);
 
-  const unit = PACKS[sticks];
+  const unit = PACKS[product][sticks];
   if (!unit) {
     res.status(400).json({ error: "Unknown pack size" });
     return;
@@ -63,7 +73,7 @@ module.exports = async (req, res) => {
   params.set("line_items[0][price_data][unit_amount]", String(unitAmountCents));
   params.set("line_items[0][price_data][product_data][name]", member
     ? "Hydraco Membership — " + sticks + " Strawberry Lemonade stick packs every month"
-    : "Hydraco Restore, Strawberry Lemonade — " + sticks + "-pack");
+    : "Hydraco " + (product === "hydrapro" ? "Hydrapro" : "Restore") + ", Strawberry Lemonade — " + sticks + "-pack");
   if (member) {
     params.set("line_items[0][price_data][recurring][interval]", "month");
     // session metadata doesn't carry over to the subscription Stripe creates,
@@ -74,6 +84,7 @@ module.exports = async (req, res) => {
   if (email) { params.set("customer_email", email); }
   params.set("metadata[order_ref]", orderRef);
   params.set("metadata[name]", name);
+  params.set("metadata[product]", product);
   params.set("metadata[sticks]", String(sticks));
   params.set("metadata[qty]", String(qty));
 
