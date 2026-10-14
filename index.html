@@ -2463,23 +2463,23 @@ body.fun-mode .galaxy-bg{opacity:1}
             <span class="hp-price">$112.05</span>
             <span class="hp-meta">$2.49 per stick</span>
           </button>
-          <button type="button" class="hero-pack-opt" data-product="mix" data-sticks="10" data-unit="2.49" aria-pressed="false" hidden>
-            <span class="hp-flag">Try both</span>
-            <span class="hp-name">10-pack</span>
-            <span class="hp-price">$24.90</span>
-            <span class="hp-meta">5 + 5 &middot; $2.49 per stick</span>
-          </button>
-          <button type="button" class="hero-pack-opt" data-product="mix" data-sticks="20" data-unit="2.35" aria-pressed="false" hidden>
+          <button type="button" class="hero-pack-opt" data-product="mix" data-sticks="19" data-unit="2.39" aria-pressed="false" hidden>
             <span class="hp-flag">Popular</span>
-            <span class="hp-name">20-pack</span>
-            <span class="hp-price">$47.00</span>
-            <span class="hp-meta">10 + 10 &middot; $2.35 per stick</span>
+            <span class="hp-name">19-pack</span>
+            <span class="hp-price">$45.41</span>
+            <span class="hp-meta">9 + 10 &middot; $2.39 per stick</span>
           </button>
-          <button type="button" class="hero-pack-opt" data-product="mix" data-sticks="46" data-unit="2.25" aria-pressed="false" hidden>
+          <button type="button" class="hero-pack-opt" data-product="mix" data-sticks="45" data-unit="2.29" aria-pressed="false" hidden>
             <span class="hp-flag">Best value</span>
-            <span class="hp-name">46-pack</span>
-            <span class="hp-price">$103.50</span>
-            <span class="hp-meta">23 + 23 &middot; $2.25 per stick</span>
+            <span class="hp-name">45-pack</span>
+            <span class="hp-price">$103.05</span>
+            <span class="hp-meta">22 + 23 &middot; $2.29 per stick</span>
+          </button>
+          <button type="button" class="hero-pack-opt" data-product="mix" data-sticks="95" data-unit="2.19" aria-pressed="false" hidden>
+            <span class="hp-flag">Biggest box</span>
+            <span class="hp-name">95-pack</span>
+            <span class="hp-price">$208.05</span>
+            <span class="hp-meta">47 + 48 &middot; $2.19 per stick</span>
           </button>
         </div>
         <a href="#order" class="btn btn-solid hero-buy-cta" id="heroBuyBtn">Order &mdash; <span id="heroBuyPrice">$39.71</span></a>
@@ -3328,26 +3328,26 @@ body.fun-mode .galaxy-bg{opacity:1}
           <span class="price">$112.05</span>
           <span class="unit">$2.49 per stick</span>
         </button>
-        <button type="button" class="pack-opt" data-product="mix" data-sticks="10" data-unit="2.49" aria-pressed="false" hidden>
-          <span class="flag">Try both</span>
-          <span class="size">10-pack</span>
-          <span class="sticks">5 Restore + 5 Hydrapro</span>
-          <span class="price">$24.90</span>
-          <span class="unit">$2.49 per stick</span>
-        </button>
-        <button type="button" class="pack-opt" data-product="mix" data-sticks="20" data-unit="2.35" aria-pressed="false" hidden>
+        <button type="button" class="pack-opt" data-product="mix" data-sticks="19" data-unit="2.39" aria-pressed="false" hidden>
           <span class="flag">Most popular</span>
-          <span class="size">20-pack</span>
-          <span class="sticks">10 Restore + 10 Hydrapro</span>
-          <span class="price">$47.00</span>
-          <span class="unit">$2.35 per stick</span>
+          <span class="size">19-pack</span>
+          <span class="sticks">9 Restore + 10 Hydrapro</span>
+          <span class="price">$45.41</span>
+          <span class="unit">$2.39 per stick</span>
         </button>
-        <button type="button" class="pack-opt" data-product="mix" data-sticks="46" data-unit="2.25" aria-pressed="false" hidden>
+        <button type="button" class="pack-opt" data-product="mix" data-sticks="45" data-unit="2.29" aria-pressed="false" hidden>
           <span class="flag">Best value</span>
-          <span class="size">46-pack</span>
-          <span class="sticks">23 Restore + 23 Hydrapro</span>
-          <span class="price">$103.50</span>
-          <span class="unit">$2.25 per stick</span>
+          <span class="size">45-pack</span>
+          <span class="sticks">22 Restore + 23 Hydrapro</span>
+          <span class="price">$103.05</span>
+          <span class="unit">$2.29 per stick</span>
+        </button>
+        <button type="button" class="pack-opt" data-product="mix" data-sticks="95" data-unit="2.19" aria-pressed="false" hidden>
+          <span class="flag">Biggest box</span>
+          <span class="size">95-pack</span>
+          <span class="sticks">47 Restore + 48 Hydrapro</span>
+          <span class="price">$208.05</span>
+          <span class="unit">$2.19 per stick</span>
         </button>
       </div>
 
@@ -3744,8 +3744,10 @@ let mode = "restore";
    MEMBERSHIP_STICKS in /api/create-checkout-session.js. */
 const MEMBER_STICKS = { restore: [41, 59, 95], hydrapro: [41, 59, 95], mix: [60] };
 const isMember = () => MEMBER_STICKS[product].includes(sticks);
-/* Mix boxes are half and half: a 20-pack is 10 Restore + 10 Hydrapro */
-const mixSplit = () => " (" + sticks / 2 + " Restore + " + sticks / 2 + " Hydrapro)";
+/* Mix boxes are half and half, any odd stick being Hydrapro: a 19-pack is
+   9 Restore + 10 Hydrapro */
+const mixParts = () => Math.floor(sticks / 2) + " Restore + " + Math.ceil(sticks / 2) + " Hydrapro";
+const mixSplit = () => " (" + mixParts() + ")";
 
 function payMethodInfo(id){
   return CONFIG.paymentMethods.find(m => m.id === id) || CONFIG.paymentMethods[0];
@@ -3760,7 +3762,7 @@ function render(){
   const member    = isMember();
   const packLabel = member
     ? (product === "restore" ? "" : PRODUCT_NAME[product] + " ") + "Membership (" + sticks + " sticks / month"
-      + (product === "mix" ? ": " + sticks / 2 + " Restore + " + sticks / 2 + " Hydrapro" : "") + ")"
+      + (product === "mix" ? ": " + mixParts() : "") + ")"
     : (product === "restore" ? "" : PRODUCT_NAME[product] + " ") + sticks + "-pack"
       + (product === "mix" ? mixSplit() : "");
 
@@ -3854,10 +3856,10 @@ const PRODUCT_HERO = {
 const PRODUCT_DESC = {
   restore:  'Our original: electrolytes with tart cherry and pomegranate, for after training. <a href="#formula">What’s in it →</a>',
   hydrapro: 'Everything in Restore, with more electrolytes (about 360 mg sodium, 280 mg potassium, 25 mg magnesium per stick) and a probiotic for your gut. <a href="#hydrapro">What’s new →</a>',
-  mix:      'Can’t pick? Half Restore, half Hydrapro in one box: packs of 10, 20 or 46, or 60 a month as a membership.'
+  mix:      'Can’t pick? Half Restore, half Hydrapro in one box: packs of 19, 45 or 95, or 60 a month as a membership.'
 };
 const calmMotion = () => window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-const START_PACK = { restore: 19, hydrapro: 19, mix: 20 };
+const START_PACK = { restore: 19, hydrapro: 19, mix: 19 };
 const photoSrc = (name, p) => p === "hydrapro"
   ? "/images/hp/" + name + ".webp?v=hp2" : "/images/" + name + ".webp?v=pack7";
 
@@ -4008,7 +4010,7 @@ function summary(){
     "",
     "Item:      " + (isMember()
       ? PRODUCT_NAME[product] + " monthly membership (" + sticks + " stick packs every month"
-        + (product === "mix" ? ": " + sticks / 2 + " Restore + " + sticks / 2 + " Hydrapro" : "") + ")"
+        + (product === "mix" ? ": " + mixParts() : "") + ")"
       : PRODUCT_NAME[product] + " " + sticks + "-pack" + (product === "mix" ? mixSplit() : " (" + sticks + " stick packs)") + " × " + qty),
     "Subtotal:  " + money(t.sub),
     "Delivery:  " + (t.ship === 0 ? "Free (service area)" : money(t.ship)),

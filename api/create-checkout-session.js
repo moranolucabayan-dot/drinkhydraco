@@ -26,11 +26,12 @@ const PACKS = {
     59: 2.38,
     95: 2.19,
   },
-  // Mix: half Restore, half Hydrapro in one box (10 = 5 + 5, and so on).
+  // Mix: half Restore, half Hydrapro in one box, the odd stick being
+  // Hydrapro (19 = 9 + 10). 60 is the monthly Mix membership (30 + 30).
   mix: {
-    10: 2.49,
-    20: 2.35,
-    46: 2.25,
+    19: 2.39,
+    45: 2.29,
+    95: 2.19,
     60: 2.19,
   },
 };
