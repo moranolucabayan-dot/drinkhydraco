@@ -1596,6 +1596,13 @@ img[data-photo].swapping{opacity:.35}
 
 /* Hydrapro: what changed from Restore */
 .hp-new{padding-block:clamp(64px,9vw,120px)}
+.lytes{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-top:clamp(28px,4vw,44px);max-width:900px}
+.lyte{border:1.5px solid var(--pink);border-radius:18px;padding:18px 18px 16px;background:color-mix(in srgb,var(--pink) 8%,var(--paper))}
+.lyte b{display:block;font-size:clamp(2rem,4.4vw,2.8rem);font-weight:400;letter-spacing:.02em;line-height:1;color:var(--ink)}
+.lyte b small{font-size:.42em;margin-left:.2em;letter-spacing:.08em;color:var(--pink-ink)}
+.lyte span{display:block;margin-top:10px;font-size:.72rem;letter-spacing:.16em;text-transform:uppercase;font-weight:600;color:var(--ink)}
+.lyte em{display:block;margin-top:4px;font-style:normal;font-size:.76rem;color:var(--slate)}
+@media (max-width:760px){ .lytes{grid-template-columns:1fr 1fr} }
 .chg{display:grid;gap:22px;margin-top:clamp(28px,4vw,44px);max-width:760px}
 .chg-row{display:grid;grid-template-columns:minmax(150px,1fr) 2.4fr;gap:10px 22px;align-items:center}
 .chg-name{font-size:.9rem;font-weight:600;color:var(--ink)}
@@ -2530,7 +2537,7 @@ body.fun-mode .galaxy-bg{opacity:1}
       <div class="benefit">
         <span class="n">Hydration</span>
         <h3>More electrolytes per stick</h3>
-        <p class="ink" tabindex="0"><span class="ink-core">A quarter more coconut water, a third more salt</span><span class="ink-full-wrap"><span class="ink-full">Built up from Restore for heavier sweat and longer sessions: more coconut water for potassium, more pink Himalayan salt for sodium, more pumpkin seed for magnesium.</span></span></p>
+        <p class="ink" tabindex="0"><span class="ink-core">About 360&nbsp;mg sodium &middot; 280&nbsp;mg potassium &middot; 25&nbsp;mg magnesium</span><span class="ink-full-wrap"><span class="ink-full">Built up from Restore (270&nbsp;/&nbsp;230&nbsp;/&nbsp;20&nbsp;mg) for heavier sweat and longer sessions: more pink Himalayan salt for sodium, more coconut water for potassium, more pumpkin seed for magnesium.</span></span></p>
       </div>
       <div class="benefit">
         <span class="n">Probiotic</span>
@@ -2779,7 +2786,7 @@ body.fun-mode .galaxy-bg{opacity:1}
               <span class="ingx-plus" aria-hidden="true">+</span>
               <span class="ingx-bar"><span data-w="26"></span></span>
             </summary>
-            <p class="ingx-role"><b>What it&rsquo;s for</b>The base of the mix &mdash; a quarter more than in Restore.</p>
+            <p class="ingx-role"><b>What it&rsquo;s for</b>The base of the mix, and most of the potassium &mdash; about 280&nbsp;mg per stick with the apple.</p>
             <p class="ingx-why"><b>Why it helps</b>Coconut water is naturally rich in potassium. More of it here means more potassium in every stick.</p>
           </details>
         </li>
@@ -2845,7 +2852,7 @@ body.fun-mode .galaxy-bg{opacity:1}
               <span class="ingx-plus" aria-hidden="true">+</span>
               <span class="ingx-bar"><span data-w="5"></span></span>
             </summary>
-            <p class="ingx-role"><b>What it&rsquo;s for</b>Where the sodium comes from &mdash; a third more than in Restore.</p>
+            <p class="ingx-role"><b>What it&rsquo;s for</b>Where most of the sodium comes from &mdash; about 360&nbsp;mg per stick, up from 270 in Restore.</p>
             <p class="ingx-why"><b>Why it helps</b>Salt is what you lose most of when you sweat, so Hydrapro puts more of it back. Built for heavier sweat and longer sessions.</p>
           </details>
         </li>
@@ -3060,7 +3067,7 @@ body.fun-mode .galaxy-bg{opacity:1}
       <div>
         <span class="tag">New &middot; Hydrapro</span>
         <h2>Restore, with more electrolytes and a probiotic</h2>
-        <p>The same strawberry lemonade, built up: a quarter more coconut water, a third more pink Himalayan salt, and over 1&nbsp;billion CFU of <em>Bacillus coagulans</em> in every stick. Or get a Mix box &mdash; half Restore, half Hydrapro.</p>
+        <p>The same strawberry lemonade, built up: about 360&nbsp;mg sodium, 280&nbsp;mg potassium and 25&nbsp;mg magnesium per stick, and over 1&nbsp;billion CFU of <em>Bacillus coagulans</em> in every stick. Or get a Mix box &mdash; half Restore, half Hydrapro.</p>
         <a href="#top" class="btn btn-solid" data-pick-product="hydrapro">See Hydrapro &rarr;</a>
       </div>
     </div>
@@ -3072,35 +3079,34 @@ body.fun-mode .galaxy-bg{opacity:1}
       <div class="sec-head" style="margin-bottom:0">
         <span class="tag">What&rsquo;s new</span>
         <h2>Restore, <span class="doodle-underline">built up<svg class="doodle-svg" viewBox="0 0 120 18" fill="none" stroke="var(--pink-ink)" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" filter="url(#sketch-sm)"><path d="M3 10 C 25 2, 50 15, 75 6 C 92 1, 108 12, 117 8"/></svg></span></h2>
-        <p class="sec-lede">Hydrapro starts from the Restore recipe. Here&rsquo;s what changed, per stick.</p>
+        <p class="sec-lede">The electrolytes in one stick of Hydrapro, next to Restore.</p>
+      </div>
+      <div class="lytes">
+        <div class="lyte"><b>360<small>mg</small></b><span>Sodium</span><em>16% DV &middot; Restore 270&nbsp;mg</em></div>
+        <div class="lyte"><b>280<small>mg</small></b><span>Potassium</span><em>6% DV &middot; Restore 230&nbsp;mg</em></div>
+        <div class="lyte"><b>25<small>mg</small></b><span>Magnesium</span><em>6% DV &middot; Restore 20&nbsp;mg</em></div>
+        <div class="lyte"><b>1B+<small>CFU</small></b><span>Probiotic</span><em><i>Bacillus coagulans</i> &middot; new</em></div>
       </div>
       <div class="chg" id="hpChg">
           <div class="chg-row">
-            <span class="chg-name">Coconut water powder<small>More potassium</small></span>
+            <span class="chg-name">Sodium<small>From pink Himalayan salt and coconut water</small></span>
             <span class="chg-bars">
-              <span class="chg-bar r"><i style="--w:75%"></i><b>Restore</b></span>
-              <span class="chg-bar h"><i style="--w:94%"></i><b>Hydrapro +25%</b></span>
+              <span class="chg-bar r"><i style="--w:71%"></i><b>Restore &middot; 270&nbsp;mg</b></span>
+              <span class="chg-bar h"><i style="--w:94%"></i><b>Hydrapro &middot; 360&nbsp;mg</b></span>
             </span>
           </div>
           <div class="chg-row">
-            <span class="chg-name">Pink Himalayan salt<small>More sodium</small></span>
+            <span class="chg-name">Potassium<small>Mainly from coconut water</small></span>
             <span class="chg-bars">
-              <span class="chg-bar r"><i style="--w:70%"></i><b>Restore</b></span>
-              <span class="chg-bar h"><i style="--w:94%"></i><b>Hydrapro +33%</b></span>
+              <span class="chg-bar r"><i style="--w:77%"></i><b>Restore &middot; 230&nbsp;mg</b></span>
+              <span class="chg-bar h"><i style="--w:94%"></i><b>Hydrapro &middot; 280&nbsp;mg</b></span>
             </span>
           </div>
           <div class="chg-row">
-            <span class="chg-name">Pumpkin seed extract<small>More magnesium</small></span>
+            <span class="chg-name">Magnesium<small>From coconut water and pumpkin seed</small></span>
             <span class="chg-bars">
-              <span class="chg-bar r"><i style="--w:80%"></i><b>Restore</b></span>
-              <span class="chg-bar h"><i style="--w:94%"></i><b>Hydrapro +17%</b></span>
-            </span>
-          </div>
-          <div class="chg-row">
-            <span class="chg-name">Pomegranate extract<small>Recovery fruit</small></span>
-            <span class="chg-bars">
-              <span class="chg-bar r"><i style="--w:87%"></i><b>Restore</b></span>
-              <span class="chg-bar h"><i style="--w:94%"></i><b>Hydrapro +7%</b></span>
+              <span class="chg-bar r"><i style="--w:75%"></i><b>Restore &middot; 20&nbsp;mg</b></span>
+              <span class="chg-bar h"><i style="--w:94%"></i><b>Hydrapro &middot; 25&nbsp;mg</b></span>
             </span>
           </div>
           <div class="chg-row">
@@ -3108,9 +3114,10 @@ body.fun-mode .galaxy-bg{opacity:1}
             <span><span class="chg-new">New &middot; 1 billion+ CFU</span></span>
           </div>
         <p class="chg-key"><span class="r">Restore</span><span class="h">Hydrapro</span></p>
+        <p class="hp-soon">Per stick. Hydrapro&rsquo;s figures are estimates worked out from its recipe and Restore&rsquo;s nutrition data; the full Nutrition Facts panel is coming. % DV is based on a 2,000-calorie diet.</p>
       </div>
         <ul class="hp-diff" style="margin-top:clamp(40px,6vw,64px)">
-          <li><b>More electrolytes</b>A quarter more coconut water powder and a third more pink Himalayan salt than Restore, plus extra pumpkin seed &mdash; more potassium, sodium and magnesium in each stick.</li>
+          <li><b>More electrolytes</b>About 360&nbsp;mg sodium, 280&nbsp;mg potassium and 25&nbsp;mg magnesium per stick, up from Restore&rsquo;s 270, 230 and 20&nbsp;mg.</li>
           <li><b>1 billion+ CFU probiotic</b><em>Bacillus coagulans</em>, a probiotic that sits dormant as a spore in the dry powder, so the stick needs no refrigeration.</li>
           <li><b>Same recovery fruits</b>The tart cherry, lemon and apple are unchanged, with a little more pomegranate. Still 3&nbsp;g of cane sugar and no artificial sweeteners.</li>
         </ul>
@@ -3605,7 +3612,7 @@ body.fun-mode .galaxy-bg{opacity:1}
       </details>
       <details>
         <summary>What&rsquo;s the difference between Restore and Hydrapro?</summary>
-        <p>Hydrapro is Restore with a quarter more coconut water, a third more pink Himalayan salt, a little more pumpkin seed and pomegranate, and over 1&nbsp;billion CFU of the probiotic <em>Bacillus coagulans</em> per stick. Same strawberry lemonade, same 3&nbsp;g of cane sugar. Can&rsquo;t decide? The Mix box is half of each.</p>
+        <p>Hydrapro has more electrolytes &mdash; about 360&nbsp;mg sodium, 280&nbsp;mg potassium and 25&nbsp;mg magnesium per stick, against Restore&rsquo;s 270, 230 and 20&nbsp;mg &mdash; a little more pomegranate, and over 1&nbsp;billion CFU of the probiotic <em>Bacillus coagulans</em> per stick. Same strawberry lemonade, same 3&nbsp;g of cane sugar. Can&rsquo;t decide? The Mix box is half of each.</p>
       </details>
       <details>
         <summary>Is it safe for me?</summary>
@@ -3846,7 +3853,7 @@ const PRODUCT_HERO = {
 };
 const PRODUCT_DESC = {
   restore:  'Our original: electrolytes with tart cherry and pomegranate, for after training. <a href="#formula">What’s in it →</a>',
-  hydrapro: 'Everything in Restore, plus a quarter more coconut water, a third more salt, and a probiotic for your gut. <a href="#hydrapro">What’s new →</a>',
+  hydrapro: 'Everything in Restore, with more electrolytes (about 360 mg sodium, 280 mg potassium, 25 mg magnesium per stick) and a probiotic for your gut. <a href="#hydrapro">What’s new →</a>',
   mix:      'Can’t pick? Half Restore, half Hydrapro in one box: packs of 10, 20 or 46, or 60 a month as a membership.'
 };
 const calmMotion = () => window.matchMedia("(prefers-reduced-motion: reduce)").matches;
