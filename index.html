@@ -1451,6 +1451,8 @@ body.fun-mode .pack-hint.hidden{transform:rotate(-9deg) translateY(-6px)}
   font-size:1.14rem;line-height:1.78;max-width:52ch;
 }
 .exp-wrap{margin-top:clamp(40px,5vw,64px)}
+[data-exp="hydrapro"] .bar-row:not(.is-ref) .bar-fill{background:var(--pink)}
+.exp-title{font-size:clamp(1.15rem,2.2vw,1.5rem);letter-spacing:.06em;text-transform:uppercase;font-weight:400;margin:0 0 18px}
 
 /* ---------- Hydrapro mode ----------
    Picking Hydrapro stamps data-product="hydrapro" on <html>: the pink
@@ -2932,11 +2934,11 @@ body:not(.fun-mode) .galaxy-bg *{animation-play-state:paused!important}
           <p class="sec-lede">Per stick, versus a typical sports drink &mdash; and the full supplement facts panel below.</p>
         </div>
 
-        <div class="exp-wrap">
+        <div class="exp-wrap" data-exp="restore">
           <div class="seg" role="tablist" aria-label="Choose what to compare">
-            <button class="seg-btn" role="tab" id="seg-fruit" aria-selected="true"  aria-controls="expChart">Recovery fruits</button>
-            <button class="seg-btn" role="tab" id="seg-lyte"  aria-selected="false" aria-controls="expChart" tabindex="-1">Electrolytes</button>
-            <button class="seg-btn" role="tab" id="seg-sugar" aria-selected="false" aria-controls="expChart" tabindex="-1">Sugar &amp; calories</button>
+            <button class="seg-btn" role="tab" id="seg-fruit" data-key="fruit" aria-selected="true"  aria-controls="expChart">Recovery fruits</button>
+            <button class="seg-btn" role="tab" id="seg-lyte"  data-key="lyte" aria-selected="false" aria-controls="expChart" tabindex="-1">Electrolytes</button>
+            <button class="seg-btn" role="tab" id="seg-sugar" data-key="sugar" aria-selected="false" aria-controls="expChart" tabindex="-1">Sugar &amp; calories</button>
           </div>
           <div class="exp">
             <div class="exp-chart" id="expChart" role="tabpanel" aria-label="Comparison chart"></div>
@@ -3145,6 +3147,18 @@ body:not(.fun-mode) .galaxy-bg *{animation-play-state:paused!important}
           </div>
         <p class="chg-key"><span class="r">Restore</span><span class="h">Hydrapro</span></p>
         <p class="hp-soon">Per stick. Hydrapro&rsquo;s figures are estimates worked out from its recipe and Restore&rsquo;s nutrition data; the full Nutrition Facts panel is coming. % DV is based on a 2,000-calorie diet.</p>
+      </div>
+      <div class="exp-wrap" data-exp="hydrapro">
+        <h3 class="exp-title">Hydrapro vs. a leading sports drink</h3>
+        <div class="seg" role="tablist" aria-label="Choose what to compare">
+          <button class="seg-btn" role="tab" id="hpseg-fruit" data-key="fruit" aria-selected="true" aria-controls="hpExpChart">Recovery</button>
+          <button class="seg-btn" role="tab" id="hpseg-lyte" data-key="lyte" aria-selected="false" aria-controls="hpExpChart" tabindex="-1">Electrolytes</button>
+          <button class="seg-btn" role="tab" id="hpseg-sugar" data-key="sugar" aria-selected="false" aria-controls="hpExpChart" tabindex="-1">Sugar &amp; calories</button>
+        </div>
+        <div class="exp">
+          <div class="exp-chart" id="hpExpChart" role="tabpanel" aria-label="Comparison chart"></div>
+          <p class="exp-note" aria-live="polite"></p>
+        </div>
       </div>
         <ul class="hp-diff" style="margin-top:clamp(40px,6vw,64px)">
           <li><b>More electrolytes</b>About 360&nbsp;mg sodium, 280&nbsp;mg potassium and 25&nbsp;mg magnesium per stick, up from Restore&rsquo;s 270, 230 and 20&nbsp;mg.</li>
@@ -5822,18 +5836,53 @@ const EXPLORER = {
   },
   sugar: {
     unit: "g", max: 30,
-    caption: "Added sugars: Restore has 3&nbsp;g per stick. A 16&nbsp;oz sports drink has around 28&nbsp;g, about nine times as much.",
+    caption: "Restore has 3&nbsp;g of added sugar and 50 calories per stick. A 16&nbsp;oz sports drink has around 28&nbsp;g and 110 calories &mdash; about nine times the sugar and twice the calories.",
     rows: [
       { name: "Hydraco Restore &middot; added sugars",            value: 3,  ref: false, blurb: "3&nbsp;g added sugars &middot; 50&nbsp;calories per stick. No artificial sweeteners &mdash; monk fruit does the rest." },
-      { name: "Typical 16 oz sports drink &middot; added sugars", value: 28, ref: true,  blurb: "Around 28&nbsp;g added sugars and ~105&nbsp;calories in 16&nbsp;oz, and still no recovery fruit." }
+      { name: "Typical 16 oz sports drink &middot; added sugars", value: 28, ref: true,  blurb: "Around 28&nbsp;g added sugars in 16&nbsp;oz, and still no recovery fruit." },
+      { name: "Hydraco Restore &middot; calories",                value: 50,  unit: "cal", barMax: 110, ref: false, blurb: "50 calories per stick." },
+      { name: "Typical 16 oz sports drink &middot; calories",     value: 110, unit: "cal", barMax: 110, ref: true,  blurb: "Around 110 calories in 16&nbsp;oz &mdash; more than twice as many, nearly all from sugar." }
     ]
   }
 };
 
-function drawExplorer(key){
-  const v = EXPLORER[key];
-  const chart = document.getElementById("expChart");
-  const note  = document.getElementById("expNote");
+/* Hydrapro's numbers are estimates worked out from its recipe and Restore's
+   nutrition data until its own Nutrition Facts panel is in. */
+const EXPLORER_HP = {
+  fruit: {
+    unit: "mg", max: 2000,
+    caption: "The same two recovery fruits as Restore, with a little more pomegranate &mdash; plus over 1&nbsp;billion CFU of the probiotic <em>Bacillus coagulans</em>. A typical sports drink carries none of them.",
+    rows: [
+      { name: "Tart cherry powder",   value: 1800, ref: false, blurb: "1,800&nbsp;mg per stick, the same as Restore." },
+      { name: "Pomegranate extract",  value: 1500, ref: false, blurb: "1,500&nbsp;mg per stick, a little more than Restore." },
+      { name: "Typical sports drink", value: 0,    ref: true,  blurb: "Electrolytes and sugar, but no recovery fruit and no probiotic." }
+    ]
+  },
+  lyte: {
+    unit: "mg",
+    caption: "Each electrolyte next to a leading 16&nbsp;oz sports drink. Hydrapro has about 1.7 times the sodium, over four times the potassium, and the magnesium the big brands leave out. Hydrapro figures are estimates.",
+    rows: [
+      { name: "Magnesium",            value: 25,  barMax: 25,  dv: "6% Daily Value (est.)",  ref: false, blurb: "About 25&nbsp;mg, from coconut water powder and pumpkin seed extract. Most sports drinks carry none." },
+      { name: "Leading sports drink", value: 0,   barMax: 25,  ref: true,  blurb: "A typical 16&nbsp;oz sports drink has no magnesium." },
+      { name: "Potassium",            value: 280, barMax: 280, dv: "6% Daily Value (est.)",  ref: false, blurb: "About 280&nbsp;mg, mainly from coconut water powder." },
+      { name: "Leading sports drink", value: 60,  barMax: 280, ref: true,  blurb: "Around 60&nbsp;mg of potassium in 16&nbsp;oz." },
+      { name: "Sodium",               value: 360, barMax: 360, dv: "16% Daily Value (est.)", ref: false, blurb: "About 360&nbsp;mg, mostly from pink Himalayan salt &mdash; built for heavier sweat." },
+      { name: "Leading sports drink", value: 215, barMax: 360, ref: true,  blurb: "Around 215&nbsp;mg of sodium in 16&nbsp;oz." }
+    ]
+  },
+  sugar: {
+    unit: "g", max: 30,
+    caption: "Hydrapro has 3&nbsp;g of added sugar and about 50 calories per stick. A 16&nbsp;oz sports drink has around 28&nbsp;g and 110 calories &mdash; about nine times the sugar and twice the calories.",
+    rows: [
+      { name: "Hydrapro &middot; added sugars",                  value: 3,   ref: false, blurb: "3&nbsp;g of cane sugar. No artificial sweeteners &mdash; monk fruit does the rest." },
+      { name: "Typical 16 oz sports drink &middot; added sugars", value: 28,  ref: true,  blurb: "Around 28&nbsp;g added sugars in 16&nbsp;oz." },
+      { name: "Hydrapro &middot; calories",                      value: 50,  unit: "cal", barMax: 110, ref: false, blurb: "About 50 calories per stick (estimate)." },
+      { name: "Typical 16 oz sports drink &middot; calories",     value: 110, unit: "cal", barMax: 110, ref: true,  blurb: "Around 110 calories in 16&nbsp;oz." }
+    ]
+  }
+};
+
+function drawExplorer(v, chart, note){
   if (!chart) { return; }
 
   chart.innerHTML = v.rows.map((r) => {
@@ -5843,7 +5892,7 @@ function drawExplorer(key){
              ' data-name="' + r.name + '" data-blurb="' + r.blurb + '">' +
              '<div class="bar-head">' +
                '<span class="bar-name">' + r.name + '</span>' +
-               '<span class="bar-val">' + r.value.toLocaleString("en-US") + '<u>' + v.unit + '</u></span>' +
+               '<span class="bar-val">' + r.value.toLocaleString("en-US") + '<u>' + (r.unit || v.unit) + '</u></span>' +
              '</div>' +
              '<div class="bar-track"><span class="bar-fill" data-pct="' + pct.toFixed(2) + '"></span></div>' +
              dv +
@@ -5871,18 +5920,24 @@ function drawExplorer(key){
   });
 }
 
-(function initExplorer(){
-  const btns = Array.from(document.querySelectorAll(".seg-btn"));
+/* one explorer per product site; each draws (and its bars grow) when it
+   first scrolls into view, since the other site's copy is hidden */
+document.querySelectorAll(".exp-wrap[data-exp]").forEach(function initExplorer(wrap){
+  const data  = wrap.dataset.exp === "hydrapro" ? EXPLORER_HP : EXPLORER;
+  const chart = wrap.querySelector(".exp-chart");
+  const note  = wrap.querySelector(".exp-note");
+  const btns  = Array.from(wrap.querySelectorAll(".seg-btn"));
   if (!btns.length) { return; }
-  const KEY = { "seg-fruit": "fruit", "seg-lyte": "lyte", "seg-sugar": "sugar" };
+  let current = 0;
 
   function select(idx){
+    current = idx;
     btns.forEach((b, i) => {
       const on = i === idx;
       b.setAttribute("aria-selected", on ? "true" : "false");
       b.tabIndex = on ? 0 : -1;
     });
-    drawExplorer(KEY[btns[idx].id]);
+    drawExplorer(data[btns[idx].dataset.key], chart, note);
   }
   btns.forEach((btn, idx) => {
     btn.addEventListener("click", () => select(idx));
@@ -5895,7 +5950,10 @@ function drawExplorer(key){
     });
   });
   select(0);
-})();
+  new IntersectionObserver((es, obs) => {
+    if (es[0].isIntersecting) { select(current); obs.disconnect(); }
+  }).observe(chart);
+});
 
 </script>
 
