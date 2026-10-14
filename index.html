@@ -1452,6 +1452,25 @@ body.fun-mode .pack-hint.hidden{transform:rotate(-9deg) translateY(-6px)}
 }
 .exp-wrap{margin-top:clamp(40px,5vw,64px)}
 [data-exp="hydrapro"] .bar-row:not(.is-ref) .bar-fill{background:var(--pink)}
+.pro-x{margin-top:clamp(56px,8vw,96px)}
+.pro-x .sec-head h2 em{font-style:italic;text-transform:none;letter-spacing:.02em}
+.pro-x-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:18px;margin-top:clamp(28px,4vw,44px)}
+.pro-x-card{border:1px solid var(--rule);border-radius:18px;padding:22px;background:var(--paper);line-height:1.75;font-size:.92rem;color:var(--ink-soft)}
+.pro-x-card h3{font-size:.9rem;letter-spacing:.14em;text-transform:uppercase;font-weight:600;color:var(--ink);margin:6px 0 10px}
+.pro-x-card b{color:var(--ink);font-weight:600}
+.pro-x-n{font-size:.75rem;letter-spacing:.16em;color:var(--pink-ink);font-weight:700}
+.spore{margin:14px 0 4px;color:var(--ink)}
+.spore svg{width:100%;height:auto;display:block}
+.spore figcaption{font-size:.8125rem;color:var(--slate);margin-top:6px}
+.pro-x-steps{margin:0;padding-left:1.2em;display:grid;gap:8px}
+.pro-x-h{margin:clamp(36px,5vw,56px) 0 16px;font-size:clamp(1.15rem,2.2vw,1.5rem);letter-spacing:.06em;text-transform:uppercase;font-weight:400}
+.pro-x-research{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:14px}
+.pro-x-study{border-left:3px solid var(--pink);padding:4px 0 4px 16px;font-size:.9rem;line-height:1.72;color:var(--ink-soft)}
+.pro-x-study b{display:block;color:var(--ink);font-size:.8rem;letter-spacing:.12em;text-transform:uppercase;margin-bottom:4px}
+.pro-x-study p{margin:0 0 6px}
+.pro-x-fine{margin-top:clamp(28px,4vw,40px);padding:18px 20px;border-radius:14px;background:color-mix(in srgb,var(--ink) 4%,var(--paper));font-size:.8125rem;line-height:1.75;color:var(--slate)}
+.pro-x-fine b{display:block;color:var(--ink);font-size:.75rem;letter-spacing:.14em;text-transform:uppercase;margin-bottom:6px}
+.pro-x-fine p{margin:0}
 .exp-title{font-size:clamp(1.15rem,2.2vw,1.5rem);letter-spacing:.06em;text-transform:uppercase;font-weight:400;margin:0 0 18px}
 
 /* ---------- Hydrapro mode ----------
@@ -2918,7 +2937,10 @@ body:not(.fun-mode) .galaxy-bg *{animation-play-state:paused!important}
               <span class="ingx-bar"><span data-w="2"></span></span>
             </summary>
             <p class="ingx-role"><b>What it&rsquo;s for</b>The probiotic &mdash; over 1&nbsp;billion live cultures in every stick.</p>
-            <p class="ingx-why"><b>Why it helps</b>Probiotics are live microbes that add to the ones already living in your gut. This one forms a protective spore, so it stays dormant in the dry powder, needs no refrigeration, and holds up in stomach acid better than most.</p>
+            <p class="ingx-why"><b>Why it helps</b>A probiotic is a live microbe that, taken in a large enough amount, has a measurable benefit. <em>Bacillus coagulans</em> survives as a spore &mdash; a dormant cell inside a tough protective coat &mdash; so it keeps on a shelf without a fridge and is far more tolerant of stomach acid than most probiotic bacteria. The full explanation, with the research, is in the Hydrapro section below.</p>
+            <p class="ingx-cite">Spore-forming <em>Bacillus</em> probiotics are markedly more resistant to heat, stomach acid and bile than the lactic acid bacteria in most probiotic foods.
+              <span class="ingx-src">Cutting, 2011, <em>Food Microbiology</em></span>
+            </p>
           </details>
         </li>
         </ol>
@@ -3174,6 +3196,84 @@ body:not(.fun-mode) .galaxy-bg *{animation-play-state:paused!important}
           <li><span class="num">2</span><b>Into your water</b>Mix one stick into 16&ndash;32&nbsp;oz of cool or warm water, the same as Restore. Shake or stir and drink.</li>
           <li><span class="num">3</span><b>1 billion+ CFU</b>Every stick carries over 1&nbsp;billion CFU &mdash; colony-forming units, the standard way probiotics are counted.</li>
         </ol>
+      </div>
+
+
+      <div class="pro-x">
+        <div class="sec-head" style="margin-bottom:0">
+          <span class="tag">The probiotic, explained</span>
+          <h2>Meet <em>Bacillus coagulans</em></h2>
+          <p class="sec-lede">A small, tough bacterium with a long track record &mdash; here&rsquo;s what it is, why we chose it, and what the research actually shows.</p>
+        </div>
+
+        <div class="pro-x-grid">
+          <div class="pro-x-card">
+            <span class="pro-x-n">01</span>
+            <h3>What is a probiotic?</h3>
+            <p>Your gut is home to trillions of bacteria &mdash; the gut microbiome. A probiotic is a <b>live microbe that, taken in a large enough amount, has a measurable benefit</b> for the person taking it. That&rsquo;s the scientific definition, not a marketing one.</p>
+            <p class="ingx-cite">&ldquo;Live microorganisms that, when administered in adequate amounts, confer a health benefit on the host.&rdquo;
+              <span class="ingx-src">FAO/WHO expert panel; Hill et al., 2014, <em>Nature Reviews Gastroenterology &amp; Hepatology</em></span>
+            </p>
+          </div>
+
+          <div class="pro-x-card">
+            <span class="pro-x-n">02</span>
+            <h3>Why this one survives</h3>
+            <p>Most probiotics are fragile: heat, air, time on a shelf and stomach acid kill many of them before they reach your intestine. <em>B.&nbsp;coagulans</em> is different &mdash; it&rsquo;s a <b>spore-former</b>. In the dry powder it waits as a dormant spore inside a hard protective coat, like a seed.</p>
+            <figure class="spore" aria-label="Diagram: a Bacillus coagulans spore - a dormant core with its DNA, wrapped in a thick protective cortex and an outer coat">
+              <svg viewBox="0 0 320 150" role="img" aria-hidden="true">
+                <ellipse cx="110" cy="75" rx="92" ry="52" fill="none" stroke="currentColor" stroke-width="5"/>
+                <ellipse cx="110" cy="75" rx="74" ry="38" fill="var(--pink)" fill-opacity=".22" stroke="var(--pink)" stroke-width="10"/>
+                <ellipse cx="110" cy="75" rx="46" ry="20" fill="var(--paper)" stroke="currentColor" stroke-width="2"/>
+                <path d="M84 75 c8 -10 14 10 22 0 s14 10 22 0 s10 8 14 2" fill="none" stroke="currentColor" stroke-width="2.4"/>
+                <g font-size="11" fill="currentColor" font-family="Jost, sans-serif" letter-spacing=".06em">
+                  <line x1="200" y1="40" x2="236" y2="28" stroke="currentColor"/><text x="240" y="31">OUTER COAT</text>
+                  <line x1="180" y1="70" x2="236" y2="66" stroke="currentColor"/><text x="240" y="69">CORTEX</text>
+                  <line x1="140" y1="84" x2="236" y2="104" stroke="currentColor"/><text x="240" y="107">CORE + DNA</text>
+                </g>
+              </svg>
+              <figcaption>The spore: a dormant core, wrapped in layers that shield it from heat, drying and acid.</figcaption>
+            </figure>
+            <p class="ingx-cite">Spore-forming <em>Bacillus</em> probiotics are markedly more resistant to heat, stomach acid and bile than the lactic acid bacteria in most probiotic foods.
+              <span class="ingx-src">Cutting, 2011, <em>Food Microbiology</em></span>
+            </p>
+          </div>
+
+          <div class="pro-x-card">
+            <span class="pro-x-n">03</span>
+            <h3>What it does in your gut</h3>
+            <ol class="pro-x-steps">
+              <li><b>Stomach.</b> The spore&rsquo;s coat carries it through stomach acid.</li>
+              <li><b>Small intestine.</b> Warmth, moisture and nutrients &ldquo;wake&rdquo; it up: the spore germinates back into an active cell.</li>
+              <li><b>Active.</b> Like yogurt cultures, it makes lactic acid &mdash; it was once even named <em>Lactobacillus sporogenes</em>.</li>
+              <li><b>Passing through.</b> It doesn&rsquo;t move in for good; it works on the way through, which is why probiotics are taken regularly.</li>
+            </ol>
+          </div>
+        </div>
+
+        <h3 class="pro-x-h">What the research shows</h3>
+        <div class="pro-x-research">
+          <div class="pro-x-study">
+            <b>Recovery after hard exercise</b>
+            <p>In a placebo-controlled trial of 29 trained men, adding 1&nbsp;billion CFU of <em>B.&nbsp;coagulans</em> (strain GBI-30) to 20&nbsp;g of protein for two weeks improved recovery and reduced markers of muscle damage after an intense, muscle-damaging workout, compared with protein alone.</p>
+            <span class="ingx-src">J&auml;ger et al., 2016, <em>PeerJ</em></span>
+          </div>
+          <div class="pro-x-study">
+            <b>Getting more from protein</b>
+            <p>Taken with protein, the same strain increased how much of the protein&rsquo;s amino acids were absorbed and used, in a randomized study of healthy men.</p>
+            <span class="ingx-src">J&auml;ger et al., 2018, <em>Probiotics and Antimicrobial Proteins</em></span>
+          </div>
+          <div class="pro-x-study">
+            <b>Digestive comfort</b>
+            <p>In a randomized, placebo-controlled trial of adults with IBS, <em>B.&nbsp;coagulans</em> improved abdominal pain and bloating compared with placebo over eight weeks.</p>
+            <span class="ingx-src">Hun, 2009, <em>Postgraduate Medicine</em></span>
+          </div>
+        </div>
+
+        <div class="pro-x-fine">
+          <b>The honest fine print</b>
+          <p>Probiotic effects depend on the exact strain and the dose, and the studies above are small and used specific strains &mdash; results for one strain don&rsquo;t automatically carry over to another. CFU (colony-forming units) counts live cells; Hydrapro carries over 1&nbsp;billion per stick, in line with the dose used in the exercise study. Hydrapro is a food, not a medicine: it isn&rsquo;t intended to diagnose, treat, cure or prevent any disease. If you&rsquo;re pregnant, immunocompromised or managing a medical condition, check with your doctor before taking any probiotic.</p>
+        </div>
       </div>
 
       <div class="hp-photos">
@@ -3653,6 +3753,10 @@ body:not(.fun-mode) .galaxy-bg *{animation-play-state:paused!important}
       <details>
         <summary>How should I store it?</summary>
         <p>In a cool, dry place<span data-only="restore">. Best before January 2027</span>. Hydrapro needs no fridge either: its probiotic is a spore that stays dormant in the dry powder.</p>
+      </details>
+      <details data-only="hydrapro">
+        <summary>What is <em>Bacillus coagulans</em>, and is it safe?</summary>
+        <p>It&rsquo;s a spore-forming, lactic-acid-producing bacterium that has been used in foods and probiotics for decades. In the dry powder it stays dormant as a spore; in your intestine it becomes active, then passes through. Probiotics are generally well tolerated, but if you&rsquo;re pregnant, immunocompromised or managing a medical condition, check with your doctor first. The research behind it is in the &ldquo;What&rsquo;s new&rdquo; section above.</p>
       </details>
       <details>
         <summary>What&rsquo;s the difference between Restore and Hydrapro?</summary>
