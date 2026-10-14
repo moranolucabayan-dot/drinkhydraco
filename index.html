@@ -1452,6 +1452,53 @@ body.fun-mode .pack-hint.hidden{transform:rotate(-9deg) translateY(-6px)}
 }
 .exp-wrap{margin-top:clamp(40px,5vw,64px)}
 [data-exp="hydrapro"] .bar-row:not(.is-ref) .bar-fill{background:var(--pink)}
+
+/* probiotic graphics: thin line art, aqua accent, moving only when on screen */
+.journey{margin-top:clamp(28px,4vw,44px);position:relative}
+.journey-track{position:absolute;left:12.5%;right:12.5%;top:22px;height:2px;
+  background:repeating-linear-gradient(90deg,var(--rule) 0 6px,transparent 6px 12px)}
+.journey-dot{position:absolute;top:50%;left:0;width:12px;height:12px;margin:-6px 0 0 -6px;border-radius:50%;
+  background:var(--pink);box-shadow:0 0 0 4px color-mix(in srgb,var(--pink) 25%,transparent)}
+.journey.in .journey-dot{animation:spore-travel 7s cubic-bezier(.55,0,.45,1) infinite}
+@keyframes spore-travel{
+  0%{left:0;width:12px;border-radius:50%}
+  70%{left:100%;width:12px;border-radius:50%}
+  80%,100%{left:100%;width:26px;border-radius:7px;margin-left:-13px}
+}
+.journey-stops{list-style:none;margin:0;padding:0;display:grid;grid-template-columns:repeat(4,1fr);text-align:center;position:relative}
+.journey-stops svg{width:44px;height:44px;padding:4px;background:var(--paper);color:var(--ink);display:block;margin:0 auto 8px}
+.journey-stops b{display:block;font-size:.75rem;letter-spacing:.14em;text-transform:uppercase;color:var(--ink)}
+.journey-stops span{display:block;font-size:.8125rem;color:var(--slate);margin-top:2px}
+@media (max-width:560px){ .journey-stops span{font-size:.75rem} .journey-stops b{font-size:.7rem;letter-spacing:.08em} }
+.sp-coat,.sp-cortex{stroke-dasharray:100;stroke-dashoffset:100;transition:stroke-dashoffset 1.6s cubic-bezier(.2,.7,.2,1)}
+.sp-cortex{transition-delay:.5s}
+.pro-x-grid.in .sp-coat,.pro-x-grid.in .sp-cortex{stroke-dashoffset:0}
+.pro-x-grid.in .sp-dna{animation:dna 3s ease-in-out infinite}
+@keyframes dna{50%{transform:translateY(-2px)}}
+.sp-dna{transform-box:fill-box}
+.germ{margin:4px 0 14px;color:var(--ink)}
+.germ svg{width:100%;height:auto;display:block}
+.germ figcaption{display:flex;justify-content:space-between;font-size:.75rem;letter-spacing:.12em;text-transform:uppercase;color:var(--slate)}
+.germ g{opacity:0;transform-origin:110px 40px}
+.g-spore{opacity:1}
+.pro-x-grid.in .g-spore{animation:g1 6s ease-in-out infinite}
+.pro-x-grid.in .g-rod{animation:g2 6s ease-in-out infinite}
+.pro-x-grid.in .g-split{animation:g3 6s ease-in-out infinite}
+@keyframes g1{0%,25%{opacity:1;transform:scale(1)}35%,100%{opacity:0;transform:scale(1.25)}}
+@keyframes g2{0%,25%{opacity:0;transform:scaleX(.4)}38%,58%{opacity:1;transform:scaleX(1)}68%,100%{opacity:0;transform:scaleX(1.1)}}
+@keyframes g3{0%,60%{opacity:0;transform:scaleX(.8)}72%,92%{opacity:1;transform:scaleX(1)}100%{opacity:0}}
+.cfu{display:grid;grid-template-columns:1fr auto;gap:clamp(20px,4vw,48px);align-items:center;margin-top:clamp(40px,6vw,64px);
+  padding:clamp(20px,3vw,32px);border:1px solid var(--rule);border-radius:18px}
+.cfu-num b{display:block;font-size:clamp(2rem,5.4vw,3.4rem);font-weight:400;letter-spacing:.02em;line-height:1;color:var(--ink);font-variant-numeric:tabular-nums}
+.cfu-num span{display:block;margin-top:8px;font-size:.75rem;letter-spacing:.16em;text-transform:uppercase;font-weight:600;color:var(--pink-ink)}
+.cfu-num p{margin:12px 0 0;font-size:.8125rem;line-height:1.7;color:var(--slate);max-width:42ch}
+.cfu-dots{display:grid;grid-template-columns:repeat(10,10px);gap:6px}
+.cfu-dots i{width:10px;height:10px;border-radius:50%;background:var(--rule);display:block}
+.cfu.in .cfu-dots i{animation:dot-on .4s ease forwards}
+@keyframes dot-on{to{background:var(--pink);transform:scale(1.1)}}
+@media (max-width:560px){ .cfu{grid-template-columns:1fr} .cfu-dots{grid-template-columns:repeat(10,8px);gap:5px} .cfu-dots i{width:8px;height:8px} }
+.study-ic{display:block;width:34px;height:34px;color:var(--pink-ink);margin-bottom:8px}
+.study-ic svg{width:100%;height:100%}
 .pro-x{margin-top:clamp(56px,8vw,96px)}
 .pro-x .sec-head h2 em{font-style:italic;text-transform:none;letter-spacing:.02em}
 .pro-x-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:18px;margin-top:clamp(28px,4vw,44px)}
@@ -3206,7 +3253,17 @@ body:not(.fun-mode) .galaxy-bg *{animation-play-state:paused!important}
           <p class="sec-lede">A small, tough bacterium with a long track record &mdash; here&rsquo;s what it is, why we chose it, and what the research actually shows.</p>
         </div>
 
-        <div class="pro-x-grid">
+        <div class="journey rv" aria-label="The journey: a dormant spore in the stick, mixed into water, through stomach acid, then active in the intestine">
+          <div class="journey-track" aria-hidden="true"><span class="journey-dot"></span></div>
+          <ol class="journey-stops">
+            <li><svg viewBox="0 0 40 40" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><rect x="13" y="4" width="14" height="32" rx="3"/><path d="M13 10h14M16 20h8"/></svg><b>In the stick</b><span>Dormant spore</span></li>
+            <li><svg viewBox="0 0 40 40" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M9 8h22l-3 26a2 2 0 0 1-2 2H14a2 2 0 0 1-2-2z"/><path d="M11 18h18"/><circle cx="18" cy="25" r="1.4"/><circle cx="23" cy="29" r="1.1"/></svg><b>In your water</b><span>Still dormant</span></li>
+            <li><svg viewBox="0 0 40 40" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M16 5c0 6 2 7 2 11-6 1-10 6-10 12 0 5 4 8 10 8 9 0 14-7 14-15 0-5-3-7-7-7-2 0-3-3-3-9"/><path d="M14 27c2 2 6 2 8 0"/></svg><b>Stomach</b><span>Coat shields it from acid</span></li>
+            <li><svg viewBox="0 0 40 40" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M8 10c8 0 8 6 16 6s8-6 8-6M8 20c8 0 8 6 16 6s8-6 8-6M8 30c8 0 8 4 14 4"/></svg><b>Intestine</b><span>Wakes up &amp; gets to work</span></li>
+          </ol>
+        </div>
+
+        <div class="pro-x-grid rv">
           <div class="pro-x-card">
             <span class="pro-x-n">01</span>
             <h3>What is a probiotic?</h3>
@@ -3222,10 +3279,10 @@ body:not(.fun-mode) .galaxy-bg *{animation-play-state:paused!important}
             <p>Most probiotics are fragile: heat, air, time on a shelf and stomach acid kill many of them before they reach your intestine. <em>B.&nbsp;coagulans</em> is different &mdash; it&rsquo;s a <b>spore-former</b>. In the dry powder it waits as a dormant spore inside a hard protective coat, like a seed.</p>
             <figure class="spore" aria-label="Diagram: a Bacillus coagulans spore - a dormant core with its DNA, wrapped in a thick protective cortex and an outer coat">
               <svg viewBox="0 0 320 150" role="img" aria-hidden="true">
-                <ellipse cx="110" cy="75" rx="92" ry="52" fill="none" stroke="currentColor" stroke-width="5"/>
-                <ellipse cx="110" cy="75" rx="74" ry="38" fill="var(--pink)" fill-opacity=".22" stroke="var(--pink)" stroke-width="10"/>
+                <ellipse class="sp-coat" cx="110" cy="75" rx="92" ry="52" fill="none" stroke="currentColor" stroke-width="5" pathLength="100"/>
+                <ellipse class="sp-cortex" cx="110" cy="75" rx="74" ry="38" fill="var(--pink)" fill-opacity=".22" stroke="var(--pink)" stroke-width="10" pathLength="100"/>
                 <ellipse cx="110" cy="75" rx="46" ry="20" fill="var(--paper)" stroke="currentColor" stroke-width="2"/>
-                <path d="M84 75 c8 -10 14 10 22 0 s14 10 22 0 s10 8 14 2" fill="none" stroke="currentColor" stroke-width="2.4"/>
+                <path class="sp-dna" d="M84 75 c8 -10 14 10 22 0 s14 10 22 0 s10 8 14 2" fill="none" stroke="currentColor" stroke-width="2.4"/>
                 <g font-size="11" fill="currentColor" font-family="Jost, sans-serif" letter-spacing=".06em">
                   <line x1="200" y1="40" x2="236" y2="28" stroke="currentColor"/><text x="240" y="31">OUTER COAT</text>
                   <line x1="180" y1="70" x2="236" y2="66" stroke="currentColor"/><text x="240" y="69">CORTEX</text>
@@ -3242,6 +3299,14 @@ body:not(.fun-mode) .galaxy-bg *{animation-play-state:paused!important}
           <div class="pro-x-card">
             <span class="pro-x-n">03</span>
             <h3>What it does in your gut</h3>
+            <figure class="germ" aria-label="Animation: a round dormant spore swells into a rod-shaped active cell, which then divides in two">
+              <svg viewBox="0 0 220 80" aria-hidden="true">
+                <g class="g-spore"><ellipse cx="110" cy="40" rx="22" ry="16" fill="none" stroke="currentColor" stroke-width="3"/><ellipse cx="110" cy="40" rx="13" ry="8" fill="var(--pink)" fill-opacity=".35" stroke="var(--pink)" stroke-width="3"/></g>
+                <g class="g-rod"><rect x="66" y="26" width="88" height="28" rx="14" fill="var(--pink)" fill-opacity=".18" stroke="currentColor" stroke-width="3"/><path d="M88 40c6-6 10 6 16 0s10 6 16 0s8 5 12 1" fill="none" stroke="currentColor" stroke-width="2"/></g>
+                <g class="g-split"><rect x="30" y="26" width="72" height="28" rx="14" fill="var(--pink)" fill-opacity=".18" stroke="currentColor" stroke-width="3"/><rect x="118" y="26" width="72" height="28" rx="14" fill="var(--pink)" fill-opacity=".18" stroke="currentColor" stroke-width="3"/></g>
+              </svg>
+              <figcaption><span>Spore</span><span>Active cell</span><span>Divides</span></figcaption>
+            </figure>
             <ol class="pro-x-steps">
               <li><b>Stomach.</b> The spore&rsquo;s coat carries it through stomach acid.</li>
               <li><b>Small intestine.</b> Warmth, moisture and nutrients &ldquo;wake&rdquo; it up: the spore germinates back into an active cell.</li>
@@ -3251,20 +3316,26 @@ body:not(.fun-mode) .galaxy-bg *{animation-play-state:paused!important}
           </div>
         </div>
 
+        <div class="cfu rv">
+          <div class="cfu-num"><b data-count="1000000000">1,000,000,000</b><span>+ live cultures in every stick</span>
+            <p>CFU &mdash; colony-forming units &mdash; counts the live cells that can grow. Each dot here stands for about 10&nbsp;million.</p></div>
+          <div class="cfu-dots" aria-hidden="true"><i style="animation-delay:0.00s"></i><i style="animation-delay:0.02s"></i><i style="animation-delay:0.04s"></i><i style="animation-delay:0.05s"></i><i style="animation-delay:0.07s"></i><i style="animation-delay:0.09s"></i><i style="animation-delay:0.11s"></i><i style="animation-delay:0.13s"></i><i style="animation-delay:0.14s"></i><i style="animation-delay:0.16s"></i><i style="animation-delay:0.18s"></i><i style="animation-delay:0.20s"></i><i style="animation-delay:0.22s"></i><i style="animation-delay:0.23s"></i><i style="animation-delay:0.25s"></i><i style="animation-delay:0.27s"></i><i style="animation-delay:0.29s"></i><i style="animation-delay:0.31s"></i><i style="animation-delay:0.32s"></i><i style="animation-delay:0.34s"></i><i style="animation-delay:0.36s"></i><i style="animation-delay:0.38s"></i><i style="animation-delay:0.40s"></i><i style="animation-delay:0.41s"></i><i style="animation-delay:0.43s"></i><i style="animation-delay:0.45s"></i><i style="animation-delay:0.47s"></i><i style="animation-delay:0.49s"></i><i style="animation-delay:0.50s"></i><i style="animation-delay:0.52s"></i><i style="animation-delay:0.54s"></i><i style="animation-delay:0.56s"></i><i style="animation-delay:0.58s"></i><i style="animation-delay:0.59s"></i><i style="animation-delay:0.61s"></i><i style="animation-delay:0.63s"></i><i style="animation-delay:0.65s"></i><i style="animation-delay:0.67s"></i><i style="animation-delay:0.68s"></i><i style="animation-delay:0.70s"></i><i style="animation-delay:0.72s"></i><i style="animation-delay:0.74s"></i><i style="animation-delay:0.76s"></i><i style="animation-delay:0.77s"></i><i style="animation-delay:0.79s"></i><i style="animation-delay:0.81s"></i><i style="animation-delay:0.83s"></i><i style="animation-delay:0.85s"></i><i style="animation-delay:0.86s"></i><i style="animation-delay:0.88s"></i><i style="animation-delay:0.90s"></i><i style="animation-delay:0.92s"></i><i style="animation-delay:0.94s"></i><i style="animation-delay:0.95s"></i><i style="animation-delay:0.97s"></i><i style="animation-delay:0.99s"></i><i style="animation-delay:1.01s"></i><i style="animation-delay:1.03s"></i><i style="animation-delay:1.04s"></i><i style="animation-delay:1.06s"></i><i style="animation-delay:1.08s"></i><i style="animation-delay:1.10s"></i><i style="animation-delay:1.12s"></i><i style="animation-delay:1.13s"></i><i style="animation-delay:1.15s"></i><i style="animation-delay:1.17s"></i><i style="animation-delay:1.19s"></i><i style="animation-delay:1.21s"></i><i style="animation-delay:1.22s"></i><i style="animation-delay:1.24s"></i><i style="animation-delay:1.26s"></i><i style="animation-delay:1.28s"></i><i style="animation-delay:1.30s"></i><i style="animation-delay:1.31s"></i><i style="animation-delay:1.33s"></i><i style="animation-delay:1.35s"></i><i style="animation-delay:1.37s"></i><i style="animation-delay:1.39s"></i><i style="animation-delay:1.40s"></i><i style="animation-delay:1.42s"></i><i style="animation-delay:1.44s"></i><i style="animation-delay:1.46s"></i><i style="animation-delay:1.48s"></i><i style="animation-delay:1.49s"></i><i style="animation-delay:1.51s"></i><i style="animation-delay:1.53s"></i><i style="animation-delay:1.55s"></i><i style="animation-delay:1.57s"></i><i style="animation-delay:1.58s"></i><i style="animation-delay:1.60s"></i><i style="animation-delay:1.62s"></i><i style="animation-delay:1.64s"></i><i style="animation-delay:1.66s"></i><i style="animation-delay:1.67s"></i><i style="animation-delay:1.69s"></i><i style="animation-delay:1.71s"></i><i style="animation-delay:1.73s"></i><i style="animation-delay:1.75s"></i><i style="animation-delay:1.76s"></i><i style="animation-delay:1.78s"></i></div>
+        </div>
+
         <h3 class="pro-x-h">What the research shows</h3>
         <div class="pro-x-research">
           <div class="pro-x-study">
-            <b>Recovery after hard exercise</b>
+            <span class="study-ic" aria-hidden="true"><svg viewBox="0 0 40 40" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M6 16v8M10 12v16M30 12v16M34 16v8M10 20h20"/></svg></span><b>Recovery after hard exercise</b>
             <p>In a placebo-controlled trial of 29 trained men, adding 1&nbsp;billion CFU of <em>B.&nbsp;coagulans</em> (strain GBI-30) to 20&nbsp;g of protein for two weeks improved recovery and reduced markers of muscle damage after an intense, muscle-damaging workout, compared with protein alone.</p>
             <span class="ingx-src">J&auml;ger et al., 2016, <em>PeerJ</em></span>
           </div>
           <div class="pro-x-study">
-            <b>Getting more from protein</b>
+            <span class="study-ic" aria-hidden="true"><svg viewBox="0 0 40 40" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M8 18h24l-3 16H11z"/><path d="M14 18c0-5 3-9 6-9s6 4 6 9"/><circle cx="20" cy="26" r="2"/></svg></span><b>Getting more from protein</b>
             <p>Taken with protein, the same strain increased how much of the protein&rsquo;s amino acids were absorbed and used, in a randomized study of healthy men.</p>
             <span class="ingx-src">J&auml;ger et al., 2018, <em>Probiotics and Antimicrobial Proteins</em></span>
           </div>
           <div class="pro-x-study">
-            <b>Digestive comfort</b>
+            <span class="study-ic" aria-hidden="true"><svg viewBox="0 0 40 40" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M16 5c0 6 2 7 2 11-6 1-10 6-10 12 0 5 4 8 10 8 9 0 14-7 14-15 0-5-3-7-7-7-2 0-3-3-3-9"/><path d="M14 27c2 2 6 2 8 0"/></svg></span><b>Digestive comfort</b>
             <p>In a randomized, placebo-controlled trial of adults with IBS, <em>B.&nbsp;coagulans</em> improved abdominal pain and bloating compared with placebo over eight weeks.</p>
             <span class="ingx-src">Hun, 2009, <em>Postgraduate Medicine</em></span>
           </div>
@@ -5303,6 +5374,22 @@ const offIO = new IntersectionObserver((entries) => {
   entries.forEach(en => en.target.classList.toggle("is-off", !en.isIntersecting));
 }, { rootMargin: "200px 0px" });
 document.querySelectorAll("main > section, main > header, main > div, .foot").forEach(el => offIO.observe(el));
+/* 1 billion counts up once, the first time it scrolls into view */
+document.querySelectorAll("[data-count]").forEach((el) => {
+  const target = +el.dataset.count;
+  new IntersectionObserver((es, obs) => {
+    if (!es[0].isIntersecting) { return; }
+    obs.disconnect();
+    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) { return; }
+    const t0 = performance.now(), dur = 1800;
+    const tick = (t) => {
+      const k = Math.min(1, (t - t0) / dur), e = 1 - Math.pow(1 - k, 3);
+      el.textContent = Math.round(target * e).toLocaleString("en-US");
+      if (k < 1) { requestAnimationFrame(tick); }
+    };
+    requestAnimationFrame(tick);
+  }).observe(el);
+});
 const chgEl = document.getElementById("hpChg");
 if (chgEl) { io.observe(chgEl); }   // the "in" class grows the bars
 
