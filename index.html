@@ -2125,7 +2125,8 @@ img[data-photo].swapping{opacity:.35}
 .ingp img{width:100%;height:100%;object-fit:cover;display:block;transition:transform .9s cubic-bezier(.2,.7,.2,1)}
 .ingp figure:hover img{transform:scale(1.08) rotate(-1deg)}
 .ingp figcaption{font-size:.74rem;letter-spacing:.1em;text-transform:uppercase;color:var(--slate);margin-top:9px;font-weight:500;line-height:1.35}
-@media (max-width:640px){ .ingp{grid-template-columns:repeat(3,1fr)} }
+.ingp .ingp-wide{grid-column:1/-1}
+.ingp .ingp-wide .ph{aspect-ratio:3/1}
 .pband{position:relative;overflow:hidden;min-height:clamp(420px,62vh,640px);display:flex;align-items:center;color:#fff;isolation:isolate}
 .pband>img{position:absolute;inset:-6% 0;width:100%;height:112%;object-fit:cover;z-index:-2;will-change:transform}
 .pband::before{content:"";position:absolute;inset:0;z-index:-1;background:linear-gradient(100deg,rgba(14,20,20,.82) 0%,rgba(14,20,20,.55) 45%,rgba(14,20,20,.08) 80%)}
@@ -2914,13 +2915,17 @@ body:not(.fun-mode) .galaxy-bg *{animation-play-state:paused!important}
           <h2>What&rsquo;s in the powder &mdash; and what it delivers</h2>
           <p class="sec-lede"><span data-only="restore">Nine real ingredients, each earning its place.</span><span data-only="hydrapro">Restore&rsquo;s nine ingredients, built up, plus a probiotic.</span> <span class="doodle-underline">Tap any one<svg class="doodle-svg" viewBox="0 0 120 18" fill="none" stroke="var(--pink-ink)" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" filter="url(#sketch-sm)"><path d="M3 10 C 25 2, 50 15, 75 6 C 92 1, 108 12, 117 8"/></svg></span> for the mechanism behind it, then scroll down for exactly what one stick delivers.</p>
         </div>
-        <div class="ingp rv" aria-label="Real ingredients">
-          <figure><div class="ph"><img src="/images/life/coconut.webp?v=life2" alt="Fresh coconut halves" loading="lazy" decoding="async" width="720" height="720"></div><figcaption>Coconut water</figcaption></figure>
-          <figure><div class="ph"><img src="/images/life/strawberry.webp?v=life2" alt="A fresh strawberry" loading="lazy" decoding="async" width="720" height="720"></div><figcaption>Strawberry</figcaption></figure>
-          <figure><div class="ph"><img src="/images/life/cherry.webp?v=life2" alt="A single red cherry" loading="lazy" decoding="async" width="720" height="720"></div><figcaption>Tart cherry</figcaption></figure>
-          <figure><div class="ph"><img src="/images/life/lemon.webp?v=life2" alt="Lemon halves" loading="lazy" decoding="async" width="720" height="720"></div><figcaption>Lemon</figcaption></figure>
-          <figure><div class="ph"><img src="/images/life/pomegranate.webp?v=life2" alt="Halved pomegranate with seeds" loading="lazy" decoding="async" width="720" height="720"></div><figcaption>Pomegranate</figcaption></figure>
-          <figure><div class="ph"><img src="/images/life/salt.webp?v=life2" alt="Pink Himalayan salt crystals" loading="lazy" decoding="async" width="720" height="720"></div><figcaption>Pink Himalayan salt</figcaption></figure>
+        <div class="ingp rv" aria-label="Every ingredient">
+          <figure><div class="ph"><img src="/images/life/coconut.webp?v=life3" alt="Fresh coconut halves" loading="lazy" decoding="async" width="720" height="720"></div><figcaption>Coconut water</figcaption></figure>
+          <figure><div class="ph"><img src="/images/life/sugar.webp?v=life3" alt="Raw cane sugar crystals" loading="lazy" decoding="async" width="720" height="720"></div><figcaption>Organic cane sugar</figcaption></figure>
+          <figure><div class="ph"><img src="/images/life/cherry.webp?v=life3" alt="A single red cherry" loading="lazy" decoding="async" width="720" height="720"></div><figcaption>Tart cherry</figcaption></figure>
+          <figure><div class="ph"><img src="/images/life/lemon.webp?v=life3" alt="Lemon halves" loading="lazy" decoding="async" width="720" height="720"></div><figcaption>Lemon juice</figcaption></figure>
+          <figure><div class="ph"><img src="/images/life/pomegranate.webp?v=life3" alt="Halved pomegranate with seeds" loading="lazy" decoding="async" width="720" height="720"></div><figcaption>Pomegranate</figcaption></figure>
+          <figure><div class="ph"><img src="/images/life/apple.webp?v=life3" alt="A green apple on a white plate" loading="lazy" decoding="async" width="720" height="720"></div><figcaption>Apple</figcaption></figure>
+          <figure><div class="ph"><img src="/images/life/monk.webp?v=life3" alt="Monk fruit growing on the vine" loading="lazy" decoding="async" width="720" height="720"></div><figcaption>Monk fruit</figcaption></figure>
+          <figure><div class="ph"><img src="/images/life/pumpkin.webp?v=life3" alt="Green pumpkin seeds" loading="lazy" decoding="async" width="720" height="720"></div><figcaption>Pumpkin seed</figcaption></figure>
+          <figure><div class="ph"><img src="/images/life/salt.webp?v=life3" alt="Pink Himalayan salt crystals" loading="lazy" decoding="async" width="720" height="720"></div><figcaption>Pink Himalayan salt</figcaption></figure>
+          <figure class="ingp-wide" data-only="hydrapro"><div class="ph"><img src="/images/life/probiotic.webp?v=life3" alt="Illustration of rod-shaped probiotic bacteria" loading="lazy" decoding="async" width="1200" height="400"></div><figcaption><i>Bacillus coagulans</i> &middot; 1&nbsp;billion+ CFU</figcaption></figure>
         </div>
         <ol class="ingx" data-only="restore">
         <li class="ingx-row">
