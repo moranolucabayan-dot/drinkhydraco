@@ -32,7 +32,7 @@
 <meta name="theme-color" content="#00a9ac">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Jost:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400;1,500&family=Newsreader:ital,opsz,wght@0,6..72,400;1,6..72,400&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Jost:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;1,400;1,500;1,800&family=Newsreader:ital,opsz,wght@0,6..72,400;1,6..72,400&display=swap">
 <style>*,*::before,*::after{box-sizing:border-box}body{margin:0}</style>
 <style>
 :root{
@@ -147,7 +147,7 @@ main:focus{outline:none}
   font-weight:500;color:var(--slate);margin:0;
 }
 h1,h2,h3{text-wrap:balance;margin:0;font-weight:400}
-h2{font-size:clamp(1.9rem,4.4vw,3rem);letter-spacing:.16em;text-transform:uppercase;line-height:1.22}
+h2{font-size:clamp(2.1rem,5vw,3.6rem);letter-spacing:-.01em;text-transform:uppercase;line-height:.98;font-weight:800}
 h3{font-size:1.05rem;letter-spacing:.16em;text-transform:uppercase;font-weight:500}
 p{margin:0}
 
@@ -324,8 +324,8 @@ section{padding-block:clamp(84px,11vw,168px)}
 @keyframes paint{from{clip-path:inset(0 100% 0 0)}to{clip-path:inset(0 0 0 0)}}
 .hero h1{
   font-size:clamp(3.2rem,10.5vw,7.4rem);
-  letter-spacing:.1em;text-transform:uppercase;font-weight:400;
-  line-height:.98;color:#0e1414;position:relative;z-index:1;
+  letter-spacing:-.015em;text-transform:uppercase;font-weight:800;
+  line-height:.92;color:#0e1414;position:relative;z-index:1;
 }
 /* the one flavor, said plainly under the headline */
 .hero-flavor{margin-top:10px;font-size:.78rem;letter-spacing:.16em;text-transform:uppercase;font-weight:600;color:var(--pink-ink)}
@@ -2097,46 +2097,54 @@ img[data-photo].swapping{opacity:.35}
 
 /* ---------- reveal ---------- */
 /* ---------- real-photo sections (lifestyle gallery, ingredient photos, photo band) ---------- */
-.life{padding:clamp(56px,7vw,96px) 0 clamp(20px,3vw,40px)}
-.life-head{display:flex;justify-content:space-between;align-items:flex-end;gap:24px;flex-wrap:wrap;margin-bottom:clamp(26px,3vw,38px)}
-.life-head h2{font-size:clamp(1.7rem,3.4vw,2.6rem);font-weight:500;letter-spacing:-.02em;line-height:1.08;max-width:18ch}
-.life-head p{color:var(--slate);font-size:1rem;max-width:36ch;line-height:1.6}
-.life-row{display:grid;grid-template-columns:repeat(6,1fr);gap:14px;width:min(1320px,96vw);margin-inline:auto}
-.life-card{position:relative;border-radius:18px;overflow:hidden;aspect-ratio:4/5;background:var(--panel);margin:0}
-.life-card:nth-child(even){transform:translateY(28px)}
-.life-card img{width:100%;height:100%;object-fit:cover;display:block;transition:transform 1.2s cubic-bezier(.2,.7,.2,1)}
-.life-card:hover img{transform:scale(1.06)}
-.life-card figcaption{position:absolute;left:12px;bottom:12px;font-size:.78rem;letter-spacing:.12em;text-transform:uppercase;font-weight:600;color:#fff;
-  background:rgba(14,20,20,.42);backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px);padding:7px 11px;border-radius:99px}
-.life.rv .life-card{opacity:0;transform:translateY(40px);transition:opacity .8s ease,transform .9s cubic-bezier(.2,.7,.2,1)}
+.life{padding:clamp(64px,8vw,110px) 0 0}
+.life-head{display:flex;justify-content:space-between;align-items:flex-end;gap:24px;flex-wrap:wrap;margin-bottom:clamp(22px,3vw,32px)}
+.life-head h2{font-size:clamp(2.2rem,5.6vw,4.4rem);max-width:14ch}
+.life-head p{color:var(--slate);font-size:1rem;max-width:34ch;line-height:1.6}
+.life-cta{display:inline-flex;align-items:center;min-height:44px;padding:0 24px;border-radius:99px;background:var(--ink);color:var(--paper);font-weight:600;text-decoration:none;font-size:.95rem;margin-top:16px}
+.life-cta:hover{opacity:.82}
+.life-row{display:grid;grid-template-columns:repeat(3,1fr);gap:6px;width:100%}
+.life-card{position:relative;overflow:hidden;aspect-ratio:4/5;background:var(--panel);margin:0}
+.life-card img{width:100%;height:100%;object-fit:cover;display:block;transition:transform 1.4s cubic-bezier(.2,.7,.2,1)}
+.life-card:hover img{transform:scale(1.05)}
+.life-card::after{content:"";position:absolute;inset:55% 0 0;background:linear-gradient(transparent,rgba(0,0,0,.55));pointer-events:none}
+.life-card figcaption{position:absolute;left:clamp(16px,2.4vw,32px);bottom:clamp(16px,2.4vw,30px);z-index:1;color:#fff}
+.life-card figcaption b{display:block;font-size:clamp(1.3rem,2.4vw,2rem);font-weight:800;text-transform:uppercase;letter-spacing:-.01em;line-height:1}
+.life-card figcaption a{display:inline-flex;align-items:center;min-height:40px;margin-top:12px;padding:0 20px;border-radius:99px;background:#fff;color:#0e1414;font-weight:600;font-size:.9rem;text-decoration:none}
+.life-card figcaption a:hover{background:var(--pink-soft)}
+.life.rv .life-card{opacity:0;transform:translateY(30px);transition:opacity .8s ease,transform .9s cubic-bezier(.2,.7,.2,1)}
 .life.rv.in .life-card{opacity:1;transform:none}
-.life.rv.in .life-card:nth-child(even){transform:translateY(28px)}
 .life.rv.in .life-card:nth-child(2){transition-delay:.08s}.life.rv.in .life-card:nth-child(3){transition-delay:.16s}
 .life.rv.in .life-card:nth-child(4){transition-delay:.24s}.life.rv.in .life-card:nth-child(5){transition-delay:.32s}
 .life.rv.in .life-card:nth-child(6){transition-delay:.4s}
 @media (max-width:900px){
-  .life-row{display:flex;overflow-x:auto;scroll-snap-type:x mandatory;gap:12px;padding:0 4vw 34px;width:100%;scrollbar-width:none}
+  .life-row{display:flex;overflow-x:auto;scroll-snap-type:x mandatory;gap:6px;scrollbar-width:none}
   .life-row::-webkit-scrollbar{display:none}
-  .life-card{flex:0 0 62%;scroll-snap-align:center}
+  .life-card{flex:0 0 78%;scroll-snap-align:start}
 }
 .ingp{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-top:clamp(26px,3vw,36px)}
 .ingp figure{margin:0;text-align:center}
-.ingp .ph{border-radius:16px;overflow:hidden;aspect-ratio:1;background:var(--panel)}
+.ingp .ph{border-radius:16px;overflow:hidden;aspect-ratio:1;background:#fff;isolation:isolate}
+.ingp .ph img{mix-blend-mode:multiply}
 .ingp img{width:100%;height:100%;object-fit:cover;display:block;transition:transform .9s cubic-bezier(.2,.7,.2,1)}
 .ingp figure:hover img{transform:scale(1.08) rotate(-1deg)}
 .ingp figcaption{font-size:.74rem;letter-spacing:.1em;text-transform:uppercase;color:var(--slate);margin-top:9px;font-weight:500;line-height:1.35}
 .ingp .ingp-wide{grid-column:1/-1}
 .ingp .ingp-wide .ph{aspect-ratio:3/1}
-.pband{position:relative;overflow:hidden;min-height:clamp(420px,62vh,640px);display:flex;align-items:center;color:#fff;isolation:isolate}
+.pband{position:relative;overflow:hidden;min-height:clamp(480px,82vh,820px);display:flex;align-items:center;color:#fff;isolation:isolate}
 .pband>img{position:absolute;inset:-6% 0;width:100%;height:112%;object-fit:cover;z-index:-2;will-change:transform}
 .pband::before{content:"";position:absolute;inset:0;z-index:-1;background:linear-gradient(100deg,rgba(14,20,20,.82) 0%,rgba(14,20,20,.55) 45%,rgba(14,20,20,.08) 80%)}
 :root[data-product="hydrapro"] .pband::before{background:linear-gradient(100deg,rgba(0,60,62,.85) 0%,rgba(0,90,92,.55) 45%,rgba(0,90,92,.08) 80%)}
 .pband-copy{width:min(1120px,92vw);margin-inline:auto}
-.pband h2{font-size:clamp(2rem,5vw,3.8rem);font-weight:500;letter-spacing:-.025em;line-height:1.04;max-width:17ch}
+.pband h2{font-size:clamp(2.6rem,8vw,6.4rem);font-weight:800;letter-spacing:-.02em;line-height:.92;max-width:12ch}
 .pband-stats{display:flex;gap:clamp(22px,4vw,54px);margin-top:clamp(24px,3vw,36px);flex-wrap:wrap}
 .pband-stats b{display:block;font-size:clamp(1.8rem,3.4vw,2.6rem);font-weight:500;letter-spacing:-.02em}
 .pband-stats span{font-size:.82rem;letter-spacing:.12em;text-transform:uppercase;opacity:.82}
-.pband .btn-band{display:inline-block;margin-top:clamp(26px,3vw,38px);background:#fff;color:#0e1414;font-weight:600;padding:15px 26px;border-radius:99px;text-decoration:none;min-height:44px}
+.pband-btns{display:flex;gap:10px;flex-wrap:wrap;margin-top:clamp(26px,3vw,38px)}
+.pband button.btn-band{border:0;font:inherit;font-weight:600;cursor:pointer}
+.pband .btn-band.ghost{background:transparent;color:#fff;box-shadow:inset 0 0 0 2px #fff}
+.pband .btn-band.ghost:hover{background:#fff;color:#0e1414}
+.pband .btn-band{display:inline-flex;align-items:center;background:#fff;color:#0e1414;font-weight:600;padding:15px 26px;border-radius:99px;text-decoration:none;min-height:44px}
 .pband .btn-band:hover{background:var(--pink-soft)}
 .story-photo{margin-top:28px;border-radius:20px;overflow:hidden;aspect-ratio:4/5;max-width:340px}
 .story-photo img{width:100%;height:100%;object-fit:cover;display:block}
@@ -2755,15 +2763,15 @@ body:not(.fun-mode) .galaxy-bg *{animation-play-state:paused!important}
   <section class="life rv" aria-label="Made for training">
     <div class="wrap life-head">
       <h2><span data-only="restore">Made for the work <em style="font-family:Newsreader,serif;font-weight:400">after</em> the work.</span><span data-only="hydrapro">Built for the longest, sweatiest sessions.</span></h2>
-      <p><span data-only="restore">Long runs, sprint days, game days, court time. One stick in water when you&rsquo;re done.</span><span data-only="hydrapro">More sodium for heavy sweaters, plus a probiotic for your gut. For days that take everything.</span></p>
+      <div><p><span data-only="restore">Long runs, sprint days, game days, court time. One stick in water when you&rsquo;re done.</span><span data-only="hydrapro">More sodium for heavy sweaters, plus a probiotic for your gut. For days that take everything.</span></p><a class="life-cta" href="#order">Shop now</a></div>
     </div>
     <div class="life-row">
-      <figure class="life-card"><img src="/images/life/run.webp?v=life2" alt="Runner on a hillside trail in golden evening light" loading="lazy" decoding="async" width="900" height="1125"><figcaption>Long runs</figcaption></figure>
-      <figure class="life-card"><img src="/images/life/sprint.webp?v=life2" alt="Runner's legs and pink spikes on a blue track" loading="lazy" decoding="async" width="900" height="1125"><figcaption>Sprint days</figcaption></figure>
-      <figure class="life-card"><img src="/images/life/hoop.webp?v=life2" alt="Shadow of a basketball hoop on an outdoor court" loading="lazy" decoding="async" width="900" height="1125"><figcaption>Game day</figcaption></figure>
-      <figure class="life-card"><img src="/images/life/mobility.webp?v=life2" alt="Athlete stretching in a bright studio" loading="lazy" decoding="async" width="900" height="1125"><figcaption>Mobility</figcaption></figure>
-      <figure class="life-card"><img src="/images/life/court.webp?v=life2" alt="Shadows across an orange clay tennis court" loading="lazy" decoding="async" width="900" height="1125"><figcaption>Court time</figcaption></figure>
-      <figure class="life-card"><img src="/images/life/rest.webp?v=life2" alt="Athlete warming up outdoors in the sun" loading="lazy" decoding="async" width="900" height="1125"><figcaption>Warm-ups</figcaption></figure>
+      <figure class="life-card"><img src="/images/life/run.webp?v=life2" alt="Runner on a hillside trail in golden evening light" loading="lazy" decoding="async" width="900" height="1125"><figcaption><b>Long runs</b><a href="#order">Shop</a></figcaption></figure>
+      <figure class="life-card"><img src="/images/life/sprint.webp?v=life2" alt="Runner's legs and pink spikes on a blue track" loading="lazy" decoding="async" width="900" height="1125"><figcaption><b>Sprint days</b><a href="#order">Shop</a></figcaption></figure>
+      <figure class="life-card"><img src="/images/life/hoop.webp?v=life2" alt="Shadow of a basketball hoop on an outdoor court" loading="lazy" decoding="async" width="900" height="1125"><figcaption><b>Game day</b><a href="#order">Shop</a></figcaption></figure>
+      <figure class="life-card"><img src="/images/life/mobility.webp?v=life2" alt="Athlete stretching in a bright studio" loading="lazy" decoding="async" width="900" height="1125"><figcaption><b>Mobility</b><a href="#order">Shop</a></figcaption></figure>
+      <figure class="life-card"><img src="/images/life/court.webp?v=life2" alt="Shadows across an orange clay tennis court" loading="lazy" decoding="async" width="900" height="1125"><figcaption><b>Court time</b><a href="#order">Shop</a></figcaption></figure>
+      <figure class="life-card"><img src="/images/life/rest.webp?v=life2" alt="Athlete warming up outdoors in the sun" loading="lazy" decoding="async" width="900" height="1125"><figcaption><b>Warm-ups</b><a href="#order">Shop</a></figcaption></figure>
     </div>
   </section>
 
@@ -2916,15 +2924,15 @@ body:not(.fun-mode) .galaxy-bg *{animation-play-state:paused!important}
           <p class="sec-lede"><span data-only="restore">Nine real ingredients, each earning its place.</span><span data-only="hydrapro">Restore&rsquo;s nine ingredients, built up, plus a probiotic.</span> <span class="doodle-underline">Tap any one<svg class="doodle-svg" viewBox="0 0 120 18" fill="none" stroke="var(--pink-ink)" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" filter="url(#sketch-sm)"><path d="M3 10 C 25 2, 50 15, 75 6 C 92 1, 108 12, 117 8"/></svg></span> for the mechanism behind it, then scroll down for exactly what one stick delivers.</p>
         </div>
         <div class="ingp rv" aria-label="Every ingredient">
-          <figure><div class="ph"><img src="/images/life/coconut.webp?v=life3" alt="Fresh coconut halves" loading="lazy" decoding="async" width="720" height="720"></div><figcaption>Coconut water</figcaption></figure>
-          <figure><div class="ph"><img src="/images/life/sugar.webp?v=life3" alt="Raw cane sugar crystals" loading="lazy" decoding="async" width="720" height="720"></div><figcaption>Organic cane sugar</figcaption></figure>
-          <figure><div class="ph"><img src="/images/life/cherry.webp?v=life3" alt="A single red cherry" loading="lazy" decoding="async" width="720" height="720"></div><figcaption>Tart cherry</figcaption></figure>
-          <figure><div class="ph"><img src="/images/life/lemon.webp?v=life3" alt="Lemon halves" loading="lazy" decoding="async" width="720" height="720"></div><figcaption>Lemon juice</figcaption></figure>
-          <figure><div class="ph"><img src="/images/life/pomegranate.webp?v=life3" alt="Halved pomegranate with seeds" loading="lazy" decoding="async" width="720" height="720"></div><figcaption>Pomegranate</figcaption></figure>
-          <figure><div class="ph"><img src="/images/life/apple.webp?v=life3" alt="A green apple on a white plate" loading="lazy" decoding="async" width="720" height="720"></div><figcaption>Apple</figcaption></figure>
-          <figure><div class="ph"><img src="/images/life/monk.webp?v=life3" alt="Monk fruit growing on the vine" loading="lazy" decoding="async" width="720" height="720"></div><figcaption>Monk fruit</figcaption></figure>
-          <figure><div class="ph"><img src="/images/life/pumpkin.webp?v=life3" alt="Green pumpkin seeds" loading="lazy" decoding="async" width="720" height="720"></div><figcaption>Pumpkin seed</figcaption></figure>
-          <figure><div class="ph"><img src="/images/life/salt.webp?v=life3" alt="Pink Himalayan salt crystals" loading="lazy" decoding="async" width="720" height="720"></div><figcaption>Pink Himalayan salt</figcaption></figure>
+          <figure><div class="ph"><img src="/images/life/coconut.webp?v=life5" alt="Fresh coconut halves" loading="lazy" decoding="async" width="720" height="720"></div><figcaption>Coconut water</figcaption></figure>
+          <figure><div class="ph"><img src="/images/life/sugar.webp?v=life5" alt="Raw cane sugar crystals" loading="lazy" decoding="async" width="720" height="720"></div><figcaption>Organic cane sugar</figcaption></figure>
+          <figure><div class="ph"><img src="/images/life/cherry.webp?v=life5" alt="A single red cherry" loading="lazy" decoding="async" width="720" height="720"></div><figcaption>Tart cherry</figcaption></figure>
+          <figure><div class="ph"><img src="/images/life/lemon.webp?v=life5" alt="Lemon halves" loading="lazy" decoding="async" width="720" height="720"></div><figcaption>Lemon juice</figcaption></figure>
+          <figure><div class="ph"><img src="/images/life/pomegranate.webp?v=life5" alt="Halved pomegranate with seeds" loading="lazy" decoding="async" width="720" height="720"></div><figcaption>Pomegranate</figcaption></figure>
+          <figure><div class="ph"><img src="/images/life/apple.webp?v=life5" alt="A green apple on a white plate" loading="lazy" decoding="async" width="720" height="720"></div><figcaption>Apple</figcaption></figure>
+          <figure><div class="ph"><img src="/images/life/monk.webp?v=life5" alt="Monk fruit growing on the vine" loading="lazy" decoding="async" width="720" height="720"></div><figcaption>Monk fruit</figcaption></figure>
+          <figure><div class="ph"><img src="/images/life/pumpkin.webp?v=life5" alt="Green pumpkin seeds" loading="lazy" decoding="async" width="720" height="720"></div><figcaption>Pumpkin seed</figcaption></figure>
+          <figure><div class="ph"><img src="/images/life/salt.webp?v=life5" alt="Pink Himalayan salt crystals" loading="lazy" decoding="async" width="720" height="720"></div><figcaption>Pink Himalayan salt</figcaption></figure>
           <figure class="ingp-wide" data-only="hydrapro"><div class="ph"><img src="/images/life/probiotic.webp?v=life3" alt="Illustration of rod-shaped probiotic bacteria" loading="lazy" decoding="async" width="1200" height="400"></div><figcaption><i>Bacillus coagulans</i> &middot; 1&nbsp;billion+ CFU</figcaption></figure>
         </div>
         <ol class="ingx" data-only="restore">
@@ -3786,7 +3794,11 @@ body:not(.fun-mode) .galaxy-bg *{animation-play-state:paused!important}
         <div data-only="hydrapro"><b>~280&nbsp;mg</b><span>potassium</span></div>
         <div data-only="hydrapro"><b>1B+</b><span>CFU probiotic</span></div>
       </div>
-      <a class="btn-band" href="#order">Choose your pack</a>
+      <div class="pband-btns">
+        <a class="btn-band" href="#order">Shop now</a>
+        <button type="button" class="btn-band ghost" data-only="restore" data-pick-product="hydrapro">Explore Hydrapro</button>
+        <button type="button" class="btn-band ghost" data-only="hydrapro" data-pick-product="restore">Explore Restore</button>
+      </div>
     </div>
   </section>
 
