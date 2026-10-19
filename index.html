@@ -2150,12 +2150,33 @@ img[data-photo].swapping{opacity:.35}
 .story-photo img{width:100%;height:100%;object-fit:cover;display:block}
 @media (max-width:900px){ .story-photo{display:none} }
 @media (prefers-reduced-motion:reduce){ .life-card img,.ingp img{transition:none} .pband>img{transform:none!important} }
-.rv{opacity:0;transform:translateY(22px);transition:opacity .7s ease,transform .7s cubic-bezier(.2,.7,.2,1)}
-.rv.in{opacity:1;transform:none}
+/* ---------- motion system: one set of easings for every animation ---------- */
+:root{--ease-out:cubic-bezier(.16,1,.3,1);--ease-spring:cubic-bezier(.34,1.56,.64,1)}
+.rv{opacity:0;transform:translateY(28px) scale(.985);filter:blur(6px);
+  transition:opacity .9s var(--ease-out),transform 1.1s var(--ease-out),filter .9s var(--ease-out)}
+.rv.in{opacity:1;transform:none;filter:none}
+/* headings rise out of a mask as their section arrives (no layout shift) */
+.rv h2{transition:clip-path 1.1s var(--ease-out) .08s,transform 1.1s var(--ease-out) .08s}
+.rv:not(.in) h2{clip-path:inset(0 0 100% 0);transform:translateY(.45em)}
+/* cards in a grid arrive one after another instead of all at once */
+.stg>*{opacity:0;transform:translateY(20px);transition:opacity .8s var(--ease-out) calc(var(--i,0)*75ms),transform 1s var(--ease-out) calc(var(--i,0)*75ms)}
+.stg.in>*{opacity:1;transform:none}
+/* buttons: lift on hover, a springy press on click */
+.btn,.btn-band,.life-cta,.life-card figcaption a,.mode-pill-btn,.seg-btn{transition:transform .35s var(--ease-spring),background-color .25s ease,color .25s ease,box-shadow .25s ease,opacity .25s ease}
+.btn:hover,.btn-band:hover,.life-cta:hover,.life-card figcaption a:hover{transform:translateY(-2px)}
+.btn:active,.btn-band:active,.life-cta:active,.life-card figcaption a:active,.mode-pill-btn:active,.seg-btn:active{transform:scale(.96);transition-duration:.12s}
+/* photos drift a little slower than the page (set from JS as --py) */
+.life-card img,.why-photo img,.story-photo img{scale:1.08;translate:0 var(--py,0px);will-change:translate}
+.life-card img{transition:transform 1.4s var(--ease-out)}
+.ingp .ph img{transition:transform 1s var(--ease-out)}
+.strip:hover .strip-track{animation-play-state:paused}
 
 @media (prefers-reduced-motion:reduce){
   *,*::before,*::after{animation-duration:.001ms!important;animation-iteration-count:1!important;transition-duration:.001ms!important}
-  .rv{opacity:1;transform:none}
+  .rv{opacity:1;transform:none;filter:none}
+  .rv:not(.in) h2{clip-path:none;transform:none}
+  .stg>*{opacity:1;transform:none}
+  .life-card img,.why-photo img,.story-photo img{translate:none}
   .hero-stroke.painting::before{animation:none}
   .beat-search svg,.beat-search .glint,.beat-missing .slash,
   .beat-missing .fizz,.beat-build .swing{animation:none}
@@ -5706,6 +5727,25 @@ const io = new IntersectionObserver((entries) => {
   entries.forEach(en => { if (en.isIntersecting){ en.target.classList.add("in"); io.unobserve(en.target); } });
 }, { rootMargin: "0px 0px -12% 0px" });
 document.querySelectorAll(".rv").forEach(el => io.observe(el));
+/* stagger: each card in these grids arrives a beat after the one before */
+document.querySelectorAll(".benefits,.ingp,.story-beats,.lytes,.sci-grid,.pband-stats").forEach(g => {
+  if (REDUCED) { return; }
+  Array.from(g.children).forEach((c, i) => c.style.setProperty("--i", i));
+  g.classList.add("stg"); io.observe(g);
+});
+/* photos drift slightly slower than the page while on screen */
+(() => {
+  if (REDUCED) { return; }
+  const imgs = Array.from(document.querySelectorAll(".life-card img,.why-photo img,.story-photo img"));
+  const live = new Set(); let raf = 0;
+  const tick = () => { raf = 0; const vh = innerHeight;
+    live.forEach(img => { const r = img.parentElement.getBoundingClientRect();
+      const k = ((r.top + r.height / 2) - vh / 2) / vh;      // -1 .. 1 across the screen
+      img.style.setProperty("--py", (k * -18).toFixed(1) + "px"); }); };
+  const vis = new IntersectionObserver(es => { es.forEach(e => e.isIntersecting ? live.add(e.target) : live.delete(e.target)); tick(); });
+  imgs.forEach(i => vis.observe(i));
+  addEventListener("scroll", () => { if (live.size && !raf) raf = requestAnimationFrame(tick); }, { passive: true });
+})();
 /* photo band: slow parallax while it is on screen */
 (() => {
   const band = document.querySelector(".pband"), img = band && band.querySelector("img");
@@ -5728,9 +5768,9 @@ document.querySelectorAll("[data-count]").forEach((el) => {
     if (!es[0].isIntersecting) { return; }
     obs.disconnect();
     if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) { return; }
-    const t0 = performance.now(), dur = 1800;
+    const t0 = performance.now(), dur = 2400;
     const tick = (t) => {
-      const k = Math.min(1, (t - t0) / dur), e = 1 - Math.pow(1 - k, 3);
+      const k = Math.min(1, (t - t0) / dur), e = k === 1 ? 1 : 1 - Math.pow(2, -10 * k);
       el.textContent = Math.round(target * e).toLocaleString("en-US");
       if (k < 1) { requestAnimationFrame(tick); }
     };
