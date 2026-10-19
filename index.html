@@ -2546,6 +2546,10 @@ body:not(.fun-mode) .galaxy-bg *{animation-play-state:paused!important}
      to noise. -->
 <svg width="0" height="0" style="position:absolute" aria-hidden="true">
   <defs>
+    <filter id="liquidGoo" x="0" y="0" width="100%" height="100%" color-interpolation-filters="sRGB">
+      <feGaussianBlur in="SourceGraphic" stdDeviation="5" result="b"/>
+      <feColorMatrix in="b" mode="matrix" values="1 0 0 0 0  0 1 0 0 0  0 0 1 0 0  0 0 0 26 -11"/>
+    </filter>
     <filter id="sketch" x="-20%" y="-20%" width="140%" height="140%">
       <feTurbulence type="fractalNoise" baseFrequency="0.018 0.028" numOctaves="2" seed="7" result="n"/>
       <feDisplacementMap in="SourceGraphic" in2="n" scale="3" xChannelSelector="R" yChannelSelector="G"/>
@@ -5993,7 +5997,7 @@ document.querySelectorAll(".ingx-bar > span").forEach(el => barIO.observe(el));
       if (cv) { return; }
       cv = document.createElement("canvas");
       cv.setAttribute("aria-hidden", "true");
-      cv.style.cssText = "position:fixed;inset:0;width:100vw;height:100vh;pointer-events:none;z-index:60";
+      cv.style.cssText = "position:fixed;inset:0;width:100vw;height:100vh;pointer-events:none;z-index:60;filter:url(#liquidGoo)";
       document.body.appendChild(cv);
       ctx = cv.getContext("2d");
       size();
@@ -6029,25 +6033,25 @@ document.querySelectorAll(".ingx-bar > span").forEach(el => barIO.observe(el));
       const sides = lowRight ? ["R"] : lowLeft ? ["L"] : (r < 0.42 ? ["L"] : r < 0.84 ? ["R"] : ["L", "R"]);
       const slosh = (Math.random() - 0.5) * 120;   // the surface is never still
       const burst = 0.6 + Math.random() * 0.9;     // some pours gush, some trickle
-      // liquid leaves a rim in a few uneven glugs, each one a connected clump
-      const glugs = 2 + Math.floor(Math.random() * 3);
-      const glugAt = Array.from({ length: glugs }, (_, g) => g * (110 + Math.random() * 160) + Math.random() * 40);
+      // liquid leaves the rim as one steady, connected sheet: drops follow each
+      // other a few ms apart, so the stream never breaks into separate clumps
+      const gap = 6 + Math.random() * 3;
       for (let i = 0; i < n; i++){
         const side = sides[i % sides.length];
         const lip = side === "R" ? G0.rimR : G0.rimL, out = side === "R" ? 1 : -1;
-        const delay = glugAt[i % glugs] + Math.random() * 70;
+        const delay = Math.floor(i / sides.length) * gap;
         setTimeout(() => {
           if (P.length > 900) { return; }
           P.push({
             // spread along the lip at roughly the fluid's rest spacing
-            x: lip[0] + out * (1 + Math.random() * 7) * G0.scale,
-            y: lip[1] - (1 + Math.random() * 7) * G0.scale,
-            vx: out * (8 + Math.random() * 70) * burst + slosh * 0.4 * Math.random(),
-            vy: -25 * Math.random() * burst + 15,
+            x: lip[0] + out * (1 + Math.random() * 4) * G0.scale,
+            y: lip[1] - (1 + Math.random() * 4) * G0.scale,
+            vx: out * (30 + Math.random() * 25) * burst + slosh * 0.15 * Math.random(),
+            vy: -10 * Math.random() * burst + 15,
             px: 0, py: 0, age: 0,
             life: 5 + Math.random() * 4,
-            stick: Math.random() < 0.55,          // some cling to the glass, some let go
-            r: (3 + Math.random() * 2) * Math.max(0.7, G0.scale)
+            stick: Math.random() < 0.7,           // most cling to the glass, some let go
+            r: (4.2 + Math.random() * 1.6) * Math.max(0.7, G0.scale)
           });
           if (!running){ running = true; last = performance.now(); requestAnimationFrame(step); }
         }, delay);
@@ -6139,7 +6143,7 @@ document.querySelectorAll(".ingx-bar > span").forEach(el => barIO.observe(el));
         for (const p of P){ p.vx = (p.x - p.px) / h; p.vy = (p.y - p.py) / h; }
         // viscosity: neighbours drag each other along
         for (const [a, b, w] of pairs){
-          const k = 0.06 * w;
+          const k = 0.11 * w;
           const mx = (b.vx - a.vx) * k, my = (b.vy - a.vy) * k;
           a.vx += mx; a.vy += my; b.vx -= mx; b.vy -= my;
         }
@@ -6163,17 +6167,17 @@ document.querySelectorAll(".ingx-bar > span").forEach(el => barIO.observe(el));
         if (a.age > a.life || b.age > b.life) { continue; }
         if (Math.abs(a.x - b.x) > 2 * H || Math.abs(a.y - b.y) > 2 * H) { continue; }
         const f = Math.min(fade(a), fade(b));
-        ctx.globalAlpha = 0.9 * f;
-        ctx.lineWidth = Math.min(a.r, b.r) * 1.7 * (0.6 + w);
+        ctx.globalAlpha = f;
+        ctx.lineWidth = Math.min(a.r, b.r) * 2.1 * (0.6 + w);
         ctx.beginPath(); ctx.moveTo(a.x - ox, a.y - oy); ctx.lineTo(b.x - ox, b.y - oy); ctx.stroke();
       }
       for (const p of P){
         const f = fade(p), sp = Math.min(1.8, Math.hypot(p.vx, p.vy) / 900);
-        ctx.globalAlpha = 0.92 * f;
+        ctx.globalAlpha = f;
         ctx.beginPath();
         // fast drops stretch along their direction of travel
         const ang = Math.atan2(p.vy, p.vx);
-        ctx.ellipse(p.x - ox, p.y - oy, p.r * (1 + sp * 0.8), p.r * (1 - sp * 0.25), ang, 0, Math.PI * 2);
+        ctx.ellipse(p.x - ox, p.y - oy, p.r * 1.25 * (1 + sp * 0.9), p.r * 1.25 * (1 - sp * 0.2), ang, 0, Math.PI * 2);
         ctx.fill();
       }
       ctx.globalAlpha = 1;
