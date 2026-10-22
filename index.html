@@ -2556,8 +2556,229 @@ body:not(.fun-mode) .galaxy-bg *{animation-play-state:paused!important}
      apply). This one script is the vanilla-site equivalent. -->
 <script defer src="/_vercel/speed-insights/script.js"></script>
 
+<style>
+/* ============================================================
+   Logo variations: a ~3s intro montage of the H mark (thin line,
+   dotted, colour combos, glitch, water fill) that lands in the
+   top-left nav, then one variation replays on the nav mark every
+   10s. Shapes are a vector trace of /images/logo-mark.webp.
+   ============================================================ */
+.hx{--fx-ink:var(--ink);--fx-a:var(--teal);--fx-b:#ffbf00;--fx-c:#ff2d78;--fx-sw:7;--fx-dur:1.4s;overflow:visible;display:block}
+.hx path{fill:var(--fx-ink);stroke:none}
+.hx .hx-c1,.hx .hx-c2,.hx .hx-liq{opacity:0}
+.hx .hx-c1 path{fill:var(--fx-a)}
+.hx .hx-c2 path{fill:var(--fx-c)}
+.hx .hx-liq{fill:var(--fx-a)}
+
+/* thin line: drawn on, then filled */
+.hx[data-v="line"] .hx-main path{
+  fill:var(--fx-ink);stroke:var(--fx-ink);stroke-width:var(--fx-sw);stroke-linejoin:round;
+  stroke-dasharray:1 1;animation:hx-draw var(--fx-dur) cubic-bezier(.6,0,.2,1) both}
+@keyframes hx-draw{
+  0%{stroke-dashoffset:1;fill-opacity:0}
+  72%{stroke-dashoffset:0;fill-opacity:0}
+  100%{stroke-dashoffset:0;fill-opacity:1}}
+
+/* dotted stroke that runs around the outline */
+.hx[data-v="dots"] .hx-main path{
+  stroke:var(--fx-a);stroke-width:calc(var(--fx-sw) * 2.4);stroke-linecap:round;
+  stroke-dasharray:0 .022;animation:hx-dots var(--fx-dur) linear both}
+@keyframes hx-dots{
+  0%{stroke-dashoffset:0;fill-opacity:0;stroke-opacity:1}
+  75%{stroke-dashoffset:-.12;fill-opacity:0;stroke-opacity:1}
+  100%{stroke-dashoffset:-.15;fill-opacity:1;stroke-opacity:0}}
+
+/* colour combo: teal body, gold cap and drop */
+.hx[data-v="duo"] .hx-b{animation:hx-duo-a var(--fx-dur) ease both}
+.hx[data-v="duo"] .hx-t,.hx[data-v="duo"] .hx-d{animation:hx-duo-b var(--fx-dur) ease both}
+@keyframes hx-duo-a{0%,100%{fill:var(--fx-ink)}14%,82%{fill:var(--fx-a)}}
+@keyframes hx-duo-b{0%,100%{fill:var(--fx-ink)}14%,82%{fill:var(--fx-b)}}
+
+/* glitch: RGB-split copies and sliced jumps */
+.hx[data-v="glitch"]{animation:hx-gl var(--fx-dur) steps(1,end) both}
+.hx[data-v="glitch"] .hx-c1{animation:hx-gl-c1 var(--fx-dur) steps(1,end) both}
+.hx[data-v="glitch"] .hx-c2{animation:hx-gl-c2 var(--fx-dur) steps(1,end) both}
+@keyframes hx-gl{
+  0%{clip-path:inset(0);transform:none}
+  8%{clip-path:inset(12% 0 52% 0);transform:translate(-4%,0)}
+  16%{clip-path:inset(58% 0 6% 0);transform:translate(5%,0)}
+  26%{clip-path:inset(0);transform:translate(-1%,1%)}
+  40%{clip-path:inset(34% 0 33% 0);transform:translate(3%,0)}
+  52%{clip-path:inset(0);transform:none}
+  66%{clip-path:inset(72% 0 0 0);transform:translate(-4%,0)}
+  76%{clip-path:inset(0 0 80% 0);transform:translate(2%,0)}
+  86%,100%{clip-path:inset(0);transform:none}}
+@keyframes hx-gl-c1{
+  0%{opacity:.9;transform:translate(-46px,0)}
+  20%{opacity:.9;transform:translate(-80px,10px)}
+  45%{opacity:.9;transform:translate(-30px,-6px)}
+  70%{opacity:.9;transform:translate(-64px,0)}
+  86%,100%{opacity:0;transform:none}}
+@keyframes hx-gl-c2{
+  0%{opacity:.9;transform:translate(46px,0)}
+  20%{opacity:.9;transform:translate(70px,-8px)}
+  45%{opacity:.9;transform:translate(36px,6px)}
+  70%{opacity:.9;transform:translate(60px,0)}
+  86%,100%{opacity:0;transform:none}}
+
+/* water fill: teal rises through the outline, then settles to ink */
+.hx[data-v="fill"] .hx-main path{
+  stroke:var(--fx-ink);stroke-width:var(--fx-sw);animation:hx-fill-main var(--fx-dur) ease both}
+.hx[data-v="fill"] .hx-liq{animation:hx-fill-liq var(--fx-dur) cubic-bezier(.3,.1,.3,1) both}
+@keyframes hx-fill-main{0%,78%{fill-opacity:0}100%{fill-opacity:1}}
+@keyframes hx-fill-liq{
+  0%{opacity:1;transform:translate(-350px,1120px)}
+  78%{opacity:1;transform:translate(0,-20px)}
+  100%{opacity:0;transform:translate(0,-20px)}}
+
+/* intro overlay */
+.hx-intro{
+  position:fixed;inset:0;z-index:1000;display:grid;place-items:center;
+  background:var(--paper);cursor:pointer;transition:background-color .5s ease}
+.hx-intro.is-flying{background-color:transparent;pointer-events:none}
+.hx-intro-in{display:flex;flex-direction:column;align-items:center;gap:26px}
+.hx-intro .hx{width:clamp(110px,22vw,158px);height:auto}
+.hx-intro-word{
+  font-size:.95rem;letter-spacing:.5em;text-indent:.5em;text-transform:uppercase;font-weight:500;
+  color:var(--ink);opacity:0;transform:translateY(6px);transition:opacity .35s ease,transform .35s ease}
+.hx-intro.show-word .hx-intro-word{opacity:1;transform:none}
+.hx-intro.is-flying .hx-intro-word{opacity:0;transition-duration:.2s}
+
+/* nav replay: the vector copy sits exactly over the raster mark */
+.brand{position:relative}
+.mark-fx{position:absolute;pointer-events:none;--fx-ink:#000;--fx-sw:38;visibility:hidden}
+.brand.fx-on .mark-fx{visibility:visible}
+.brand.fx-on .mark{opacity:0}
+@media (prefers-color-scheme:dark){
+  :root:not([data-theme="light"]) .mark-fx{filter:drop-shadow(0 0 1px var(--ink)) drop-shadow(0 0 2px var(--ink))}
+}
+:root[data-theme="dark"] .mark-fx{filter:drop-shadow(0 0 1px var(--ink)) drop-shadow(0 0 2px var(--ink))}
+
+@media (prefers-reduced-motion:reduce){ .hx-intro,.mark-fx{display:none!important} }
+</style>
 </head>
 <body>
+<div class="hx-intro" id="hxIntro" aria-hidden="true"><div class="hx-intro-in"><span class="hx-intro-word">Hydraco</span></div></div>
+<script>
+/* Logo variations: intro montage + nav replay every 10s (styles above, "Logo variations"). */
+(function(){
+  const PATHS = {
+    b:"M27 11 227 12 241 16 249 27 252 39 252 57 250 101 246 423 248 460 302 428 352 407 428 386 500 373 555 371 594 379 626 391 647 404 660 416 658 420 596 442 542 465 511 482 478 503 440 531 413 555 383 587 356 623 329 663 306 705 277 771 266 801 253 872 247 911 243 1013 241 1021 237 1027 231 1033 224 1036 25 1037 16 1032 12 1026 8 1018 10 35 14 19Z",
+    t:"M464 16 644 17 654 19 660 24 666 34 668 43 665 237 664 281 663 284 614 266 555 256 511 256 489 260 463 268 456 266 457 25 458 19Z",
+    d:"M584 581 587 582 592 589 618 635 654 719 670 766 679 806 683 837 684 873 679 905 669 944 659 966 644 991 616 1021 589 1037 547 1049 532 1050 480 1046 458 1040 445 1033 418 1011 401 989 387 959 381 934 379 908 383 885 397 838 414 797 434 758 463 710 490 672 521 634 551 605Z"
+  };
+  // the viewBox pads the 700x1058 mark by 20 on every side so strokes and glitch offsets aren't cut off
+  const PAD = 20, MW = 700, MH = 1058;
+  let uid = 0;
+  function makeMark(cls){
+    const id = "hxClip" + (++uid);
+    const set = (c) => `<g class="${c}">` + ["b","t","d"].map((k) => `<path class="hx-${k}" pathLength="1" d="${PATHS[k]}"/>`).join("") + "</g>";
+    const wrap = document.createElement("div");
+    wrap.innerHTML =
+      `<svg class="hx ${cls}" viewBox="${-PAD} ${-PAD} ${MW + 2 * PAD} ${MH + 2 * PAD}" aria-hidden="true" focusable="false">` +
+      `<defs><clipPath id="${id}"><path d="${PATHS.b} ${PATHS.t} ${PATHS.d}"/></clipPath></defs>` +
+      set("hx-c1") + set("hx-c2") +
+      `<g clip-path="url(#${id})"><path class="hx-liq" d="M-400 40 Q-225 -20 -50 40 T300 40 T650 40 T1000 40 T1350 40 V1200 H-400Z"/></g>` +
+      set("hx-main") + "</svg>";
+    return wrap.firstChild;
+  }
+  // play one variation; restarting the same one needs the attribute cleared for a frame
+  function play(svg, v, ms){
+    svg.removeAttribute("data-v");
+    void svg.getBoundingClientRect();
+    svg.style.setProperty("--fx-dur", ms + "ms");
+    svg.setAttribute("data-v", v);
+  }
+
+  const REDUCED = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+  const NAV_VARIANTS = ["glitch", "line", "duo", "fill", "dots"];
+  const NAV_EVERY = 10000, NAV_MS = 1500;
+
+  /* ---------- intro (once per tab session) ---------- */
+  const intro = document.getElementById("hxIntro");
+  let seen = false;
+  try { seen = sessionStorage.getItem("hxIntro") === "1"; sessionStorage.setItem("hxIntro", "1"); } catch (e) {}
+  let introDone;
+  const introFinished = new Promise((res) => { introDone = res; });
+
+  if (REDUCED || seen || !intro){
+    if (intro) { intro.remove(); }
+    introDone();
+  } else {
+    const holder = intro.querySelector(".hx-intro-in");
+    const svg = makeMark("hx-intro-mark");
+    holder.insertBefore(svg, holder.firstChild);
+    const steps = [["line", 700], ["dots", 420], ["duo", 420], ["glitch", 420], ["fill", 480]];
+    const timers = [];
+    let t = 0;
+    steps.forEach(([v, ms]) => { timers.push(setTimeout(() => play(svg, v, ms), t)); t += ms; });
+    timers.push(setTimeout(() => { svg.removeAttribute("data-v"); intro.classList.add("show-word"); }, t));
+    t += 380;
+
+    let finished = false;
+    const finish = () => {
+      if (finished) { return; }
+      finished = true;
+      timers.forEach(clearTimeout);
+      intro.remove();
+      introDone();
+    };
+    // fly the mark into the nav's top-left mark
+    const fly = () => {
+      const mark = document.querySelector(".nav .mark");
+      if (!mark || finished) { finish(); return; }
+      svg.removeAttribute("data-v");
+      intro.classList.add("is-flying");
+      const a = svg.getBoundingClientRect(), b = mark.getBoundingClientRect();
+      const s = (b.width * (MW + 2 * PAD) / MW) / a.width;
+      const dx = (b.left + b.width / 2) - (a.left + a.width / 2);
+      const dy = (b.top + b.height / 2) - (a.top + a.height / 2);
+      const anim = svg.animate(
+        [{ transform: "none" }, { transform: `translate(${dx}px,${dy}px) scale(${s})` }],
+        { duration: 560, easing: "cubic-bezier(.7,0,.2,1)", fill: "forwards" });
+      anim.onfinish = finish;
+      timers.push(setTimeout(finish, 900)); // safety if the animation never reports back
+    };
+    timers.push(setTimeout(fly, t));
+    // click or any key skips straight to the site
+    intro.addEventListener("click", finish);
+    window.addEventListener("keydown", finish, { once: true });
+  }
+
+  /* ---------- nav replay every 10s ---------- */
+  if (REDUCED) { return; }
+  const startNav = () => {
+    const brand = document.querySelector(".nav .brand");
+    const mark = brand && brand.querySelector(".mark");
+    if (!mark) { return; }
+    const fx = makeMark("mark-fx");
+    brand.appendChild(fx);
+    let i = 0, off;
+    const place = () => {
+      const br = brand.getBoundingClientRect(), mr = mark.getBoundingClientRect();
+      // the raster mark is masked "contain"; size the copy by width and centre it the same way
+      const w = mr.width * (MW + 2 * PAD) / MW, h = w * (MH + 2 * PAD) / (MW + 2 * PAD);
+      fx.style.width = w + "px"; fx.style.height = h + "px";
+      fx.style.left = (mr.left - br.left + mr.width / 2 - w / 2) + "px";
+      fx.style.top = (mr.top - br.top + mr.height / 2 - h / 2) + "px";
+    };
+    const tick = () => {
+      if (document.hidden || mark.offsetParent === null) { return; }
+      // don't fight the pour's gold reward glow on the same mark
+      if (mark.getAnimations && mark.getAnimations().length) { return; }
+      place();
+      brand.classList.add("fx-on");
+      play(fx, NAV_VARIANTS[i++ % NAV_VARIANTS.length], NAV_MS);
+      clearTimeout(off);
+      off = setTimeout(() => { brand.classList.remove("fx-on"); fx.removeAttribute("data-v"); }, NAV_MS + 40);
+    };
+    setInterval(tick, NAV_EVERY);
+  };
+  const ready = () => introFinished.then(startNav);
+  if (document.readyState === "loading") { document.addEventListener("DOMContentLoaded", ready); } else { ready(); }
+})();
+</script>
+
 
 <!-- Shared hand-drawn wobble, used by every illustration on the page so the
      cup, the pouch, the pour and the story icons all read as one hand-sketched
