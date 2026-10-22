@@ -2559,15 +2559,14 @@ body:not(.fun-mode) .galaxy-bg *{animation-play-state:paused!important}
 <style>
 /* ============================================================
    Logo variations: a ~4s intro montage (every load) of the H mark (thin line,
-   dotted, colour combos, glitch, water fill) that lands in the
+   dotted, colour combos, water fill, foil, emboss...) that lands in the
    top-left nav, then one variation replays on the nav mark every
    10s. Shapes are a vector trace of /images/logo-mark.webp.
    ============================================================ */
-.hx{--fx-ink:var(--ink);--fx-paper:var(--paper);--fx-k:1;--fx-a:var(--teal);--fx-b:#ffbf00;--fx-c:#ff2d78;--fx-sw:7;--fx-dur:1.4s;overflow:visible;display:block}
+.hx{--fx-ink:var(--ink);--fx-paper:var(--paper);--fx-k:1;--fx-a:var(--teal);--fx-b:#ffbf00;--fx-sw:7;--fx-dur:1.4s;overflow:visible;display:block}
 .hx path{fill:var(--fx-ink);stroke:none}
 .hx .hx-c1,.hx .hx-c2,.hx .hx-liq{opacity:0}
 .hx .hx-c1 path{fill:var(--fx-a)}
-.hx .hx-c2 path{fill:var(--fx-c)}
 .hx .hx-liq{fill:var(--fx-a)}
 
 /* thin line: drawn on, then filled */
@@ -2593,33 +2592,6 @@ body:not(.fun-mode) .galaxy-bg *{animation-play-state:paused!important}
 .hx[data-v="duo"] .hx-t,.hx[data-v="duo"] .hx-d{animation:hx-duo-b var(--fx-dur) ease both}
 @keyframes hx-duo-a{0%,100%{fill:var(--fx-ink)}14%,82%{fill:var(--fx-a)}}
 @keyframes hx-duo-b{0%,100%{fill:var(--fx-ink)}14%,82%{fill:var(--fx-b)}}
-
-/* glitch: RGB-split copies and sliced jumps */
-.hx[data-v="glitch"]{animation:hx-gl var(--fx-dur) steps(1,end) both}
-.hx[data-v="glitch"] .hx-c1{animation:hx-gl-c1 var(--fx-dur) steps(1,end) both}
-.hx[data-v="glitch"] .hx-c2{animation:hx-gl-c2 var(--fx-dur) steps(1,end) both}
-@keyframes hx-gl{
-  0%{clip-path:inset(0);transform:none}
-  8%{clip-path:inset(12% 0 52% 0);transform:translate(-4%,0)}
-  16%{clip-path:inset(58% 0 6% 0);transform:translate(5%,0)}
-  26%{clip-path:inset(0);transform:translate(-1%,1%)}
-  40%{clip-path:inset(34% 0 33% 0);transform:translate(3%,0)}
-  52%{clip-path:inset(0);transform:none}
-  66%{clip-path:inset(72% 0 0 0);transform:translate(-4%,0)}
-  76%{clip-path:inset(0 0 80% 0);transform:translate(2%,0)}
-  86%,100%{clip-path:inset(0);transform:none}}
-@keyframes hx-gl-c1{
-  0%{opacity:.9;transform:translate(-46px,0)}
-  20%{opacity:.9;transform:translate(-80px,10px)}
-  45%{opacity:.9;transform:translate(-30px,-6px)}
-  70%{opacity:.9;transform:translate(-64px,0)}
-  86%,100%{opacity:0;transform:none}}
-@keyframes hx-gl-c2{
-  0%{opacity:.9;transform:translate(46px,0)}
-  20%{opacity:.9;transform:translate(70px,-8px)}
-  45%{opacity:.9;transform:translate(36px,6px)}
-  70%{opacity:.9;transform:translate(60px,0)}
-  86%,100%{opacity:0;transform:none}}
 
 /* water fill: teal rises through the outline, then settles to ink */
 .hx[data-v="fill"] .hx-main path{
@@ -2655,7 +2627,7 @@ body:not(.fun-mode) .galaxy-bg *{animation-play-state:paused!important}
 :root[data-theme="dark"] .brand .mark-fx{filter:drop-shadow(0 0 1px var(--ink)) drop-shadow(0 0 2px var(--ink))}
 
 /* --- more variations --- */
-.hx .hx-shine{opacity:0;fill:var(--paper)}
+.hx .hx-shine{opacity:0;fill:var(--fx-sheen)}
 .hx-b,.hx-t,.hx-d{transform-box:fill-box;transform-origin:50% 50%}
 
 /* split: the three pieces fly in from different sides and lock together */
@@ -2719,8 +2691,8 @@ body:not(.fun-mode) .galaxy-bg *{animation-play-state:paused!important}
 @keyframes hx-flip-c{0%{fill:var(--fx-ink)}25%{fill:var(--fx-a)}75%,100%{fill:var(--fx-ink)}}
 
 /* shine: an Apple-style sheen sweeps across the mark */
-.hx[data-v="shine"] .hx-shine{animation:hx-shine var(--fx-dur) cubic-bezier(.4,0,.2,1) both}
-@keyframes hx-shine{0%{opacity:.75;transform:translateX(-300px)}85%{opacity:.75;transform:translateX(1150px)}100%{opacity:0;transform:translateX(1150px)}}
+.hx[data-v="shine"] .hx-shine{animation:hx-shine var(--fx-dur) cubic-bezier(.4,.1,.6,.9) both}
+@keyframes hx-shine{0%{opacity:1;transform:translateX(-220px)}88%{opacity:1;transform:translateX(1020px)}100%{opacity:0;transform:translateX(1020px)}}
 
 /* --- ten more --- */
 .hx .hx-scan,.hx .hx-bg{opacity:0}
@@ -2792,6 +2764,81 @@ body:not(.fun-mode) .galaxy-bg *{animation-play-state:paused!important}
 @keyframes hx-sh-t{0%,100%{transform:none}35%,45%{transform:translate(180px,-280px) rotate(34deg)}85%{transform:none}}
 @keyframes hx-sh-d{0%,100%{transform:none}35%,45%{transform:translate(220px,250px) rotate(-48deg)}85%{transform:none}}
 
+/* --- premium looks: slower, eased, material rather than effects --- */
+.hx{--fx-ease:cubic-bezier(.65,0,.35,1);--fx-out:cubic-bezier(.16,1,.3,1)}
+.hx .hx-bloom{opacity:0;fill:var(--fx-ink);transform-box:fill-box;transform-origin:50% 50%}
+
+/* foil / chrome / deep: the ink fades away to the material layer underneath (hx-c1), a soft
+   light passes over it, and the ink fades back */
+.hx[data-v="foil"] .hx-c1 path{fill:var(--fx-foil)}
+.hx[data-v="chrome"] .hx-c1 path{fill:var(--fx-chrome)}
+.hx[data-v="deep"] .hx-c1 path{fill:var(--fx-deep)}
+.hx[data-v="foil"] .hx-c1,.hx[data-v="chrome"] .hx-c1,.hx[data-v="deep"] .hx-c1{animation:hx-xfade-in var(--fx-dur) var(--fx-ease) both}
+.hx[data-v="foil"] .hx-main path,.hx[data-v="chrome"] .hx-main path,.hx[data-v="deep"] .hx-main path{animation:hx-xfade-out var(--fx-dur) var(--fx-ease) both}
+.hx[data-v="foil"] .hx-shine,.hx[data-v="chrome"] .hx-shine{animation:hx-sheen var(--fx-dur) cubic-bezier(.4,.1,.6,.9) both}
+@keyframes hx-xfade-in{0%{opacity:0}24%,76%{opacity:1}100%{opacity:0}}
+@keyframes hx-xfade-out{0%{fill-opacity:1}24%,76%{fill-opacity:0}100%{fill-opacity:1}}
+@keyframes hx-sheen{0%,20%{opacity:1;transform:translateX(-220px)}76%{opacity:1;transform:translateX(1020px)}100%{opacity:0;transform:translateX(1020px)}}
+
+/* emboss: the mark turns to paper and is pressed into the surface, like letterpress */
+.hx[data-v="emboss"]{animation:hx-emb var(--fx-dur) var(--fx-ease) both}
+.hx[data-v="emboss"] .hx-main path{animation:hx-emb-fill var(--fx-dur) var(--fx-ease) both}
+@keyframes hx-emb-fill{0%,100%{fill:var(--fx-ink)}26%,74%{fill:var(--fx-paper)}}
+@keyframes hx-emb{
+  0%,100%{filter:drop-shadow(0 0 0 rgba(255,255,255,0)) drop-shadow(0 0 0 rgba(0,0,0,0))}
+  26%,74%{filter:
+    drop-shadow(calc(max(.8px, 1.2px * var(--fx-k)) * -1) calc(max(.8px, 1.2px * var(--fx-k)) * -1) 0 rgba(255,255,255,.95))
+    drop-shadow(max(.8px, calc(1.6px * var(--fx-k))) max(1px, calc(2px * var(--fx-k))) max(1px, calc(2.4px * var(--fx-k))) rgba(0,0,0,.3))}}
+
+/* bloom: settles to a hairline, then ink spreads out from the drop and fills it */
+.hx[data-v="bloom"] .hx-main path{stroke:var(--fx-ink);stroke-width:var(--fx-sw);animation:hx-bloom-main var(--fx-dur) var(--fx-ease) both}
+.hx[data-v="bloom"] .hx-bloom{animation:hx-bloom var(--fx-dur) cubic-bezier(.55,0,.25,1) both}
+@keyframes hx-bloom-main{
+  0%{fill-opacity:1;stroke-opacity:0}
+  16%,86%{fill-opacity:0;stroke-opacity:1}
+  100%{fill-opacity:1;stroke-opacity:0}}
+@keyframes hx-bloom{0%,20%{opacity:1;transform:scale(0)}86%{opacity:1;transform:scale(1)}100%{opacity:0;transform:scale(1)}}
+
+/* iris: a circular aperture closes on the mark and opens again */
+.hx[data-v="iris"]{animation:hx-iris var(--fx-dur) var(--fx-ease) both}
+@keyframes hx-iris{
+  0%{clip-path:circle(75% at 50% 56%);transform:none}
+  38%{clip-path:circle(0% at 50% 56%);transform:scale(.97)}
+  42%{clip-path:circle(0% at 50% 56%);transform:scale(1.05)}
+  100%{clip-path:circle(75% at 50% 56%);transform:none}}
+
+/* rise: dissolves upward, then rises back into place out of a soft blur */
+.hx[data-v="rise"]{animation:hx-rise var(--fx-dur) var(--fx-out) both}
+@keyframes hx-rise{
+  0%{opacity:1;transform:none;filter:blur(0)}
+  24%{opacity:0;transform:translateY(-5%);filter:blur(calc(6px * var(--fx-k)))}
+  25%{opacity:0;transform:translateY(9%);filter:blur(calc(6px * var(--fx-k)))}
+  82%,100%{opacity:1;transform:none;filter:blur(0)}}
+
+/* trace: a hairline redraws the outline behind a small teal light, then the ink returns */
+.hx[data-v="trace"] .hx-main path{
+  stroke:var(--fx-ink);stroke-width:var(--fx-sw);stroke-dasharray:1 1;
+  animation:hx-trace var(--fx-dur) var(--fx-ease) both}
+.hx[data-v="trace"] .hx-c1{animation:hx-trace-glow var(--fx-dur) linear both}
+.hx[data-v="trace"] .hx-c1 path{
+  fill:none;stroke:var(--fx-a);stroke-width:calc(var(--fx-sw) * 2.2);stroke-linecap:round;stroke-dasharray:.05 .95;
+  animation:hx-trace-run var(--fx-dur) var(--fx-ease) both}
+@keyframes hx-trace{
+  0%{fill-opacity:1;stroke-opacity:0;stroke-dashoffset:0}
+  14%{fill-opacity:0;stroke-opacity:1;stroke-dashoffset:1}
+  78%{fill-opacity:0;stroke-opacity:1;stroke-dashoffset:0}
+  100%{fill-opacity:1;stroke-opacity:0;stroke-dashoffset:0}}
+@keyframes hx-trace-run{0%,14%{stroke-dashoffset:.05}78%,100%{stroke-dashoffset:-.95}}
+@keyframes hx-trace-glow{0%,12%{opacity:0}18%,72%{opacity:1}80%,100%{opacity:0}}
+
+/* breathe: a slow swell with a soft lift and a deep-teal tint */
+.hx[data-v="breathe"]{animation:hx-breathe var(--fx-dur) cubic-bezier(.45,0,.55,1) both}
+.hx[data-v="breathe"] .hx-main path{animation:hx-breathe-c var(--fx-dur) cubic-bezier(.45,0,.55,1) both}
+@keyframes hx-breathe{
+  0%,100%{transform:none;filter:drop-shadow(0 0 0 rgba(0,0,0,0))}
+  50%{transform:scale(1.045);filter:drop-shadow(0 calc(6px * var(--fx-k)) calc(12px * var(--fx-k)) rgba(0,40,44,.22))}}
+@keyframes hx-breathe-c{0%,100%{fill:var(--fx-ink)}50%{fill:#0b4f55}}
+
 /* --- the same replay on the CSS packs and the packets in the photos --- */
 .fx-on > .mark,.fx-on > .pack-mark{opacity:0}
 .photo-fx{position:absolute;left:0;top:0;width:0;height:0;overflow:visible;pointer-events:none;visibility:hidden;z-index:1}
@@ -2814,24 +2861,40 @@ body:not(.fun-mode) .galaxy-bg *{animation-play-state:paused!important}
     t:"M464 16 644 17 654 19 660 24 666 34 668 43 665 237 664 281 663 284 614 266 555 256 511 256 489 260 463 268 456 266 457 25 458 19Z",
     d:"M584 581 587 582 592 589 618 635 654 719 670 766 679 806 683 837 684 873 679 905 669 944 659 966 644 991 616 1021 589 1037 547 1049 532 1050 480 1046 458 1040 445 1033 418 1011 401 989 387 959 381 934 379 908 383 885 397 838 414 797 434 758 463 710 490 672 521 634 551 605Z"
   };
-  // the viewBox pads the 700x1058 mark by 20 on every side so strokes and glitch offsets aren't cut off
+  // the viewBox pads the 700x1058 mark by 20 on every side so strokes and offsets aren't cut off
   const PAD = 20, MW = 700, MH = 1058;
   let uid = 0;
   function makeMark(cls){
-    const id = "hxClip" + (++uid), rough = "hxRough" + uid;
+    const id = "hxClip" + (++uid), rough = "hxRough" + uid, gid = "hxG" + uid;
     const set = (c) => `<g class="${c}">` + ["b","t","d"].map((k) => `<path class="hx-${k}" pathLength="1" d="${PATHS[k]}"/>`).join("") + "</g>";
     const wrap = document.createElement("div");
     wrap.innerHTML =
       `<svg class="hx ${cls}" viewBox="${-PAD} ${-PAD} ${MW + 2 * PAD} ${MH + 2 * PAD}" aria-hidden="true" focusable="false">` +
       `<defs><clipPath id="${id}"><path d="${PATHS.b} ${PATHS.t} ${PATHS.d}"/></clipPath>` +
-      `<filter id="${rough}" x="-10%" y="-10%" width="120%" height="120%"><feTurbulence type="fractalNoise" baseFrequency=".025" numOctaves="2" seed="7"/><feDisplacementMap in="SourceGraphic" scale="22"/></filter></defs>` +
+      `<filter id="${rough}" x="-10%" y="-10%" width="120%" height="120%"><feTurbulence type="fractalNoise" baseFrequency=".025" numOctaves="2" seed="7"/><feDisplacementMap in="SourceGraphic" scale="22"/></filter>` +
+      `<linearGradient id="${gid}f" gradientUnits="userSpaceOnUse" x1="0" y1="0" x2="700" y2="1058">` +
+        `<stop offset="0" stop-color="#7a5a22"/><stop offset=".22" stop-color="#c9a456"/><stop offset=".42" stop-color="#f7e7b4"/>` +
+        `<stop offset=".58" stop-color="#b8903f"/><stop offset=".8" stop-color="#e6c983"/><stop offset="1" stop-color="#6e5020"/></linearGradient>` +
+      `<linearGradient id="${gid}c" gradientUnits="userSpaceOnUse" x1="0" y1="0" x2="700" y2="1058">` +
+        `<stop offset="0" stop-color="#4d5761"/><stop offset=".25" stop-color="#e8edf1"/><stop offset=".45" stop-color="#8f9aa4"/>` +
+        `<stop offset=".6" stop-color="#ffffff"/><stop offset=".8" stop-color="#66717b"/><stop offset="1" stop-color="#c3cbd2"/></linearGradient>` +
+      `<linearGradient id="${gid}d" gradientUnits="userSpaceOnUse" x1="0" y1="0" x2="0" y2="1058">` +
+        `<stop offset="0" stop-color="#0f6f73"/><stop offset=".55" stop-color="#0b3f45"/><stop offset="1" stop-color="#071c20"/></linearGradient>` +
+      `<linearGradient id="${gid}s" x1="0" y1="0" x2="1" y2="0">` +
+        `<stop offset="0" stop-color="#fff" stop-opacity="0"/><stop offset=".5" stop-color="#fff" stop-opacity=".85"/><stop offset="1" stop-color="#fff" stop-opacity="0"/></linearGradient>` +
+      `</defs>` +
       `<rect class="hx-bg" x="-130" y="-90" width="960" height="1238" rx="150"/>` +
       set("hx-c1") + set("hx-c2") +
-      `<g clip-path="url(#${id})"><path class="hx-liq" d="M-400 40 Q-225 -20 -50 40 T300 40 T650 40 T1000 40 T1350 40 V1200 H-400Z"/></g>` +
+      `<g clip-path="url(#${id})"><path class="hx-liq" d="M-400 40 Q-225 -20 -50 40 T300 40 T650 40 T1000 40 T1350 40 V1200 H-400Z"/><circle class="hx-bloom" cx="520" cy="900" r="1150"/></g>` +
       set("hx-main") +
-      `<g clip-path="url(#${id})"><path class="hx-shine" d="M-60 -40 H80 L-140 1120 H-280Z"/></g>` +
+      `<g clip-path="url(#${id})"><path class="hx-shine" d="M-60 -40 H180 L-40 1120 H-280Z"/></g>` +
       `<rect class="hx-scan" x="-80" y="-34" width="860" height="28" rx="14"/>` + "</svg>";
-    wrap.firstChild.style.setProperty("--fx-rough", `url(#${rough})`);
+    const st = wrap.firstChild.style;
+    st.setProperty("--fx-rough", `url(#${rough})`);
+    st.setProperty("--fx-foil", `url(#${gid}f)`);
+    st.setProperty("--fx-chrome", `url(#${gid}c)`);
+    st.setProperty("--fx-deep", `url(#${gid}d)`);
+    st.setProperty("--fx-sheen", `url(#${gid}s)`);
     return wrap.firstChild;
   }
   // play one variation; restarting the same one needs the attribute cleared for a frame
@@ -2843,9 +2906,11 @@ body:not(.fun-mode) .galaxy-bg *{animation-play-state:paused!important}
   }
 
   const REDUCED = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-  const NAV_VARIANTS = ["glitch", "line", "stamp", "duo", "split", "ripple", "neon", "fill", "jelly", "echo", "scan", "drip",
-    "hue", "dots", "badge", "sketch", "wave", "flip", "focus", "shine", "spin", "shatter"];
+  const NAV_VARIANTS = ["foil", "line", "stamp", "duo", "emboss", "split", "ripple", "chrome", "neon", "fill", "iris",
+    "jelly", "echo", "bloom", "scan", "drip", "rise", "hue", "dots", "trace", "badge", "sketch", "deep", "wave", "flip",
+    "breathe", "focus", "shine", "spin", "shatter"];
   const NAV_EVERY = 10000, NAV_MS = 1500;
+  const LOOK_MS = { foil: 2400, chrome: 2400, emboss: 2200, bloom: 2000, iris: 1800, rise: 1800, trace: 2200, deep: 2200, breathe: 2600, shine: 1800 };
 
   /* ---------- intro (~5s, on every load) ---------- */
   const intro = document.getElementById("hxIntro");
@@ -2859,8 +2924,7 @@ body:not(.fun-mode) .galaxy-bg *{animation-play-state:paused!important}
     const holder = intro.querySelector(".hx-intro-in");
     const svg = makeMark("hx-intro-mark");
     holder.insertBefore(svg, holder.firstChild);
-    const steps = [["split", 350], ["line", 360], ["neon", 250], ["duo", 220], ["glitch", 250], ["stamp", 250], ["ripple", 260],
-      ["hue", 230], ["scan", 260], ["shatter", 290], ["badge", 230], ["fill", 290]];
+    const steps = [["rise", 480], ["trace", 520], ["foil", 500], ["emboss", 440], ["iris", 400], ["chrome", 460], ["bloom", 400]];
     const timers = [];
     let t = 0;
     steps.forEach(([v, ms]) => { timers.push(setTimeout(() => play(svg, v, ms), t)); t += ms; });
@@ -2995,7 +3059,7 @@ body:not(.fun-mode) .galaxy-bg *{animation-play-state:paused!important}
     return {
       svgs: logos.map((l) => l.svg),
       ready: place,
-      on(){ layer.classList.add("fx-on"); until = performance.now() + NAV_MS; if (!raf) { raf = requestAnimationFrame(follow); } },
+      on(ms){ layer.classList.add("fx-on"); until = performance.now() + ms; if (!raf) { raf = requestAnimationFrame(follow); } },
       off(){ layer.classList.remove("fx-on"); }
     };
   }
@@ -3009,17 +3073,17 @@ body:not(.fun-mode) .galaxy-bg *{animation-play-state:paused!important}
     let i = 0, off;
     const tick = () => {
       if (document.hidden) { return; }
-      const v = NAV_VARIANTS[i++ % NAV_VARIANTS.length];
+      const v = NAV_VARIANTS[i++ % NAV_VARIANTS.length], ms = LOOK_MS[v] || NAV_MS;
       const live = targets.filter((t) => t.ready());
       live.forEach((t) => {
-        t.on();
-        (t.svgs || [t.svg]).forEach((svg) => play(svg, v, NAV_MS));
+        t.on(ms);
+        (t.svgs || [t.svg]).forEach((svg) => play(svg, v, ms));
       });
       clearTimeout(off);
       off = setTimeout(() => live.forEach((t) => {
         t.off();
         (t.svgs || [t.svg]).forEach((svg) => svg.removeAttribute("data-v"));
-      }), NAV_MS + 40);
+      }), ms + 40);
     };
     setInterval(tick, NAV_EVERY);
   };
