@@ -2839,6 +2839,59 @@ body:not(.fun-mode) .galaxy-bg *{animation-play-state:paused!important}
   50%{transform:scale(1.045);filter:drop-shadow(0 calc(6px * var(--fx-k)) calc(12px * var(--fx-k)) rgba(0,40,44,.22))}}
 @keyframes hx-breathe-c{0%,100%{fill:var(--fx-ink)}50%{fill:#0b4f55}}
 
+/* rose gold / pearl / engraved: more materials, same cross-fade as foil */
+.hx[data-v="rosegold"] .hx-c1 path{fill:var(--fx-rose)}
+.hx[data-v="pearl"] .hx-c1 path{fill:var(--fx-pearl);stroke:rgba(14,20,20,.22);stroke-width:var(--fx-sw)}
+.hx[data-v="engrave"] .hx-c1 path{fill:var(--fx-engrave);stroke:var(--fx-ink);stroke-width:var(--fx-sw)}
+.hx[data-v="rosegold"] .hx-c1,.hx[data-v="pearl"] .hx-c1,.hx[data-v="engrave"] .hx-c1{animation:hx-xfade-in var(--fx-dur) var(--fx-ease) both}
+.hx[data-v="rosegold"] .hx-main path,.hx[data-v="pearl"] .hx-main path,.hx[data-v="engrave"] .hx-main path{animation:hx-xfade-out var(--fx-dur) var(--fx-ease) both}
+.hx[data-v="rosegold"] .hx-shine,.hx[data-v="pearl"] .hx-shine{animation:hx-sheen var(--fx-dur) cubic-bezier(.4,.1,.6,.9) both}
+
+/* wipe: a feathered curtain draws across, then pulls back */
+.hx[data-v="wipe"]{
+  -webkit-mask-image:linear-gradient(90deg,#000 40%,transparent 60%);mask-image:linear-gradient(90deg,#000 40%,transparent 60%);
+  -webkit-mask-size:250% 100%;mask-size:250% 100%;-webkit-mask-repeat:no-repeat;mask-repeat:no-repeat;
+  animation:hx-wipe var(--fx-dur) var(--fx-ease) both}
+@keyframes hx-wipe{
+  0%{-webkit-mask-position:0% 0;mask-position:0% 0}
+  45%,55%{-webkit-mask-position:100% 0;mask-position:100% 0}
+  100%{-webkit-mask-position:0% 0;mask-position:0% 0}}
+
+/* layers: the mark lifts off two tinted paper layers, then settles back */
+.hx[data-v="layers"] .hx-c1 path{fill:#bfe3e3}
+.hx[data-v="layers"] .hx-c2 path{fill:var(--fx-a)}
+.hx[data-v="layers"] .hx-c1{animation:hx-lay-1 var(--fx-dur) var(--fx-ease) both}
+.hx[data-v="layers"] .hx-c2{animation:hx-lay-2 var(--fx-dur) var(--fx-ease) both}
+.hx[data-v="layers"] .hx-main{animation:hx-lay-0 var(--fx-dur) var(--fx-ease) both}
+@keyframes hx-lay-1{0%,100%{opacity:1;transform:none}30%,70%{opacity:1;transform:translate(46px,46px)}}
+@keyframes hx-lay-2{0%,100%{opacity:1;transform:none}30%,70%{opacity:1;transform:translate(23px,23px)}}
+@keyframes hx-lay-0{0%,100%{transform:none}30%,70%{transform:translate(-12px,-12px)}}
+
+/* tilt: a slow 3D tilt, like turning a card in the light, with a sheen */
+.hx[data-v="tilt"]{animation:hx-tilt var(--fx-dur) cubic-bezier(.45,0,.55,1) both}
+.hx[data-v="tilt"] .hx-shine{animation:hx-sheen var(--fx-dur) cubic-bezier(.45,0,.55,1) both}
+@keyframes hx-tilt{
+  0%,100%{transform:perspective(700px) rotateX(0) rotateY(0)}
+  30%{transform:perspective(700px) rotateX(8deg) rotateY(-20deg)}
+  70%{transform:perspective(700px) rotateX(-6deg) rotateY(18deg)}}
+
+/* halo: a small gold light travels once around the edge */
+.hx[data-v="halo"] .hx-c1{animation:hx-trace-glow var(--fx-dur) linear both}
+.hx[data-v="halo"] .hx-c1 path{
+  fill:none;stroke:var(--fx-b);stroke-width:calc(var(--fx-sw) * 5);stroke-linecap:round;stroke-dasharray:.1 .9;
+  animation:hx-halo var(--fx-dur) var(--fx-ease) both}
+@keyframes hx-halo{0%,12%{stroke-dashoffset:.1}80%,100%{stroke-dashoffset:-.9}}
+
+/* spotlight: a soft round light drifts across the ink */
+.hx .hx-spot{opacity:0;fill:var(--fx-spot)}
+.hx[data-v="spotlight"] .hx-spot{animation:hx-spot var(--fx-dur) cubic-bezier(.45,0,.55,1) both}
+@keyframes hx-spot{
+  0%{opacity:0;transform:translate(-120px,-80px)}
+  15%{opacity:1}
+  50%{transform:translate(380px,520px)}
+  85%{opacity:1}
+  100%{opacity:0;transform:translate(120px,1060px)}}
+
 /* --- the same replay on the CSS packs and the packets in the photos --- */
 .fx-on > .mark,.fx-on > .pack-mark{opacity:0}
 .photo-fx{position:absolute;left:0;top:0;width:0;height:0;overflow:visible;pointer-events:none;visibility:hidden;z-index:1}
@@ -2882,12 +2935,22 @@ body:not(.fun-mode) .galaxy-bg *{animation-play-state:paused!important}
         `<stop offset="0" stop-color="#0f6f73"/><stop offset=".55" stop-color="#0b3f45"/><stop offset="1" stop-color="#071c20"/></linearGradient>` +
       `<linearGradient id="${gid}s" x1="0" y1="0" x2="1" y2="0">` +
         `<stop offset="0" stop-color="#fff" stop-opacity="0"/><stop offset=".5" stop-color="#fff" stop-opacity=".85"/><stop offset="1" stop-color="#fff" stop-opacity="0"/></linearGradient>` +
+      `<linearGradient id="${gid}r" gradientUnits="userSpaceOnUse" x1="0" y1="0" x2="700" y2="1058">` +
+        `<stop offset="0" stop-color="#8e5249"/><stop offset=".24" stop-color="#d49a8e"/><stop offset=".44" stop-color="#fbe0d6"/>` +
+        `<stop offset=".6" stop-color="#c07f73"/><stop offset=".8" stop-color="#eebfb2"/><stop offset="1" stop-color="#7d443c"/></linearGradient>` +
+      `<linearGradient id="${gid}p" gradientUnits="userSpaceOnUse" x1="0" y1="0" x2="700" y2="1058">` +
+        `<stop offset="0" stop-color="#e9e4f4"/><stop offset=".3" stop-color="#cfeeea"/><stop offset=".52" stop-color="#fbe2ec"/>` +
+        `<stop offset=".7" stop-color="#ffffff"/><stop offset="1" stop-color="#d8e2f6"/></linearGradient>` +
+      `<pattern id="${gid}e" patternUnits="userSpaceOnUse" width="18" height="18" patternTransform="rotate(35)">` +
+        `<rect width="18" height="7" style="fill:var(--fx-ink)"/></pattern>` +
+      `<radialGradient id="${gid}l"><stop offset="0" stop-color="#fff" stop-opacity=".7"/><stop offset=".45" stop-color="#fff" stop-opacity=".25"/>` +
+        `<stop offset="1" stop-color="#fff" stop-opacity="0"/></radialGradient>` +
       `</defs>` +
       `<rect class="hx-bg" x="-130" y="-90" width="960" height="1238" rx="150"/>` +
       set("hx-c1") + set("hx-c2") +
       `<g clip-path="url(#${id})"><path class="hx-liq" d="M-400 40 Q-225 -20 -50 40 T300 40 T650 40 T1000 40 T1350 40 V1200 H-400Z"/><circle class="hx-bloom" cx="520" cy="900" r="1150"/></g>` +
       set("hx-main") +
-      `<g clip-path="url(#${id})"><path class="hx-shine" d="M-60 -40 H180 L-40 1120 H-280Z"/></g>` +
+      `<g clip-path="url(#${id})"><path class="hx-shine" d="M-60 -40 H180 L-40 1120 H-280Z"/><circle class="hx-spot" cx="0" cy="0" r="330"/></g>` +
       `<rect class="hx-scan" x="-80" y="-34" width="860" height="28" rx="14"/>` + "</svg>";
     const st = wrap.firstChild.style;
     st.setProperty("--fx-rough", `url(#${rough})`);
@@ -2895,6 +2958,10 @@ body:not(.fun-mode) .galaxy-bg *{animation-play-state:paused!important}
     st.setProperty("--fx-chrome", `url(#${gid}c)`);
     st.setProperty("--fx-deep", `url(#${gid}d)`);
     st.setProperty("--fx-sheen", `url(#${gid}s)`);
+    st.setProperty("--fx-rose", `url(#${gid}r)`);
+    st.setProperty("--fx-pearl", `url(#${gid}p)`);
+    st.setProperty("--fx-engrave", `url(#${gid}e)`);
+    st.setProperty("--fx-spot", `url(#${gid}l)`);
     return wrap.firstChild;
   }
   // play one variation; restarting the same one needs the attribute cleared for a frame
@@ -2906,11 +2973,12 @@ body:not(.fun-mode) .galaxy-bg *{animation-play-state:paused!important}
   }
 
   const REDUCED = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-  const NAV_VARIANTS = ["foil", "line", "stamp", "duo", "emboss", "split", "ripple", "chrome", "neon", "fill", "iris",
-    "jelly", "echo", "bloom", "scan", "drip", "rise", "hue", "dots", "trace", "badge", "sketch", "deep", "wave", "flip",
-    "breathe", "focus", "shine", "spin", "shatter"];
+  const NAV_VARIANTS = ["foil", "line", "tilt", "stamp", "duo", "emboss", "split", "rosegold", "ripple", "chrome", "neon",
+    "layers", "fill", "iris", "jelly", "halo", "echo", "bloom", "scan", "pearl", "drip", "rise", "hue", "wipe", "dots",
+    "trace", "badge", "engrave", "sketch", "deep", "wave", "spotlight", "flip", "breathe", "focus", "shine", "spin", "shatter"];
   const NAV_EVERY = 10000, NAV_MS = 1500;
-  const LOOK_MS = { foil: 2400, chrome: 2400, emboss: 2200, bloom: 2000, iris: 1800, rise: 1800, trace: 2200, deep: 2200, breathe: 2600, shine: 1800 };
+  const LOOK_MS = { foil: 2400, chrome: 2400, emboss: 2200, bloom: 2000, iris: 1800, rise: 1800, trace: 2200, deep: 2200, breathe: 2600, shine: 1800,
+    rosegold: 2400, pearl: 2400, engrave: 2400, wipe: 2000, layers: 2200, tilt: 2400, halo: 2200, spotlight: 2400 };
 
   /* ---------- intro (~5s, on every load) ---------- */
   const intro = document.getElementById("hxIntro");
