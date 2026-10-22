@@ -2558,7 +2558,7 @@ body:not(.fun-mode) .galaxy-bg *{animation-play-state:paused!important}
 
 <style>
 /* ============================================================
-   Logo variations: a ~4s intro montage (every load) of the H mark (thin line,
+   Logo variations: a ~4s intro montage (every load, all looks cut fast) of the H mark (thin line,
    dotted, colour combos, water fill, foil, emboss...) that lands in the
    top-left nav, then one variation replays on the nav mark every
    10s. Shapes are a vector trace of /images/logo-mark.webp.
@@ -2992,10 +2992,21 @@ body:not(.fun-mode) .galaxy-bg *{animation-play-state:paused!important}
     const holder = intro.querySelector(".hx-intro-in");
     const svg = makeMark("hx-intro-mark");
     holder.insertBefore(svg, holder.firstChild);
-    const steps = [["rise", 480], ["trace", 520], ["foil", 500], ["emboss", 440], ["iris", 400], ["chrome", 460], ["bloom", 400]];
+    // every look, cut fast: each one starts at its most recognisable moment and keeps moving for its slot
+    const PEAK = { line: .45, dots: .4, split: .25, neon: .5, echo: .35, drip: .6, sketch: .6, flip: .35, shine: .45,
+      stamp: .25, scan: .45, ripple: .4, hue: .2, wave: .3, jelly: .17, focus: .3, spin: .4, shatter: .4, chrome: .45,
+      bloom: .55, iris: .7, rise: .55, trace: .45, wipe: .2, tilt: .3, halo: .45, spotlight: .45 };
+    const SLOT = 85, LOOK = 1500;
+    const steps = NAV_VARIANTS.map((v) => [v, SLOT]);
     const timers = [];
     let t = 0;
-    steps.forEach(([v, ms]) => { timers.push(setTimeout(() => play(svg, v, ms), t)); t += ms; });
+    steps.forEach(([v, ms]) => {
+      timers.push(setTimeout(() => {
+        play(svg, v, LOOK);
+        svg.getAnimations({ subtree: true }).forEach((a) => { a.currentTime = LOOK * (PEAK[v] ?? .5); });
+      }, t));
+      t += ms;
+    });
     timers.push(setTimeout(() => { svg.removeAttribute("data-v"); intro.classList.add("show-word"); }, t));
     t += 250;
 
