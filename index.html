@@ -2558,7 +2558,7 @@ body:not(.fun-mode) .galaxy-bg *{animation-play-state:paused!important}
 
 <style>
 /* ============================================================
-   Logo variations: a ~3s intro montage of the H mark (thin line,
+   Logo variations: a ~5s intro montage (every load) of the H mark (thin line,
    dotted, colour combos, glitch, water fill) that lands in the
    top-left nav, then one variation replays on the nav mark every
    10s. Shapes are a vector trace of /images/logo-mark.webp.
@@ -2847,26 +2847,25 @@ body:not(.fun-mode) .galaxy-bg *{animation-play-state:paused!important}
     "hue", "dots", "badge", "sketch", "wave", "flip", "focus", "shine", "spin", "shatter"];
   const NAV_EVERY = 10000, NAV_MS = 1500;
 
-  /* ---------- intro (once per tab session) ---------- */
+  /* ---------- intro (~5s, on every load) ---------- */
   const intro = document.getElementById("hxIntro");
-  let seen = false;
-  try { seen = sessionStorage.getItem("hxIntro") === "1"; sessionStorage.setItem("hxIntro", "1"); } catch (e) {}
   let introDone;
   const introFinished = new Promise((res) => { introDone = res; });
 
-  if (REDUCED || seen || !intro){
+  if (REDUCED || !intro){
     if (intro) { intro.remove(); }
     introDone();
   } else {
     const holder = intro.querySelector(".hx-intro-in");
     const svg = makeMark("hx-intro-mark");
     holder.insertBefore(svg, holder.firstChild);
-    const steps = [["split", 450], ["line", 560], ["neon", 380], ["duo", 320], ["glitch", 360], ["fill", 420]];
+    const steps = [["split", 450], ["line", 460], ["neon", 330], ["duo", 280], ["glitch", 320], ["stamp", 330], ["ripple", 340],
+      ["hue", 300], ["scan", 340], ["shatter", 380], ["badge", 300], ["fill", 380]];
     const timers = [];
     let t = 0;
     steps.forEach(([v, ms]) => { timers.push(setTimeout(() => play(svg, v, ms), t)); t += ms; });
     timers.push(setTimeout(() => { svg.removeAttribute("data-v"); intro.classList.add("show-word"); }, t));
-    t += 380;
+    t += 300;
 
     let finished = false;
     const finish = () => {
