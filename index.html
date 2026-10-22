@@ -2654,6 +2654,74 @@ body:not(.fun-mode) .galaxy-bg *{animation-play-state:paused!important}
 }
 :root[data-theme="dark"] .mark-fx{filter:drop-shadow(0 0 1px var(--ink)) drop-shadow(0 0 2px var(--ink))}
 
+/* --- more variations --- */
+.hx .hx-shine{opacity:0;fill:var(--paper)}
+.hx-b,.hx-t,.hx-d{transform-box:fill-box;transform-origin:50% 50%}
+
+/* split: the three pieces fly in from different sides and lock together */
+.hx[data-v="split"] .hx-main .hx-b{animation:hx-split-b var(--fx-dur) cubic-bezier(.2,1.3,.4,1) both}
+.hx[data-v="split"] .hx-main .hx-t{animation:hx-split-t var(--fx-dur) cubic-bezier(.2,1.3,.4,1) both}
+.hx[data-v="split"] .hx-main .hx-d{animation:hx-split-d var(--fx-dur) cubic-bezier(.2,1.3,.4,1) both}
+@keyframes hx-split-b{0%{opacity:0;transform:translate(-420px,0) rotate(-8deg)}55%,100%{opacity:1;transform:none}}
+@keyframes hx-split-t{0%,12%{opacity:0;transform:translate(0,-520px)}62%,100%{opacity:1;transform:none}}
+@keyframes hx-split-d{0%,22%{opacity:0;transform:translate(380px,320px) rotate(40deg) scale(.4)}72%,100%{opacity:1;transform:none}}
+
+/* neon: glowing teal tube that flickers on, then settles to ink */
+.hx[data-v="neon"]{animation:hx-neon-glow var(--fx-dur) steps(1,end) both}
+.hx[data-v="neon"] .hx-main path{
+  stroke:var(--fx-a);stroke-width:calc(var(--fx-sw) * 1.6);stroke-linejoin:round;
+  animation:hx-neon var(--fx-dur) ease both}
+@keyframes hx-neon-glow{
+  0%{filter:none;opacity:.2}
+  8%{filter:drop-shadow(0 0 4px var(--fx-a)) drop-shadow(0 0 12px var(--fx-a));opacity:1}
+  14%{opacity:.25}
+  20%,80%{filter:drop-shadow(0 0 4px var(--fx-a)) drop-shadow(0 0 12px var(--fx-a));opacity:1}
+  90%,100%{filter:none;opacity:1}}
+@keyframes hx-neon{0%,80%{fill-opacity:0;stroke-opacity:1}100%{fill-opacity:1;stroke-opacity:0}}
+
+/* echo: teal and gold outlines trail behind and converge */
+.hx[data-v="echo"] .hx-c1 path,.hx[data-v="echo"] .hx-c2 path{fill:none;stroke-width:calc(var(--fx-sw) * 1.5)}
+.hx[data-v="echo"] .hx-c1 path{stroke:var(--fx-a)}
+.hx[data-v="echo"] .hx-c2 path{stroke:var(--fx-b)}
+.hx[data-v="echo"] .hx-c1{animation:hx-echo-1 var(--fx-dur) cubic-bezier(.5,0,.2,1) both}
+.hx[data-v="echo"] .hx-c2{animation:hx-echo-2 var(--fx-dur) cubic-bezier(.5,0,.2,1) both}
+.hx[data-v="echo"] .hx-main{animation:hx-echo-main var(--fx-dur) ease both}
+@keyframes hx-echo-1{0%{opacity:1;transform:translate(-90px,-60px)}70%{opacity:1;transform:none}100%{opacity:0;transform:none}}
+@keyframes hx-echo-2{0%{opacity:1;transform:translate(90px,60px)}70%{opacity:1;transform:none}100%{opacity:0;transform:none}}
+@keyframes hx-echo-main{0%{opacity:0}30%{opacity:.15}100%{opacity:1}}
+
+/* drip: the stem and cap grow up, then the drop falls in and bounces */
+.hx[data-v="drip"] .hx-main .hx-b,.hx[data-v="drip"] .hx-main .hx-t{transform-origin:50% 100%;animation:hx-grow var(--fx-dur) cubic-bezier(.3,1.4,.5,1) both}
+.hx[data-v="drip"] .hx-main .hx-d{transform-origin:50% 100%;animation:hx-drip var(--fx-dur) ease-in both}
+.hx[data-v="drip"] .hx-main .hx-d{fill:var(--fx-a);animation-name:hx-drip,hx-drip-c}
+@keyframes hx-grow{0%{transform:scaleY(0)}40%,100%{transform:none}}
+@keyframes hx-drip{
+  0%,30%{opacity:0;transform:translateY(-760px) scale(.7,1.15)}
+  32%{opacity:1}
+  58%{transform:translateY(0) scale(1.18,.78);animation-timing-function:ease-out}
+  70%{transform:translateY(-60px) scale(.95,1.05);animation-timing-function:ease-in}
+  80%,100%{opacity:1;transform:none}}
+@keyframes hx-drip-c{0%,85%{fill:var(--fx-a)}100%{fill:var(--fx-ink)}}
+
+/* sketch: wobbly pencil outline, scribbled twice, then inked */
+.hx[data-v="sketch"] .hx-main,.hx[data-v="sketch"] .hx-c1{filter:var(--fx-rough)}
+.hx[data-v="sketch"] .hx-main path,.hx[data-v="sketch"] .hx-c1 path{
+  stroke:var(--fx-ink);stroke-width:var(--fx-sw);stroke-linecap:round;stroke-dasharray:1 1}
+.hx[data-v="sketch"] .hx-main path{animation:hx-draw var(--fx-dur) cubic-bezier(.4,0,.3,1) both}
+.hx[data-v="sketch"] .hx-c1{animation:hx-sketch-2 var(--fx-dur) linear both}
+.hx[data-v="sketch"] .hx-c1 path{fill:none;animation:hx-draw var(--fx-dur) cubic-bezier(.4,0,.3,1) both;animation-delay:calc(var(--fx-dur) * -.1)}
+@keyframes hx-sketch-2{0%,80%{opacity:.6;transform:translate(12px,-10px)}100%{opacity:0;transform:none}}
+
+/* flip: a 3D turn that shows a teal back face */
+.hx[data-v="flip"]{animation:hx-flip var(--fx-dur) cubic-bezier(.5,0,.3,1) both}
+.hx[data-v="flip"] .hx-main path{animation:hx-flip-c var(--fx-dur) steps(1,end) both}
+@keyframes hx-flip{0%{transform:perspective(500px) rotateY(0)}100%{transform:perspective(500px) rotateY(360deg)}}
+@keyframes hx-flip-c{0%{fill:var(--fx-ink)}25%{fill:var(--fx-a)}75%,100%{fill:var(--fx-ink)}}
+
+/* shine: an Apple-style sheen sweeps across the mark */
+.hx[data-v="shine"] .hx-shine{animation:hx-shine var(--fx-dur) cubic-bezier(.4,0,.2,1) both}
+@keyframes hx-shine{0%{opacity:.75;transform:translateX(-300px)}85%{opacity:.75;transform:translateX(1150px)}100%{opacity:0;transform:translateX(1150px)}}
+
 @media (prefers-reduced-motion:reduce){ .hx-intro,.mark-fx{display:none!important} }
 </style>
 </head>
@@ -2671,15 +2739,18 @@ body:not(.fun-mode) .galaxy-bg *{animation-play-state:paused!important}
   const PAD = 20, MW = 700, MH = 1058;
   let uid = 0;
   function makeMark(cls){
-    const id = "hxClip" + (++uid);
+    const id = "hxClip" + (++uid), rough = "hxRough" + uid;
     const set = (c) => `<g class="${c}">` + ["b","t","d"].map((k) => `<path class="hx-${k}" pathLength="1" d="${PATHS[k]}"/>`).join("") + "</g>";
     const wrap = document.createElement("div");
     wrap.innerHTML =
       `<svg class="hx ${cls}" viewBox="${-PAD} ${-PAD} ${MW + 2 * PAD} ${MH + 2 * PAD}" aria-hidden="true" focusable="false">` +
-      `<defs><clipPath id="${id}"><path d="${PATHS.b} ${PATHS.t} ${PATHS.d}"/></clipPath></defs>` +
+      `<defs><clipPath id="${id}"><path d="${PATHS.b} ${PATHS.t} ${PATHS.d}"/></clipPath>` +
+      `<filter id="${rough}" x="-10%" y="-10%" width="120%" height="120%"><feTurbulence type="fractalNoise" baseFrequency=".025" numOctaves="2" seed="7"/><feDisplacementMap in="SourceGraphic" scale="22"/></filter></defs>` +
       set("hx-c1") + set("hx-c2") +
       `<g clip-path="url(#${id})"><path class="hx-liq" d="M-400 40 Q-225 -20 -50 40 T300 40 T650 40 T1000 40 T1350 40 V1200 H-400Z"/></g>` +
-      set("hx-main") + "</svg>";
+      set("hx-main") +
+      `<g clip-path="url(#${id})"><path class="hx-shine" d="M-60 -40 H80 L-140 1120 H-280Z"/></g>` + "</svg>";
+    wrap.firstChild.style.setProperty("--fx-rough", `url(#${rough})`);
     return wrap.firstChild;
   }
   // play one variation; restarting the same one needs the attribute cleared for a frame
@@ -2691,7 +2762,7 @@ body:not(.fun-mode) .galaxy-bg *{animation-play-state:paused!important}
   }
 
   const REDUCED = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-  const NAV_VARIANTS = ["glitch", "line", "duo", "fill", "dots"];
+  const NAV_VARIANTS = ["glitch", "line", "duo", "split", "neon", "fill", "echo", "drip", "dots", "sketch", "flip", "shine"];
   const NAV_EVERY = 10000, NAV_MS = 1500;
 
   /* ---------- intro (once per tab session) ---------- */
@@ -2708,7 +2779,7 @@ body:not(.fun-mode) .galaxy-bg *{animation-play-state:paused!important}
     const holder = intro.querySelector(".hx-intro-in");
     const svg = makeMark("hx-intro-mark");
     holder.insertBefore(svg, holder.firstChild);
-    const steps = [["line", 700], ["dots", 420], ["duo", 420], ["glitch", 420], ["fill", 480]];
+    const steps = [["split", 450], ["line", 560], ["neon", 380], ["duo", 320], ["glitch", 360], ["fill", 420]];
     const timers = [];
     let t = 0;
     steps.forEach(([v, ms]) => { timers.push(setTimeout(() => play(svg, v, ms), t)); t += ms; });
