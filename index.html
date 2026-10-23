@@ -2558,7 +2558,7 @@ body:not(.fun-mode) .galaxy-bg *{animation-play-state:paused!important}
 
 <style>
 /* ============================================================
-   Logo variations: a ~4s intro montage (every load, all looks cut fast) of the H mark (thin line,
+   Logo variations: a ~4s intro montage (every load, +1s per reload, all looks cut fast) of the H mark (thin line,
    dotted, colour combos, water fill, foil, emboss...) that lands in the
    top-left nav, then one variation replays on the nav mark every
    10s. Shapes are a vector trace of /images/logo-mark.webp.
@@ -2892,6 +2892,70 @@ body:not(.fun-mode) .galaxy-bg *{animation-play-state:paused!important}
   85%{opacity:1}
   100%{opacity:0;transform:translate(120px,1060px)}}
 
+/* --- finishes: obsidian, bronze, velvet, glass, marble (same cross-fade as foil) --- */
+.hx[data-v="obsidian"] .hx-c1 path{fill:var(--fx-obsidian)}
+.hx[data-v="bronze"] .hx-c1 path{fill:var(--fx-bronze)}
+.hx[data-v="velvet"] .hx-c1 path{fill:var(--fx-velvet)}
+.hx[data-v="glass"] .hx-c1 path{fill:var(--fx-glass);stroke:rgba(0,118,122,.55);stroke-width:var(--fx-sw)}
+.hx[data-v="marble"] .hx-c1 path{fill:#fff;stroke:rgba(14,20,20,.25);stroke-width:var(--fx-sw)}
+.hx[data-v="marble"] .hx-c1{filter:var(--fx-marble)}
+.hx[data-v="obsidian"] .hx-c1,.hx[data-v="bronze"] .hx-c1,.hx[data-v="velvet"] .hx-c1,
+.hx[data-v="glass"] .hx-c1,.hx[data-v="marble"] .hx-c1{animation:hx-xfade-in var(--fx-dur) var(--fx-ease) both}
+.hx[data-v="obsidian"] .hx-main path,.hx[data-v="bronze"] .hx-main path,.hx[data-v="velvet"] .hx-main path,
+.hx[data-v="glass"] .hx-main path,.hx[data-v="marble"] .hx-main path{animation:hx-xfade-out var(--fx-dur) var(--fx-ease) both}
+.hx[data-v="obsidian"] .hx-shine,.hx[data-v="bronze"] .hx-shine,.hx[data-v="velvet"] .hx-shine,
+.hx[data-v="glass"] .hx-shine{animation:hx-sheen var(--fx-dur) cubic-bezier(.4,.1,.6,.9) both}
+.hx[data-v="glass"]{animation:hx-glass var(--fx-dur) var(--fx-ease) both}
+.hx[data-v="marble"]{animation:hx-lift var(--fx-dur) var(--fx-ease) both}
+@keyframes hx-lift{
+  0%,100%{filter:drop-shadow(0 0 0 rgba(0,0,0,0))}
+  24%,76%{filter:drop-shadow(0 calc(3px * var(--fx-k)) calc(7px * var(--fx-k)) rgba(0,0,0,.22))}}
+@keyframes hx-glass{
+  0%,100%{filter:drop-shadow(0 0 0 rgba(0,90,94,0))}
+  24%,76%{filter:drop-shadow(0 calc(5px * var(--fx-k)) calc(10px * var(--fx-k)) rgba(0,90,94,.25))}}
+
+/* aurora: soft teal-to-lilac-to-blush light flows through the mark */
+.hx .hx-aurora{opacity:0;fill:var(--fx-aurora)}
+.hx[data-v="aurora"] .hx-aurora{animation:hx-aurora var(--fx-dur) linear both}
+.hx[data-v="aurora"] .hx-main path{animation:hx-xfade-out var(--fx-dur) var(--fx-ease) both}
+@keyframes hx-aurora{
+  0%{opacity:0;transform:translateX(0)}
+  24%,76%{opacity:1}
+  100%{opacity:0;transform:translateX(1400px)}}
+
+/* satin: two slow, soft sheens cross a satin-black mark */
+.hx .hx-shine2{opacity:0;fill:var(--fx-sheen)}
+.hx[data-v="satin"] .hx-shine{animation:hx-satin-a var(--fx-dur) cubic-bezier(.45,0,.55,1) both}
+.hx[data-v="satin"] .hx-shine2{animation:hx-satin-b var(--fx-dur) cubic-bezier(.45,0,.55,1) both}
+@keyframes hx-satin-a{0%{opacity:.55;transform:translateX(-220px)}90%{opacity:.55;transform:translateX(1020px)}100%{opacity:0;transform:translateX(1020px)}}
+@keyframes hx-satin-b{0%,18%{opacity:.4;transform:translateX(1020px)}96%{opacity:.4;transform:translateX(-260px)}100%{opacity:0;transform:translateX(-260px)}}
+
+/* keyline: a fine gold border draws itself around the mark, a paper gap apart */
+.hx[data-v="keyline"] .hx-c1 path{fill:none;stroke:var(--fx-foil);stroke-width:calc(var(--fx-sw) * 8);stroke-linejoin:round;stroke-dasharray:1 1}
+.hx[data-v="keyline"] .hx-c2 path{fill:none;stroke:var(--fx-paper);stroke-width:calc(var(--fx-sw) * 4.6);stroke-linejoin:round}
+.hx[data-v="keyline"] .hx-c1{animation:hx-key-show var(--fx-dur) var(--fx-ease) both}
+.hx[data-v="keyline"] .hx-c2{animation:hx-key-show var(--fx-dur) var(--fx-ease) both}
+.hx[data-v="keyline"] .hx-c1 path{animation:hx-key-draw var(--fx-dur) var(--fx-ease) both}
+@keyframes hx-key-show{0%{opacity:1}82%{opacity:1}100%{opacity:0}}
+@keyframes hx-key-draw{0%{stroke-dashoffset:1}60%,100%{stroke-dashoffset:0}}
+
+/* seal: a deep-teal oval seal rises behind a gold-foil mark */
+.hx .hx-seal{opacity:0;fill:#0b3f45;transform-box:fill-box;transform-origin:50% 50%}
+.hx[data-v="seal"] .hx-seal{animation:hx-seal var(--fx-dur) cubic-bezier(.3,1.25,.5,1) both}
+.hx[data-v="seal"] .hx-c1 path{fill:var(--fx-foil)}
+.hx[data-v="seal"] .hx-c1{animation:hx-xfade-in var(--fx-dur) var(--fx-ease) both}
+.hx[data-v="seal"] .hx-main path{animation:hx-xfade-out var(--fx-dur) var(--fx-ease) both}
+.hx[data-v="seal"] .hx-shine{animation:hx-sheen var(--fx-dur) cubic-bezier(.4,.1,.6,.9) both}
+@keyframes hx-seal{0%{opacity:1;transform:scale(0)}26%,74%{opacity:1;transform:none}100%{opacity:1;transform:scale(0)}}
+
+/* sundial: a soft shadow swings under the mark like the sun moving across it */
+.hx[data-v="sundial"]{animation:hx-sundial var(--fx-dur) cubic-bezier(.45,0,.55,1) both}
+@keyframes hx-sundial{
+  0%{filter:drop-shadow(0 0 0 rgba(0,0,0,0))}
+  20%{filter:drop-shadow(calc(-16px * var(--fx-k)) calc(10px * var(--fx-k)) calc(6px * var(--fx-k)) rgba(0,0,0,.22))}
+  80%{filter:drop-shadow(calc(16px * var(--fx-k)) calc(10px * var(--fx-k)) calc(6px * var(--fx-k)) rgba(0,0,0,.22))}
+  100%{filter:drop-shadow(0 0 0 rgba(0,0,0,0))}}
+
 /* --- the same replay on the CSS packs and the packets in the photos --- */
 .fx-on > .mark,.fx-on > .pack-mark{opacity:0}
 .photo-fx{position:absolute;left:0;top:0;width:0;height:0;overflow:visible;pointer-events:none;visibility:hidden;z-index:1}
@@ -2945,12 +3009,34 @@ body:not(.fun-mode) .galaxy-bg *{animation-play-state:paused!important}
         `<rect width="18" height="7" style="fill:var(--fx-ink)"/></pattern>` +
       `<radialGradient id="${gid}l"><stop offset="0" stop-color="#fff" stop-opacity=".7"/><stop offset=".45" stop-color="#fff" stop-opacity=".25"/>` +
         `<stop offset="1" stop-color="#fff" stop-opacity="0"/></radialGradient>` +
+      `<linearGradient id="${gid}o" gradientUnits="userSpaceOnUse" x1="0" y1="0" x2="700" y2="1058">` +
+        `<stop offset="0" stop-color="#3a4145"/><stop offset=".18" stop-color="#050606"/><stop offset=".46" stop-color="#14181a"/>` +
+        `<stop offset=".5" stop-color="#5c656a"/><stop offset=".54" stop-color="#0c0e0f"/><stop offset="1" stop-color="#000"/></linearGradient>` +
+      `<linearGradient id="${gid}b" gradientUnits="userSpaceOnUse" x1="0" y1="0" x2="700" y2="1058">` +
+        `<stop offset="0" stop-color="#5a3a1e"/><stop offset=".25" stop-color="#a8743f"/><stop offset=".45" stop-color="#e3b77f"/>` +
+        `<stop offset=".62" stop-color="#8c5a2c"/><stop offset=".8" stop-color="#c99560"/><stop offset="1" stop-color="#4a2f17"/></linearGradient>` +
+      `<linearGradient id="${gid}v" gradientUnits="userSpaceOnUse" x1="0" y1="0" x2="700" y2="1058">` +
+        `<stop offset="0" stop-color="#2a0a1e"/><stop offset=".4" stop-color="#7a1f4f"/><stop offset=".6" stop-color="#a3376c"/>` +
+        `<stop offset="1" stop-color="#22081a"/></linearGradient>` +
+      `<linearGradient id="${gid}g" gradientUnits="userSpaceOnUse" x1="0" y1="0" x2="700" y2="1058">` +
+        `<stop offset="0" stop-color="#00a9ac" stop-opacity=".22"/><stop offset=".45" stop-color="#6fe3e5" stop-opacity=".5"/>` +
+        `<stop offset="1" stop-color="#00767a" stop-opacity=".38"/></linearGradient>` +
+      `<linearGradient id="${gid}a" gradientUnits="userSpaceOnUse" x1="0" y1="0" x2="1400" y2="0" spreadMethod="repeat">` +
+        `<stop offset="0" stop-color="#00a9ac"/><stop offset=".25" stop-color="#7fe0c8"/><stop offset=".5" stop-color="#b9a6ff"/>` +
+        `<stop offset=".75" stop-color="#ff9ad5"/><stop offset="1" stop-color="#00a9ac"/></linearGradient>` +
+      `<filter id="${gid}m" x="0" y="0" width="1" height="1">` +
+        `<feTurbulence type="turbulence" baseFrequency=".0028 .0075" numOctaves="5" seed="9"/>` +
+        `<feColorMatrix type="matrix" values=".9 0 0 0 0 .9 0 0 0 0 .9 0 0 0 0 0 0 0 0 1"/>` +
+        `<feComponentTransfer><feFuncR type="table" tableValues=".42 .86 .97 1 1 1"/><feFuncG type="table" tableValues=".43 .86 .96 .99 1 1"/>` +
+        `<feFuncB type="table" tableValues=".45 .85 .94 .97 .98 .98"/></feComponentTransfer>` +
+        `<feComposite in2="SourceAlpha" operator="in"/></filter>` +
       `</defs>` +
       `<rect class="hx-bg" x="-130" y="-90" width="960" height="1238" rx="150"/>` +
+      `<ellipse class="hx-seal" cx="350" cy="529" rx="560" ry="690"/>` +
       set("hx-c1") + set("hx-c2") +
-      `<g clip-path="url(#${id})"><path class="hx-liq" d="M-400 40 Q-225 -20 -50 40 T300 40 T650 40 T1000 40 T1350 40 V1200 H-400Z"/><circle class="hx-bloom" cx="520" cy="900" r="1150"/></g>` +
+      `<g clip-path="url(#${id})"><path class="hx-liq" d="M-400 40 Q-225 -20 -50 40 T300 40 T650 40 T1000 40 T1350 40 V1200 H-400Z"/><circle class="hx-bloom" cx="520" cy="900" r="1150"/><rect class="hx-aurora" x="-1400" y="-40" width="2800" height="1140"/></g>` +
       set("hx-main") +
-      `<g clip-path="url(#${id})"><path class="hx-shine" d="M-60 -40 H180 L-40 1120 H-280Z"/><circle class="hx-spot" cx="0" cy="0" r="330"/></g>` +
+      `<g clip-path="url(#${id})"><path class="hx-shine" d="M-60 -40 H180 L-40 1120 H-280Z"/><circle class="hx-spot" cx="0" cy="0" r="330"/><path class="hx-shine2" d="M60 -40 H200 L380 1120 H240Z"/></g>` +
       `<rect class="hx-scan" x="-80" y="-34" width="860" height="28" rx="14"/>` + "</svg>";
     const st = wrap.firstChild.style;
     st.setProperty("--fx-rough", `url(#${rough})`);
@@ -2962,6 +3048,12 @@ body:not(.fun-mode) .galaxy-bg *{animation-play-state:paused!important}
     st.setProperty("--fx-pearl", `url(#${gid}p)`);
     st.setProperty("--fx-engrave", `url(#${gid}e)`);
     st.setProperty("--fx-spot", `url(#${gid}l)`);
+    st.setProperty("--fx-obsidian", `url(#${gid}o)`);
+    st.setProperty("--fx-bronze", `url(#${gid}b)`);
+    st.setProperty("--fx-velvet", `url(#${gid}v)`);
+    st.setProperty("--fx-glass", `url(#${gid}g)`);
+    st.setProperty("--fx-aurora", `url(#${gid}a)`);
+    st.setProperty("--fx-marble", `url(#${gid}m)`);
     return wrap.firstChild;
   }
   // play one variation; restarting the same one needs the attribute cleared for a frame
@@ -2973,12 +3065,14 @@ body:not(.fun-mode) .galaxy-bg *{animation-play-state:paused!important}
   }
 
   const REDUCED = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-  const NAV_VARIANTS = ["foil", "line", "tilt", "stamp", "duo", "emboss", "split", "rosegold", "ripple", "chrome", "neon",
-    "layers", "fill", "iris", "jelly", "halo", "echo", "bloom", "scan", "pearl", "drip", "rise", "hue", "wipe", "dots",
-    "trace", "badge", "engrave", "sketch", "deep", "wave", "spotlight", "flip", "breathe", "focus", "shine", "spin", "shatter"];
+  const NAV_VARIANTS = ["foil", "line", "obsidian", "tilt", "stamp", "duo", "emboss", "aurora", "split", "rosegold", "ripple",
+    "chrome", "keyline", "neon", "layers", "fill", "marble", "iris", "jelly", "halo", "echo", "seal", "bloom", "scan",
+    "pearl", "satin", "drip", "rise", "hue", "bronze", "wipe", "dots", "trace", "glass", "badge", "engrave", "sketch",
+    "sundial", "deep", "wave", "spotlight", "velvet", "flip", "breathe", "focus", "shine", "spin", "shatter"];
   const NAV_EVERY = 10000, NAV_MS = 1500;
   const LOOK_MS = { foil: 2400, chrome: 2400, emboss: 2200, bloom: 2000, iris: 1800, rise: 1800, trace: 2200, deep: 2200, breathe: 2600, shine: 1800,
-    rosegold: 2400, pearl: 2400, engrave: 2400, wipe: 2000, layers: 2200, tilt: 2400, halo: 2200, spotlight: 2400 };
+    rosegold: 2400, pearl: 2400, engrave: 2400, wipe: 2000, layers: 2200, tilt: 2400, halo: 2200, spotlight: 2400,
+    obsidian: 2400, bronze: 2400, velvet: 2400, glass: 2400, marble: 2600, aurora: 2600, satin: 2600, keyline: 2400, seal: 2600, sundial: 2600 };
 
   /* ---------- intro (~5s, on every load) ---------- */
   const intro = document.getElementById("hxIntro");
@@ -2996,7 +3090,15 @@ body:not(.fun-mode) .galaxy-bg *{animation-play-state:paused!important}
     const PEAK = { line: .45, dots: .4, split: .25, neon: .5, echo: .35, drip: .6, sketch: .6, flip: .35, shine: .45,
       stamp: .25, scan: .45, ripple: .4, hue: .2, wave: .3, jelly: .17, focus: .3, spin: .4, shatter: .4, chrome: .45,
       bloom: .55, iris: .7, rise: .55, trace: .45, wipe: .2, tilt: .3, halo: .45, spotlight: .45 };
-    const SLOT = 85, LOOK = 1500;
+    // every reload in the same tab adds 1s, spread across the cuts; a fresh visit or new tab starts at ~4s again
+    let reloads = 0;
+    try {
+      const nav = performance.getEntriesByType("navigation")[0];
+      reloads = nav && nav.type === "reload" ? (+sessionStorage.getItem("hxReloads") || 0) + 1 : 0;
+      sessionStorage.setItem("hxReloads", String(reloads));
+    } catch (e) {}
+    // ~3.25s of cuts + the wordmark and fly-in = ~4s, however many looks there are
+    const SLOT = (3250 + reloads * 1000) / NAV_VARIANTS.length, LOOK = 1500;
     const steps = NAV_VARIANTS.map((v) => [v, SLOT]);
     const timers = [];
     let t = 0;
