@@ -78,7 +78,11 @@ module.exports = async (req, res) => {
   }
 
   const unitAmountCents = Math.round(sticks * unit * 100);
-  const origin = "https://" + req.headers.host;
+  // only send Stripe back to our own domains (or a Vercel preview), never a spoofed Host header
+  const host = String(req.headers.host || "");
+  const origin = /(^|\.)drinkhydraco\.com$|\.vercel\.app$/i.test(host)
+    ? "https://" + host
+    : "https://www.drinkhydraco.com";
 
   const params = new URLSearchParams();
   params.set("mode", member ? "subscription" : "payment");

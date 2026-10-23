@@ -3005,7 +3005,8 @@ body:not(.fun-mode) .galaxy-bg *{animation-play-state:paused!important}
 
 /* --- the same replay on the CSS packs and the packets in the photos --- */
 .fx-on > .mark,.fx-on > .pack-mark{opacity:0}
-.photo-fx{position:absolute;left:0;top:0;width:0;height:0;overflow:visible;pointer-events:none;visibility:hidden;z-index:1}
+/* covers the photo's box and clips to it, so unplaced overlays can never widen the page */
+.photo-fx{position:absolute;inset:0;overflow:hidden;pointer-events:none;visibility:hidden;z-index:1}
 .photo-fx.fx-on{visibility:visible}
 .photo-fx-logo{position:absolute;left:0;top:0;width:700px;height:1058px;transform-origin:0 0}
 .photo-fx-logo .hx{position:absolute;left:-20px;top:-20px;width:740px;height:1098px}
@@ -3153,7 +3154,14 @@ body:not(.fun-mode) .galaxy-bg *{animation-play-state:paused!important}
   let introDone;
   const introFinished = new Promise((res) => { introDone = res; });
 
-  if (REDUCED || !intro){
+  // no intro when someone lands mid-task: back from Stripe (?paid / ?cancelled), a review link,
+  // or a link straight to a section (#order) - they came for that, not the show
+  const q = new URLSearchParams(location.search);
+  const navEntry = performance.getEntriesByType && performance.getEntriesByType("navigation")[0];
+  const isReload = !!navEntry && navEntry.type === "reload";
+  const landingMidTask = q.has("paid") || q.has("cancelled") || q.has("review") ||
+    (!isReload && location.hash.length > 1 && location.hash !== "#top");
+  if (REDUCED || !intro || landingMidTask){
     if (intro) { intro.remove(); }
     introDone();
   } else {
@@ -5240,8 +5248,13 @@ const START_PACK = { restore: 19, hydrapro: 19, mix: 19 };
 const photoSrc = (name, p) => p === "hydrapro"
   ? "/images/hp/" + name + ".webp?v=hp3" : "/images/" + name + ".webp?v=pack8";
 
+const PAGE_TITLE = {
+  restore: "Hydraco Restore — Post-Workout Electrolyte Recovery Mix",
+  hydrapro: "Hydraco Hydrapro — Electrolyte Recovery Mix + Probiotics"
+};
 function paintProduct(){
   document.documentElement.dataset.product = mode;
+  document.title = PAGE_TITLE[mode] || PAGE_TITLE.restore;
   const h = PRODUCT_HERO[mode];
   if ($("#heroName").textContent !== h.name) {
     $("#heroName").textContent = h.name;
@@ -6469,11 +6482,14 @@ function escapeHtml(s){
   });
 })();
 
+/* the endpoint already carries ?key=..., so further params need "&" */
+const sheetUrl = (action) => CONFIG.sheetEndpoint + (CONFIG.sheetEndpoint.includes("?") ? "&" : "?") + "action=" + action;
+
 (function loadApprovedQuotes(){
   const grid = document.querySelector(".quotes-grid");
   if (!grid) { return; }
 
-  fetch(CONFIG.sheetEndpoint + "?action=quotes")
+  fetch(sheetUrl("quotes"))
     .then((r) => r.json())
     .then((list) => {
       if (!Array.isArray(list) || !list.length) { return; } // nothing approved yet - grid stays empty
@@ -6498,7 +6514,7 @@ function escapeHtml(s){
   const box = $("#heroQuotes");
   if (!box) { return; }
 
-  fetch(CONFIG.sheetEndpoint + "?action=featured")
+  fetch(sheetUrl("featured"))
     .then((r) => r.json())
     .then((list) => {
       if (!Array.isArray(list) || !list.length) { return; } // stays hidden - no placeholders in the hero
