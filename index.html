@@ -2956,6 +2956,29 @@ body:not(.fun-mode) .galaxy-bg *{animation-play-state:paused!important}
   80%{filter:drop-shadow(calc(16px * var(--fx-k)) calc(10px * var(--fx-k)) calc(6px * var(--fx-k)) rgba(0,0,0,.22))}
   100%{filter:drop-shadow(0 0 0 rgba(0,0,0,0))}}
 
+/* --- colour: gradient washes (same cross-fade as foil) and flat tri-colour combos --- */
+.hx[data-v="lemonade"] .hx-c1 path{fill:var(--fx-lemonade)}
+.hx[data-v="sunset"] .hx-c1 path{fill:var(--fx-sunset)}
+.hx[data-v="ocean"] .hx-c1 path{fill:var(--fx-ocean)}
+.hx[data-v="berry"] .hx-c1 path{fill:var(--fx-berry)}
+.hx[data-v="mint"] .hx-c1 path{fill:var(--fx-mint)}
+.hx[data-v="ember"] .hx-c1 path{fill:var(--fx-ember)}
+.hx[data-v="cobalt"] .hx-c1 path{fill:var(--fx-cobalt)}
+.hx[data-v="holo"] .hx-c1 path{fill:var(--fx-holo)}
+.hx[data-v="holo"] .hx-c1 path{stroke:rgba(14,20,20,.16);stroke-width:var(--fx-sw)}
+.hx[data-v="lemonade"] .hx-c1,.hx[data-v="sunset"] .hx-c1,.hx[data-v="ocean"] .hx-c1,.hx[data-v="berry"] .hx-c1,.hx[data-v="mint"] .hx-c1,.hx[data-v="ember"] .hx-c1,.hx[data-v="cobalt"] .hx-c1,.hx[data-v="holo"] .hx-c1{animation:hx-xfade-in var(--fx-dur) var(--fx-ease) both}
+.hx[data-v="lemonade"] .hx-main path,.hx[data-v="sunset"] .hx-main path,.hx[data-v="ocean"] .hx-main path,.hx[data-v="berry"] .hx-main path,.hx[data-v="mint"] .hx-main path,.hx[data-v="ember"] .hx-main path,.hx[data-v="cobalt"] .hx-main path,.hx[data-v="holo"] .hx-main path{animation:hx-xfade-out var(--fx-dur) var(--fx-ease) both}
+.hx[data-v="ocean"] .hx-shine,.hx[data-v="ember"] .hx-shine,.hx[data-v="cobalt"] .hx-shine,.hx[data-v="holo"] .hx-shine,.hx[data-v="berry"] .hx-shine{animation:hx-sheen var(--fx-dur) cubic-bezier(.4,.1,.6,.9) both}
+/* tri-colour: each piece takes its own colour, then settles back to ink */
+.hx[data-v="tropic"]{--p1:#ff6f61;--p2:#ffbf00;--p3:#00a9ac}
+.hx[data-v="sorbet"]{--p1:#ff9ec7;--p2:#9fe6c8;--p3:#b9a6ff}
+.hx[data-v="tropic"] .hx-main .hx-b,.hx[data-v="sorbet"] .hx-main .hx-b{animation:hx-piece-1 var(--fx-dur) var(--fx-ease) both}
+.hx[data-v="tropic"] .hx-main .hx-t,.hx[data-v="sorbet"] .hx-main .hx-t{animation:hx-piece-2 var(--fx-dur) var(--fx-ease) both;animation-delay:calc(var(--fx-dur) * .04)}
+.hx[data-v="tropic"] .hx-main .hx-d,.hx[data-v="sorbet"] .hx-main .hx-d{animation:hx-piece-3 var(--fx-dur) var(--fx-ease) both;animation-delay:calc(var(--fx-dur) * .08)}
+@keyframes hx-piece-1{0%,100%{fill:var(--fx-ink)}18%,78%{fill:var(--p1)}}
+@keyframes hx-piece-2{0%,100%{fill:var(--fx-ink)}18%,74%{fill:var(--p2)}}
+@keyframes hx-piece-3{0%,100%{fill:var(--fx-ink)}18%,70%{fill:var(--p3)}}
+
 /* --- the same replay on the CSS packs and the packets in the photos --- */
 .fx-on > .mark,.fx-on > .pack-mark{opacity:0}
 .photo-fx{position:absolute;left:0;top:0;width:0;height:0;overflow:visible;pointer-events:none;visibility:hidden;z-index:1}
@@ -3030,6 +3053,22 @@ body:not(.fun-mode) .galaxy-bg *{animation-play-state:paused!important}
         `<feComponentTransfer><feFuncR type="table" tableValues=".42 .86 .97 1 1 1"/><feFuncG type="table" tableValues=".43 .86 .96 .99 1 1"/>` +
         `<feFuncB type="table" tableValues=".45 .85 .94 .97 .98 .98"/></feComponentTransfer>` +
         `<feComposite in2="SourceAlpha" operator="in"/></filter>` +
+      `<linearGradient id="${gid}-lemonade" gradientUnits="userSpaceOnUse" x1="0" y1="0" x2="700" y2="1058">` +
+        `<stop offset="0" stop-color="#ff5c8a"/><stop offset=".35" stop-color="#ff8fa3"/><stop offset=".7" stop-color="#ffd36b"/><stop offset="1" stop-color="#fff07a"/></linearGradient>` +
+      `<linearGradient id="${gid}-sunset" gradientUnits="userSpaceOnUse" x1="0" y1="0" x2="700" y2="1058">` +
+        `<stop offset="0" stop-color="#ff6f61"/><stop offset=".4" stop-color="#ff9a5a"/><stop offset=".75" stop-color="#ffc857"/><stop offset="1" stop-color="#ffe29a"/></linearGradient>` +
+      `<linearGradient id="${gid}-ocean" gradientUnits="userSpaceOnUse" x1="0" y1="0" x2="700" y2="1058">` +
+        `<stop offset="0" stop-color="#0a2a5e"/><stop offset=".4" stop-color="#0b5f8a"/><stop offset=".75" stop-color="#00a9ac"/><stop offset="1" stop-color="#7fe3e0"/></linearGradient>` +
+      `<linearGradient id="${gid}-berry" gradientUnits="userSpaceOnUse" x1="0" y1="0" x2="700" y2="1058">` +
+        `<stop offset="0" stop-color="#5b1a7a"/><stop offset=".45" stop-color="#a3268c"/><stop offset="1" stop-color="#ff4fa8"/></linearGradient>` +
+      `<linearGradient id="${gid}-mint" gradientUnits="userSpaceOnUse" x1="0" y1="0" x2="700" y2="1058">` +
+        `<stop offset="0" stop-color="#1f9c84"/><stop offset=".5" stop-color="#6fd8b7"/><stop offset="1" stop-color="#bff2e0"/></linearGradient>` +
+      `<linearGradient id="${gid}-ember" gradientUnits="userSpaceOnUse" x1="0" y1="0" x2="700" y2="1058">` +
+        `<stop offset="0" stop-color="#7a1010"/><stop offset=".45" stop-color="#d8321f"/><stop offset=".8" stop-color="#ff8a2a"/><stop offset="1" stop-color="#ffc15a"/></linearGradient>` +
+      `<linearGradient id="${gid}-cobalt" gradientUnits="userSpaceOnUse" x1="0" y1="0" x2="700" y2="1058">` +
+        `<stop offset="0" stop-color="#0b2c8c"/><stop offset=".5" stop-color="#1f4fd8"/><stop offset=".7" stop-color="#3d7bff"/><stop offset="1" stop-color="#0b2c8c"/></linearGradient>` +
+      `<linearGradient id="${gid}-holo" gradientUnits="userSpaceOnUse" x1="0" y1="0" x2="700" y2="1058">` +
+        `<stop offset="0" stop-color="#ffd1f2"/><stop offset=".2" stop-color="#c7b8ff"/><stop offset=".4" stop-color="#a8e9ff"/><stop offset=".6" stop-color="#b8ffd9"/><stop offset=".8" stop-color="#fff3b0"/><stop offset="1" stop-color="#ffc4d6"/></linearGradient>` +
       `</defs>` +
       `<rect class="hx-bg" x="-130" y="-90" width="960" height="1238" rx="150"/>` +
       `<ellipse class="hx-seal" cx="350" cy="529" rx="560" ry="690"/>` +
@@ -3054,6 +3093,14 @@ body:not(.fun-mode) .galaxy-bg *{animation-play-state:paused!important}
     st.setProperty("--fx-glass", `url(#${gid}g)`);
     st.setProperty("--fx-aurora", `url(#${gid}a)`);
     st.setProperty("--fx-marble", `url(#${gid}m)`);
+    st.setProperty("--fx-lemonade", `url(#${gid}-lemonade)`);
+    st.setProperty("--fx-sunset", `url(#${gid}-sunset)`);
+    st.setProperty("--fx-ocean", `url(#${gid}-ocean)`);
+    st.setProperty("--fx-berry", `url(#${gid}-berry)`);
+    st.setProperty("--fx-mint", `url(#${gid}-mint)`);
+    st.setProperty("--fx-ember", `url(#${gid}-ember)`);
+    st.setProperty("--fx-cobalt", `url(#${gid}-cobalt)`);
+    st.setProperty("--fx-holo", `url(#${gid}-holo)`);
     return wrap.firstChild;
   }
   // play one variation; restarting the same one needs the attribute cleared for a frame
@@ -3065,14 +3112,17 @@ body:not(.fun-mode) .galaxy-bg *{animation-play-state:paused!important}
   }
 
   const REDUCED = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-  const NAV_VARIANTS = ["foil", "line", "obsidian", "tilt", "stamp", "duo", "emboss", "aurora", "split", "rosegold", "ripple",
-    "chrome", "keyline", "neon", "layers", "fill", "marble", "iris", "jelly", "halo", "echo", "seal", "bloom", "scan",
-    "pearl", "satin", "drip", "rise", "hue", "bronze", "wipe", "dots", "trace", "glass", "badge", "engrave", "sketch",
-    "sundial", "deep", "wave", "spotlight", "velvet", "flip", "breathe", "focus", "shine", "spin", "shatter"];
+  const NAV_VARIANTS = ["foil", "line", "obsidian", "tilt", "lemonade", "stamp", "duo", "emboss", "aurora", "ocean", "split",
+    "rosegold", "ripple", "chrome", "tropic", "keyline", "neon", "layers", "fill", "sunset", "marble", "iris",
+    "jelly", "halo", "berry", "echo", "seal", "bloom", "scan", "mint", "pearl", "satin", "drip", "rise",
+    "sorbet", "hue", "bronze", "wipe", "dots", "ember", "trace", "glass", "badge", "engrave", "cobalt",
+    "sketch", "sundial", "deep", "wave", "holo", "spotlight", "velvet", "flip", "breathe", "focus", "shine",
+    "spin", "shatter"];
   const NAV_EVERY = 10000, NAV_MS = 1500;
   const LOOK_MS = { foil: 2400, chrome: 2400, emboss: 2200, bloom: 2000, iris: 1800, rise: 1800, trace: 2200, deep: 2200, breathe: 2600, shine: 1800,
     rosegold: 2400, pearl: 2400, engrave: 2400, wipe: 2000, layers: 2200, tilt: 2400, halo: 2200, spotlight: 2400,
-    obsidian: 2400, bronze: 2400, velvet: 2400, glass: 2400, marble: 2600, aurora: 2600, satin: 2600, keyline: 2400, seal: 2600, sundial: 2600 };
+    obsidian: 2400, bronze: 2400, velvet: 2400, glass: 2400, marble: 2600, aurora: 2600, satin: 2600, keyline: 2400, seal: 2600, sundial: 2600,
+    lemonade: 2200, ocean: 2200, tropic: 2200, sunset: 2200, berry: 2200, mint: 2200, sorbet: 2200, ember: 2200, cobalt: 2200, holo: 2200 };
 
   /* ---------- intro (~5s, on every load) ---------- */
   const intro = document.getElementById("hxIntro");
