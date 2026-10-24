@@ -33,8 +33,8 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Jost:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400;1,500&family=Newsreader:ital,opsz,wght@0,6..72,400;1,6..72,400&display=swap">
-<!-- display faces for the logo's "type" variations; text=h means only the letter h is downloaded -->
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Abril+Fatface&family=Fredoka:wght@700&family=Great+Vibes&family=Monoton&family=Permanent+Marker&family=Space+Mono:wght@700&family=UnifrakturMaguntia&text=h&display=swap">
+<!-- display faces for the logo's "type" variations; text=hydraco means only those letters are downloaded -->
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Abril+Fatface&family=Fredoka:wght@700&family=Great+Vibes&family=Monoton&family=Permanent+Marker&family=Space+Mono:wght@700&family=UnifrakturMaguntia&text=hydraco&display=swap">
 <style>*,*::before,*::after{box-sizing:border-box}body{margin:0}</style>
 <style>
 :root{
@@ -2639,7 +2639,7 @@ body:not(.fun-mode) .galaxy-bg *{animation-play-state:paused!important}
 .hx-b,.hx-t,.hx-d{transform-box:fill-box;transform-origin:50% 50%}
 
 /* neon: the ink melts into a glowing teal tube, then settles back */
-.hx[data-v="neon"]{animation:hx-neon-glow var(--fx-dur) var(--fx-ease) both}
+.hx[data-v="neon"] .hx-in{animation:hx-neon-glow var(--fx-dur) var(--fx-ease) both}
 .hx[data-v="neon"] .hx-main path{
   stroke:var(--fx-a);stroke-width:calc(var(--fx-sw) * 1.6);stroke-linejoin:round;
   animation:hx-neon var(--fx-dur) var(--fx-ease) both}
@@ -2669,9 +2669,8 @@ body:not(.fun-mode) .galaxy-bg *{animation-play-state:paused!important}
 @keyframes hx-shine{0%{opacity:1;transform:translateX(-220px)}88%{opacity:1;transform:translateX(1020px)}100%{opacity:0;transform:translateX(1020px)}}
 
 /* --- ten more --- */
-.hx .hx-scan,.hx .hx-bg{opacity:0}
+.hx .hx-scan{opacity:0}
 .hx .hx-scan{fill:var(--fx-a)}
-.hx .hx-bg{fill:var(--fx-ink);transform-box:fill-box;transform-origin:50% 50%}
 .hx .hx-c1,.hx .hx-c2{transform-box:fill-box;transform-origin:50% 50%}
 
 /* scan: a teal scanner line reveals the mark top to bottom */
@@ -2688,12 +2687,6 @@ body:not(.fun-mode) .galaxy-bg *{animation-play-state:paused!important}
 .hx[data-v="hue"] .hx-main path{animation:hx-hue var(--fx-dur) linear both}
 @keyframes hx-hue{0%{fill:var(--fx-ink)}18%{fill:var(--pink,#ec4fa8)}40%{fill:var(--fx-a)}62%{fill:var(--fx-b)}84%,100%{fill:var(--fx-ink)}}
 
-/* badge: an ink tile grows behind and the mark knocks out of it */
-.hx[data-v="badge"] .hx-bg{animation:hx-badge var(--fx-dur) cubic-bezier(.3,1.3,.5,1) both}
-.hx[data-v="badge"] .hx-main path{animation:hx-badge-ink var(--fx-dur) ease both}
-@keyframes hx-badge{0%{opacity:1;transform:scale(0)}26%,76%{opacity:1;transform:none}100%{opacity:1;transform:scale(0)}}
-@keyframes hx-badge-ink{0%,8%{fill:var(--fx-ink)}22%,80%{fill:var(--fx-paper)}96%,100%{fill:var(--fx-ink)}}
-
 /* --- premium looks: slower, eased, material rather than effects --- */
 .hx{--fx-ease:cubic-bezier(.65,0,.35,1);--fx-out:cubic-bezier(.16,1,.3,1)}
 .hx .hx-bloom{opacity:0;fill:var(--fx-ink);transform-box:fill-box;transform-origin:50% 50%}
@@ -2709,15 +2702,10 @@ body:not(.fun-mode) .galaxy-bg *{animation-play-state:paused!important}
 @keyframes hx-xfade-out{0%{fill-opacity:1}24%,76%{fill-opacity:0}100%{fill-opacity:1}}
 @keyframes hx-sheen{0%,20%{opacity:1;transform:translateX(-220px)}76%{opacity:1;transform:translateX(1020px)}100%{opacity:0;transform:translateX(1020px)}}
 
-/* emboss: the mark turns to paper and is pressed into the surface, like letterpress */
-.hx[data-v="emboss"]{animation:hx-emb var(--fx-dur) var(--fx-ease) both}
-.hx[data-v="emboss"] .hx-main path{animation:hx-emb-fill var(--fx-dur) var(--fx-ease) both}
-@keyframes hx-emb-fill{0%,100%{fill:var(--fx-ink)}26%,74%{fill:var(--fx-paper)}}
-@keyframes hx-emb{
-  0%,100%{filter:drop-shadow(0 0 0 rgba(255,255,255,0)) drop-shadow(0 0 0 rgba(0,0,0,0))}
-  26%,74%{filter:
-    drop-shadow(calc(max(.8px, 1.2px * var(--fx-k)) * -1) calc(max(.8px, 1.2px * var(--fx-k)) * -1) 0 rgba(255,255,255,.95))
-    drop-shadow(max(.8px, calc(1.6px * var(--fx-k))) max(1px, calc(2px * var(--fx-k))) max(1px, calc(2.4px * var(--fx-k))) rgba(0,0,0,.3))}}
+/* emboss: the mark turns to paper, pressed in - the shading sits inside the edge, never outside it */
+.hx[data-v="emboss"] .hx-main path{animation:hx-xfade-out var(--fx-dur) var(--fx-ease) both}
+.hx[data-v="emboss"] .hx-c1 path{fill:var(--fx-paper);stroke:rgba(14,20,20,.3);stroke-width:calc(var(--fx-sw) * 4)}
+.hx[data-v="emboss"] .hx-c1{animation:hx-xfade-in var(--fx-dur) var(--fx-ease) both}
 
 /* bloom: settles to a hairline, then ink spreads out from the drop and fills it */
 .hx[data-v="bloom"] .hx-main path{stroke:var(--fx-ink);stroke-width:var(--fx-sw);animation:hx-bloom-main var(--fx-dur) var(--fx-ease) both}
@@ -2783,14 +2771,6 @@ body:not(.fun-mode) .galaxy-bg *{animation-play-state:paused!important}
 .hx[data-v="glass"] .hx-c1,.hx[data-v="marble"] .hx-c1{animation:hx-xfade-in var(--fx-dur) var(--fx-ease) both}
 .hx[data-v="glass"] .hx-main path,.hx[data-v="marble"] .hx-main path{animation:hx-xfade-out var(--fx-dur) var(--fx-ease) both}
 .hx[data-v="glass"] .hx-shine{animation:hx-sheen var(--fx-dur) cubic-bezier(.4,.1,.6,.9) both}
-.hx[data-v="glass"]{animation:hx-glass var(--fx-dur) var(--fx-ease) both}
-.hx[data-v="marble"]{animation:hx-lift var(--fx-dur) var(--fx-ease) both}
-@keyframes hx-lift{
-  0%,100%{filter:drop-shadow(0 0 0 rgba(0,0,0,0))}
-  24%,76%{filter:drop-shadow(0 calc(3px * var(--fx-k)) calc(7px * var(--fx-k)) rgba(0,0,0,.22))}}
-@keyframes hx-glass{
-  0%,100%{filter:drop-shadow(0 0 0 rgba(0,90,94,0))}
-  24%,76%{filter:drop-shadow(0 calc(5px * var(--fx-k)) calc(10px * var(--fx-k)) rgba(0,90,94,.25))}}
 
 /* aurora: soft teal-to-lilac-to-blush light flows through the mark */
 .hx .hx-aurora{opacity:0;fill:var(--fx-aurora)}
@@ -2800,24 +2780,6 @@ body:not(.fun-mode) .galaxy-bg *{animation-play-state:paused!important}
   0%{opacity:0;transform:translateX(0)}
   24%,76%{opacity:1}
   100%{opacity:0;transform:translateX(1400px)}}
-
-/* keyline: a fine gold border draws itself around the mark, a paper gap apart */
-.hx[data-v="keyline"] .hx-c1 path{fill:none;stroke:var(--fx-foil);stroke-width:calc(var(--fx-sw) * 8);stroke-linejoin:round;stroke-dasharray:1 1}
-.hx[data-v="keyline"] .hx-c2 path{fill:none;stroke:var(--fx-paper);stroke-width:calc(var(--fx-sw) * 4.6);stroke-linejoin:round}
-.hx[data-v="keyline"] .hx-c1{animation:hx-key-show var(--fx-dur) var(--fx-ease) both}
-.hx[data-v="keyline"] .hx-c2{animation:hx-key-show var(--fx-dur) var(--fx-ease) both}
-.hx[data-v="keyline"] .hx-c1 path{animation:hx-key-draw var(--fx-dur) var(--fx-ease) both}
-@keyframes hx-key-show{0%{opacity:1}82%{opacity:1}100%{opacity:0}}
-@keyframes hx-key-draw{0%{stroke-dashoffset:1}60%,100%{stroke-dashoffset:0}}
-
-/* seal: a deep-teal oval seal rises behind a gold-foil mark */
-.hx .hx-seal{opacity:0;fill:#0b3f45;transform-box:fill-box;transform-origin:50% 50%}
-.hx[data-v="seal"] .hx-seal{animation:hx-seal var(--fx-dur) cubic-bezier(.3,1.25,.5,1) both}
-.hx[data-v="seal"] .hx-c1 path{fill:var(--fx-foil)}
-.hx[data-v="seal"] .hx-c1{animation:hx-xfade-in var(--fx-dur) var(--fx-ease) both}
-.hx[data-v="seal"] .hx-main path{animation:hx-xfade-out var(--fx-dur) var(--fx-ease) both}
-.hx[data-v="seal"] .hx-shine{animation:hx-sheen var(--fx-dur) cubic-bezier(.4,.1,.6,.9) both}
-@keyframes hx-seal{0%{opacity:1;transform:scale(0)}26%,74%{opacity:1;transform:none}100%{opacity:1;transform:scale(0)}}
 
 /* --- colour: gradient washes (same cross-fade as foil) and flat tri-colour combos --- */
 .hx[data-v="lemonade"] .hx-c1 path{fill:var(--fx-lemonade)}
@@ -2857,16 +2819,15 @@ body:not(.fun-mode) .galaxy-bg *{animation-play-state:paused!important}
 .hx[data-v="candy"] .hx-c1,.hx[data-v="pinstripe"] .hx-c1,.hx[data-v="polka"] .hx-c1,.hx[data-v="checker"] .hx-c1,.hx[data-v="halftone"] .hx-c1,.hx[data-v="terrazzo"] .hx-c1,.hx[data-v="gingham"] .hx-c1,.hx[data-v="waves"] .hx-c1,.hx[data-v="rings"] .hx-c1,.hx[data-v="denim"] .hx-c1,.hx[data-v="wood"] .hx-c1,.hx[data-v="glitter"] .hx-c1{animation:hx-xfade-in var(--fx-dur) var(--fx-ease) both}
 .hx[data-v="candy"] .hx-main path,.hx[data-v="pinstripe"] .hx-main path,.hx[data-v="polka"] .hx-main path,.hx[data-v="checker"] .hx-main path,.hx[data-v="halftone"] .hx-main path,.hx[data-v="terrazzo"] .hx-main path,.hx[data-v="gingham"] .hx-main path,.hx[data-v="waves"] .hx-main path,.hx[data-v="rings"] .hx-main path,.hx[data-v="denim"] .hx-main path,.hx[data-v="wood"] .hx-main path,.hx[data-v="glitter"] .hx-main path{animation:hx-xfade-out var(--fx-dur) var(--fx-ease) both}
 
-/* --- type: the mark becomes the letter h in a different face, in place --- */
-.hx .hx-type{opacity:0;font-size:1100px;fill:var(--fx-ink)}
-.hx[data-v="didone"] .hx-type{font-family:'Abril Fatface',serif;fill:#b3122e;font-size:1080px;transform:translateY(0px)}
-.hx[data-v="script"] .hx-type{font-family:'Great Vibes',cursive;fill:var(--fx-foil);font-size:1240px;transform:translateY(-20px)}
-.hx[data-v="mono"] .hx-type{font-family:'Space Mono',monospace;fill:#12a46a;font-size:1020px;transform:translateY(-10px)}
-.hx[data-v="gothic"] .hx-type{font-family:'UnifrakturMaguntia',serif;fill:var(--fx-ink);font-size:1120px;transform:translateY(0px)}
-.hx[data-v="monoton"] .hx-type{font-family:'Monoton',cursive;fill:#ff3e9a;font-size:960px;transform:translateY(-40px)}
-.hx[data-v="marker"] .hx-type{font-family:'Permanent Marker',cursive;fill:#2449d8;font-size:1040px;transform:translateY(-10px)}
-.hx[data-v="bubble"] .hx-type{font-family:'Fredoka',sans-serif;fill:#9b5cf6;font-size:1060px;transform:translateY(-10px)}
-.hx[data-v="didone"] .hx-type,.hx[data-v="script"] .hx-type,.hx[data-v="mono"] .hx-type,.hx[data-v="gothic"] .hx-type,.hx[data-v="monoton"] .hx-type,.hx[data-v="marker"] .hx-type,.hx[data-v="bubble"] .hx-type{animation:hx-xfade-in var(--fx-dur) var(--fx-ease) both}
+/* --- type: the H fills with "hydraco" set in a different face - same outline, new lettering --- */
+.hx[data-v="didone"] .hx-c1 path{fill:var(--fx-tdidone)}
+.hx[data-v="script"] .hx-c1 path{fill:var(--fx-tscript)}
+.hx[data-v="mono"] .hx-c1 path{fill:var(--fx-tmono)}
+.hx[data-v="gothic"] .hx-c1 path{fill:var(--fx-tgothic)}
+.hx[data-v="monoton"] .hx-c1 path{fill:var(--fx-tmonoton)}
+.hx[data-v="marker"] .hx-c1 path{fill:var(--fx-tmarker)}
+.hx[data-v="bubble"] .hx-c1 path{fill:var(--fx-tbubble)}
+.hx[data-v="didone"] .hx-c1,.hx[data-v="script"] .hx-c1,.hx[data-v="mono"] .hx-c1,.hx[data-v="gothic"] .hx-c1,.hx[data-v="monoton"] .hx-c1,.hx[data-v="marker"] .hx-c1,.hx[data-v="bubble"] .hx-c1{animation:hx-xfade-in var(--fx-dur) var(--fx-ease) both}
 .hx[data-v="didone"] .hx-main path,.hx[data-v="script"] .hx-main path,.hx[data-v="mono"] .hx-main path,.hx[data-v="gothic"] .hx-main path,.hx[data-v="monoton"] .hx-main path,.hx[data-v="marker"] .hx-main path,.hx[data-v="bubble"] .hx-main path{animation:hx-xfade-out var(--fx-dur) var(--fx-ease) both}
 
 /* --- the same replay on the CSS packs and the packets in the photos --- */
@@ -2972,15 +2933,35 @@ body:not(.fun-mode) .galaxy-bg *{animation-play-state:paused!important}
         `<feTurbulence type="fractalNoise" baseFrequency=".16" numOctaves="2" seed="12" result="n"/>` +
         `<feColorMatrix in="n" type="matrix" values="0 0 0 0 1 0 0 0 0 .86 0 0 0 0 .55 9 0 0 0 -5.7" result="spk"/>` +
         `<feComposite in="spk" in2="SourceGraphic" operator="atop"/></filter>` +
+      `<pattern id="${gid}-tdidone" patternUnits="userSpaceOnUse" width="900" height="315">` +
+        `<rect width="900" height="315" style="fill:#b3122e"/><text x="0" y="127" style="font-family:'Abril Fatface';font-size:150px;fill:#fff4e6;font-weight:700">hydraco hydraco</text>` +
+        `<text x="-240" y="285" style="font-family:'Abril Fatface';font-size:150px;fill:#fff4e6;font-weight:700">hydraco hydraco</text></pattern>` +
+      `<pattern id="${gid}-tscript" patternUnits="userSpaceOnUse" width="900" height="357">` +
+        `<rect width="900" height="357" style="fill:#141414"/><text x="0" y="144" style="font-family:'Great Vibes';font-size:170px;fill:#d9b45a;font-weight:700">hydraco hydraco</text>` +
+        `<text x="-272" y="323" style="font-family:'Great Vibes';font-size:170px;fill:#d9b45a;font-weight:700">hydraco hydraco</text></pattern>` +
+      `<pattern id="${gid}-tmono" patternUnits="userSpaceOnUse" width="900" height="235">` +
+        `<rect width="900" height="235" style="fill:#0d1b14"/><text x="0" y="95" style="font-family:'Space Mono';font-size:112px;fill:#19c37d;font-weight:700">hydraco hydraco</text>` +
+        `<text x="-179" y="212" style="font-family:'Space Mono';font-size:112px;fill:#19c37d;font-weight:700">hydraco hydraco</text></pattern>` +
+      `<pattern id="${gid}-tgothic" patternUnits="userSpaceOnUse" width="900" height="294">` +
+        `<rect width="900" height="294" style="fill:#f2ead8"/><text x="0" y="119" style="font-family:'UnifrakturMaguntia';font-size:140px;fill:#1a1a1a;font-weight:700">hydraco hydraco</text>` +
+        `<text x="-224" y="266" style="font-family:'UnifrakturMaguntia';font-size:140px;fill:#1a1a1a;font-weight:700">hydraco hydraco</text></pattern>` +
+      `<pattern id="${gid}-tmonoton" patternUnits="userSpaceOnUse" width="900" height="243">` +
+        `<rect width="900" height="243" style="fill:#1a0b2e"/><text x="0" y="98" style="font-family:'Monoton';font-size:116px;fill:#ff3e9a;font-weight:700">hydraco hydraco</text>` +
+        `<text x="-185" y="220" style="font-family:'Monoton';font-size:116px;fill:#ff3e9a;font-weight:700">hydraco hydraco</text></pattern>` +
+      `<pattern id="${gid}-tmarker" patternUnits="userSpaceOnUse" width="900" height="256">` +
+        `<rect width="900" height="256" style="fill:#fff7c2"/><text x="0" y="103" style="font-family:'Permanent Marker';font-size:122px;fill:#2449d8;font-weight:700">hydraco hydraco</text>` +
+        `<text x="-195" y="231" style="font-family:'Permanent Marker';font-size:122px;fill:#2449d8;font-weight:700">hydraco hydraco</text></pattern>` +
+      `<pattern id="${gid}-tbubble" patternUnits="userSpaceOnUse" width="900" height="294">` +
+        `<rect width="900" height="294" style="fill:#c9b6ff"/><text x="0" y="119" style="font-family:'Fredoka';font-size:140px;fill:#ffffff;font-weight:700">hydraco hydraco</text>` +
+        `<text x="-224" y="266" style="font-family:'Fredoka';font-size:140px;fill:#ffffff;font-weight:700">hydraco hydraco</text></pattern>` +
       `</defs>` +
-      `<rect class="hx-bg" x="-130" y="-90" width="960" height="1238" rx="150"/>` +
-      `<ellipse class="hx-seal" cx="350" cy="529" rx="560" ry="690"/>` +
+      // everything is clipped to the H itself, so no look can ever make the outline bigger
+      `<g class="hx-in" clip-path="url(#${id})">` +
       set("hx-c1") + set("hx-c2") +
       `<g clip-path="url(#${id})"><path class="hx-liq" d="M-400 40 Q-225 -20 -50 40 T300 40 T650 40 T1000 40 T1350 40 V1200 H-400Z"/><circle class="hx-bloom" cx="520" cy="900" r="1150"/><rect class="hx-aurora" x="-1400" y="-40" width="2800" height="1140"/></g>` +
       set("hx-main") +
-      `<text class="hx-type" x="350" y="1000" text-anchor="middle">h</text>` +
       `<g clip-path="url(#${id})"><path class="hx-shine" d="M-60 -40 H180 L-40 1120 H-280Z"/></g>` +
-      `<rect class="hx-scan" x="-80" y="-34" width="860" height="28" rx="14"/>` + "</svg>";
+      `<rect class="hx-scan" x="-80" y="-34" width="860" height="28" rx="14"/></g>` + "</svg>";
     const st = wrap.firstChild.style;
     st.setProperty("--fx-rough", `url(#${rough})`);
     st.setProperty("--fx-foil", `url(#${gid}f)`);
@@ -2992,6 +2973,13 @@ body:not(.fun-mode) .galaxy-bg *{animation-play-state:paused!important}
     st.setProperty("--fx-glass", `url(#${gid}g)`);
     st.setProperty("--fx-aurora", `url(#${gid}a)`);
     st.setProperty("--fx-marble", `url(#${gid}m)`);
+    st.setProperty("--fx-tdidone", `url(#${gid}-tdidone)`);
+    st.setProperty("--fx-tscript", `url(#${gid}-tscript)`);
+    st.setProperty("--fx-tmono", `url(#${gid}-tmono)`);
+    st.setProperty("--fx-tgothic", `url(#${gid}-tgothic)`);
+    st.setProperty("--fx-tmonoton", `url(#${gid}-tmonoton)`);
+    st.setProperty("--fx-tmarker", `url(#${gid}-tmarker)`);
+    st.setProperty("--fx-tbubble", `url(#${gid}-tbubble)`);
     st.setProperty("--fx-candy", `url(#${gid}-candy)`);
     st.setProperty("--fx-pin", `url(#${gid}-pin)`);
     st.setProperty("--fx-polka", `url(#${gid}-polka)`);
@@ -3022,12 +3010,12 @@ body:not(.fun-mode) .galaxy-bg *{animation-play-state:paused!important}
   const NAV_VARIANTS = ["candy", "didone", "lemonade", "foil", "line", "pinstripe", "script", "ocean", "chrome", "dots", "polka",
     "mono", "mint", "rosegold", "trace", "checker", "gothic", "holo", "pearl", "sketch", "halftone",
     "monoton", "aurora", "glass", "wipe", "terrazzo", "marker", "tropic", "emboss", "iris", "denim", "bubble",
-    "sorbet", "neon", "scan", "wood", "duo", "keyline", "bloom", "rings", "hue", "seal", "halo", "gingham",
-    "badge", "shine", "glitter", "fill", "waves", "engrave", "marble"];
+    "sorbet", "neon", "scan", "wood", "duo", "bloom", "rings", "hue", "halo", "gingham",
+    "shine", "glitter", "fill", "waves", "engrave", "marble"];
   const NAV_EVERY = 10000, NAV_MS = 1500;
   const LOOK_MS = {
-    marble: 2600, aurora: 2600, seal: 2600,
-    foil: 2400, chrome: 2400, rosegold: 2400, pearl: 2400, engrave: 2400, glass: 2400, keyline: 2400,
+    marble: 2600, aurora: 2600,
+    foil: 2400, chrome: 2400, rosegold: 2400, pearl: 2400, engrave: 2400, glass: 2400,
     didone: 2400, script: 2400, mono: 2400, gothic: 2400, monoton: 2400, marker: 2400, bubble: 2400,
     emboss: 2200, trace: 2200, halo: 2200, lemonade: 2200, ocean: 2200, tropic: 2200, mint: 2200,
     sorbet: 2200, holo: 2200, candy: 2200, pinstripe: 2200, polka: 2200, checker: 2200, halftone: 2200,
