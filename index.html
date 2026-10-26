@@ -2771,6 +2771,38 @@ body:not(.fun-mode) .galaxy-bg *{animation-play-state:paused!important}
 .hx[data-v="baroque"] .hx-c1 path{fill:var(--fx-baroque)}
 .hx[data-v="baroque"] .hx-shine{animation:hx-sheen var(--fx-dur) cubic-bezier(.4,.1,.6,.9) both}
 
+/* --- the first-visit set: solid brand colours and pen styles --- */
+.hx[data-v="teal"] .hx-c1 path{fill:#00a9ac}
+.hx[data-v="pink"] .hx-c1 path{fill:#fb4fc0}
+.hx[data-v="aqua"] .hx-c1 path{fill:#42c4d2}
+.hx[data-v="sun"] .hx-c1 path{fill:#ffbf00}
+.hx[data-v="coral"] .hx-c1 path{fill:#ff6f61}
+.hx[data-v="navy"] .hx-c1 path{fill:#14213d}
+.hx[data-v="plum"] .hx-c1 path{fill:#6b2d5c}
+.hx[data-v="mint"] .hx-c1 path{fill:#6fd8b7}
+.hx[data-v="honey"] .hx-c1 path{fill:#d99a1e}
+.hx[data-v="berry"] .hx-c1 path{fill:#a3268c}
+.hx[data-v="sky"] .hx-c1 path{fill:#3f7fc4}
+.hx[data-v="lime"] .hx-c1 path{fill:#8cc63f}
+.hx[data-v="rose"] .hx-c1 path{fill:#e88aa0}
+.hx[data-v="slate"] .hx-c1 path{fill:#61706f}
+.hx[data-v="sand"] .hx-c1 path{fill:#d9c7a1}
+.hx[data-v="cherry"] .hx-c1 path{fill:#c1121f}
+/* pens: the H turns to paper and an outline is drawn in a different pen */
+.hx[data-v="fineliner"] .hx-c1 path,.hx[data-v="redpen"] .hx-c1 path,.hx[data-v="dotted"] .hx-c1 path,.hx[data-v="dashed"] .hx-c1 path,
+.hx[data-v="marker"] .hx-c1 path,.hx[data-v="brush"] .hx-c1 path{fill:var(--fx-paper)}
+.hx[data-v="fineliner"] .hx-c2 path{stroke:var(--fx-ink);stroke-width:calc(var(--fx-sw) * 1.6)}
+.hx[data-v="redpen"] .hx-c2 path{stroke:#d7263d;stroke-width:calc(var(--fx-sw) * 1.8)}
+.hx[data-v="marker"] .hx-c2 path{stroke:#2449d8;stroke-width:calc(var(--fx-sw) * 5);stroke-opacity:.9}
+.hx[data-v="brush"] .hx-c2{filter:var(--fx-rough)}
+.hx[data-v="brush"] .hx-c2 path{stroke:var(--fx-ink);stroke-width:calc(var(--fx-sw) * 7)}
+.hx[data-v="dotted"] .hx-c2 path{stroke:var(--fx-a);stroke-width:calc(var(--fx-sw) * 4.4);stroke-dasharray:0 .016;animation:hx-run var(--fx-dur) linear both}
+.hx[data-v="dashed"] .hx-c2 path{stroke:#ff6f61;stroke-width:calc(var(--fx-sw) * 3.2);stroke-linecap:butt;stroke-dasharray:.02 .012;animation:hx-run var(--fx-dur) linear both}
+@keyframes hx-run{from{stroke-dashoffset:0}to{stroke-dashoffset:-.12}}
+/* inline: paper H with an ink line set just inside the edge */
+.hx[data-v="inline"] .hx-c1 path{fill:var(--fx-paper);stroke:var(--fx-ink);stroke-width:calc(var(--fx-sw) * 10)}
+.hx[data-v="inline"] .hx-c2 path{stroke:var(--fx-paper);stroke-width:calc(var(--fx-sw) * 6);stroke-dasharray:none;animation:none}
+
 /* --- the same replay on the CSS packs and the packets in the photos --- */
 .fx-on > .mark,.fx-on > .pack-mark{opacity:0}
 /* covers the photo's box and clips to it, so unplaced overlays can never widen the page */
@@ -2933,9 +2965,14 @@ body:not(.fun-mode) .galaxy-bg *{animation-play-state:paused!important}
     walnut: "#efe6d2", lapis: "#0b0b0b", copper: "#0f2a2a"
   };
   const shuffle = (a) => { for (let i = a.length - 1; i > 0; i--) { const j = Math.floor(Math.random() * (i + 1)); [a[i], a[j]] = [a[j], a[i]]; } return a; };
-  // the intro shows 20 looks, picked fresh every load - ones the last load didn't show come first
-  const INTRO_COUNT = 20;
-  const introLooks = (() => {
+  // a first visit gets the default intro: solid brand colours and pen styles
+  const DEFAULT_INTRO = ["teal", "fineliner", "pink", "dotted", "sun", "marker", "aqua", "brush", "coral", "dashed",
+    "navy", "inline", "mint", "redpen", "plum", "pencil", "berry", "sketchbook", "sky", "lime", "rose", "slate", "sand",
+    "cherry", "honey"];
+  // a reload shows 25 of the others, picked fresh every time - ones the last reload didn't show come first
+  const INTRO_COUNT = 25;
+  const isReloadVisit = (() => { const n = performance.getEntriesByType && performance.getEntriesByType("navigation")[0]; return !!n && n.type === "reload"; })();
+  const introLooks = isReloadVisit ? (() => {
     let last = [];
     try { last = JSON.parse(localStorage.getItem("hxLastIntro") || "[]"); } catch (e) {}
     const fresh = shuffle(NAV_VARIANTS.filter((v) => !last.includes(v)));
@@ -2943,7 +2980,7 @@ body:not(.fun-mode) .galaxy-bg *{animation-play-state:paused!important}
     const picks = fresh.concat(seen).slice(0, INTRO_COUNT);
     try { localStorage.setItem("hxLastIntro", JSON.stringify(picks)); } catch (e) {}
     return picks;
-  })();
+  })() : DEFAULT_INTRO;
   const LOOK_MS = {};   // every look runs NAV_MS
 
   /* ---------- intro (~5s, on every load) ---------- */
