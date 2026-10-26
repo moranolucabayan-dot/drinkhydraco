@@ -1690,6 +1690,12 @@ img[data-photo].swapping{opacity:.35}
              linear-gradient(90deg,#fb4fc0,#42c4d2) border-box;
 }
 @media (max-width:420px){ .prod-switch.three .prod-opt span{font-size:.66rem} }
+/* three cards side by side on a phone leave ~70px for the name: size it to the screen so
+   HYDRAPRO always fits inside its card */
+@media (max-width:560px){
+  .prod-switch.three .prod-opt{padding-inline:8px}
+  .prod-switch.three .prod-opt b{font-size:clamp(.62rem,3.2vw,.84rem);letter-spacing:.05em;white-space:nowrap}
+}
 
 /* switching mode: the new look spreads out in a circle from the button
    that was pressed (browsers without view transitions just swap) */
