@@ -329,6 +329,9 @@ section{padding-block:clamp(84px,11vw,168px)}
   letter-spacing:.1em;text-transform:uppercase;font-weight:300;
   line-height:.98;color:#0e1414;position:relative;z-index:1;
 }
+/* the longest name (HYDRAPRO, with its brush padding) is about 6.3em wide and the phone layout's copy
+   is 88vw, so cap the size there - the word then always sits inside its brush stroke */
+@media (max-width:900px){ .hero h1{font-size:min(clamp(3.2rem,10.5vw,7.4rem),13.4vw)} }
 /* the one flavor, said plainly under the headline */
 .hero-flavor{margin-top:10px;font-size:.78rem;letter-spacing:.16em;text-transform:uppercase;font-weight:600;color:var(--pink-ink)}
 .hero-flavor span{color:var(--slate);font-weight:500;margin-right:.5em}
