@@ -2653,6 +2653,34 @@ body:not(.fun-mode) .galaxy-bg *{animation-play-state:paused!important}
 .hx[data-v="boardroom"] .hx-c1 path{fill:var(--fx-board)}
 .hx[data-v="boardroom"] .hx-c2 path{stroke:var(--fx-gold);stroke-width:calc(var(--fx-sw) * 2.6)}
 
+/* --- art looks --- */
+/* mondrian: black bars and primary blocks, with a heavy black edge */
+.hx[data-v="mondrian"] .hx-c1 path{fill:var(--fx-mondrian)}
+.hx[data-v="mondrian"] .hx-c2 path{stroke:#111;stroke-width:calc(var(--fx-sw) * 6)}
+/* van gogh: night-blue and yellow brushwork */
+.hx[data-v="vangogh"] .hx-c1 path{fill:var(--fx-vangogh)}
+/* kusama: red with white dots */
+.hx[data-v="kusama"] .hx-c1 path{fill:var(--fx-kusama)}
+/* hokusai: indigo with curling wave crests */
+.hx[data-v="hokusai"] .hx-c1 path{fill:var(--fx-hokusai)}
+/* bauhaus: circle, triangle, square, bar */
+.hx[data-v="bauhaus"] .hx-c1 path{fill:var(--fx-bauhaus)}
+.hx[data-v="bauhaus"] .hx-c2 path{stroke:#111;stroke-width:calc(var(--fx-sw) * 3)}
+/* matisse: paper cut-outs on cream */
+.hx[data-v="matisse"] .hx-c1 path{fill:var(--fx-matisse)}
+/* lichtenstein: Ben-Day dots and a bold comic outline */
+.hx[data-v="lichtenstein"] .hx-c1 path{fill:var(--fx-dots)}
+.hx[data-v="lichtenstein"] .hx-c2 path{stroke:#111;stroke-width:calc(var(--fx-sw) * 6)}
+/* klimt: gold leaf mosaic */
+.hx[data-v="klimt"] .hx-c1 path{fill:var(--fx-klimt)}
+.hx[data-v="klimt"] .hx-shine{animation:hx-sheen var(--fx-dur) cubic-bezier(.4,.1,.6,.9) both}
+/* watercolour: soft washes bleeding into each other */
+.hx[data-v="watercolor"] .hx-c1 path{fill:var(--fx-wash)}
+.hx[data-v="watercolor"] .hx-c2{filter:var(--fx-wc)}
+.hx[data-v="watercolor"] .hx-c2 path{fill:var(--fx-wash2);fill-opacity:.7;stroke:none}
+/* kandinsky: concentric circles on near-black */
+.hx[data-v="kandinsky"] .hx-c1 path{fill:var(--fx-kandinsky)}
+
 /* --- the same replay on the CSS packs and the packets in the photos --- */
 .fx-on > .mark,.fx-on > .pack-mark{opacity:0}
 /* covers the photo's box and clips to it, so unplaced overlays can never widen the page */
@@ -2718,6 +2746,18 @@ body:not(.fun-mode) .galaxy-bg *{animation-play-state:paused!important}
         `<circle cx="100" cy="100" r="16" fill="#111"/></pattern>` +
       `<pattern id="${g}board" patternUnits="userSpaceOnUse" width="60" height="60">` +
         `<rect width="60" height="60" fill="#14213d"/><rect x="29" width="2" height="60" fill="#c9a456" opacity=".8"/></pattern>` +
+      `<pattern id="${g}mondrian" patternUnits="userSpaceOnUse" width="700" height="1058"><rect width="700" height="1058" fill="#f7f4ec"/><rect width="230" height="300" fill="#d7263d"/><rect x="470" y="640" width="230" height="240" fill="#1f4fb6"/><rect x="252" y="902" width="218" height="156" fill="#f6c400"/><rect x="230" width="22" height="1058" fill="#111"/><rect x="470" width="22" height="1058" fill="#111"/><rect y="300" width="700" height="22" fill="#111"/><rect y="640" width="700" height="22" fill="#111"/><rect x="252" y="880" width="448" height="22" fill="#111"/></pattern>` +
+      `<pattern id="${g}vangogh" patternUnits="userSpaceOnUse" width="160" height="120" patternTransform="rotate(-12)"><rect width="160" height="120" fill="#1f3c88"/><path d="M8 30q22-22 44 0t44 0M20 70q18-16 36 0M90 64q22-20 44 0M30 104q24-18 48 0t48 0" style="fill:none;stroke:#4a6fd1;stroke-width:9;stroke-linecap:round"/><path d="M64 16q14-12 28 0M118 96q14-12 28 0" style="fill:none;stroke:#f5d547;stroke-width:9;stroke-linecap:round"/><path d="M4 88q14-10 28 0M120 30q12-10 24 0" style="fill:none;stroke:#a9c1f2;stroke-width:6;stroke-linecap:round"/></pattern>` +
+      `<pattern id="${g}kusama" patternUnits="userSpaceOnUse" width="220" height="220"><rect width="220" height="220" fill="#e2231a"/><circle cx="40" cy="40" r="26" fill="#fff"/><circle cx="150" cy="60" r="14" fill="#fff"/><circle cx="110" cy="140" r="34" fill="#fff"/><circle cx="30" cy="170" r="12" fill="#fff"/><circle cx="190" cy="170" r="20" fill="#fff"/><circle cx="72" cy="96" r="8" fill="#fff"/><circle cx="186" cy="112" r="9" fill="#fff"/><circle cx="200" cy="18" r="7" fill="#fff"/></pattern>` +
+      `<pattern id="${g}hokusai" patternUnits="userSpaceOnUse" width="240" height="140"><rect width="240" height="140" fill="#1b365d"/><path d="M0 110C40 50 100 46 124 96C112 72 88 74 92 98M120 110C160 50 220 46 244 96C232 72 208 74 212 98" style="fill:none;stroke:#f4efe4;stroke-width:7;stroke-linecap:round"/><path d="M20 60C50 30 90 30 104 58M140 60C170 30 210 30 224 58" style="fill:none;stroke:#7fa3c9;stroke-width:5;stroke-linecap:round"/></pattern>` +
+      `<pattern id="${g}bauhaus" patternUnits="userSpaceOnUse" width="700" height="1058"><rect width="700" height="1058" fill="#efe6d2"/><circle cx="160" cy="250" r="170" fill="#d7263d"/><path d="M360 520L700 520L530 860Z" style="fill:#1f4fb6"/><rect x="40" y="660" width="260" height="260" fill="#f6c400"/><rect y="470" width="700" height="26" fill="#111"/><circle cx="560" cy="200" r="60" fill="#111"/></pattern>` +
+      `<pattern id="${g}matisse" patternUnits="userSpaceOnUse" width="700" height="1058"><rect width="700" height="1058" fill="#f4ecd8"/><path d="M120 120C210 30 300 140 240 240C330 220 360 330 260 370C300 440 190 500 150 410C70 450 30 350 100 320C20 270 50 170 120 120Z" style="fill:#1f4fb6"/><path d="M480 60C560 20 640 100 600 170C670 190 660 290 580 280C590 360 490 360 490 290C420 300 410 210 470 190C420 140 440 80 480 60Z" style="fill:#f08a24"/><path d="M80 640C170 560 260 660 210 760C300 760 310 870 220 880C240 960 130 990 110 900C30 920 10 820 80 790C10 740 30 670 80 640Z" style="fill:#1f4fb6"/><path d="M420 520C500 480 600 560 560 640C640 680 600 780 520 750C500 830 400 820 410 740C330 730 340 640 410 630C370 590 380 540 420 520Z" style="fill:#2e8b57"/></pattern>` +
+      `<pattern id="${g}dots" patternUnits="userSpaceOnUse" width="28" height="28" patternTransform="rotate(45)"><rect width="28" height="28" fill="#fffdf6"/><circle cx="14" cy="14" r="9" fill="#e8312b"/></pattern>` +
+      `<pattern id="${g}klimt" patternUnits="userSpaceOnUse" width="120" height="120"><rect width="120" height="120" fill="#c9a227"/><rect x="10" y="10" width="20" height="20" fill="#1a1408"/><rect x="70" y="64" width="20" height="20" fill="#1a1408"/><circle cx="84" cy="24" r="13" fill="#f3ead2"/><circle cx="84" cy="24" r="6" fill="#c9a227"/><circle cx="30" cy="84" r="13" fill="#f3ead2"/><circle cx="30" cy="84" r="6" fill="#c9a227"/><circle cx="104" cy="104" r="4" fill="#1a1408"/><circle cx="50" cy="44" r="4" fill="#1a1408"/></pattern>` +
+      `<linearGradient id="${g}wash" gradientUnits="userSpaceOnUse" x1="0" y1="0" x2="700" y2="1058"><stop offset="0" stop-color="#f7a8c4"/><stop offset=".45" stop-color="#c7b8f5"/><stop offset="1" stop-color="#8fcdf2"/></linearGradient>` +
+      `<linearGradient id="${g}wash2" gradientUnits="userSpaceOnUse" x1="700" y1="0" x2="0" y2="1058"><stop offset="0" stop-color="#8fcdf2"/><stop offset=".5" stop-color="#f7a8c4"/><stop offset="1" stop-color="#c7b8f5"/></linearGradient>` +
+      `<filter id="${g}wc" x="-10%" y="-10%" width="120%" height="120%"><feTurbulence type="fractalNoise" baseFrequency=".011" numOctaves="3" seed="9"/><feDisplacementMap in="SourceGraphic" scale="140"/><feGaussianBlur stdDeviation="5"/></filter>` +
+      `<pattern id="${g}kandinsky" patternUnits="userSpaceOnUse" width="260" height="260"><rect width="260" height="260" fill="#101820"/><circle cx="110" cy="110" r="100" fill="#e94e1b"/><circle cx="110" cy="110" r="70" fill="#f5c518"/><circle cx="110" cy="110" r="42" fill="#2a7fdb"/><circle cx="110" cy="110" r="18" fill="#111"/><circle cx="226" cy="226" r="40" fill="#2a7fdb"/><circle cx="226" cy="226" r="22" fill="#f3ead2"/><circle cx="230" cy="40" r="22" fill="#e94e1b"/><circle cx="230" cy="40" r="10" fill="#f5c518"/></pattern>` +
       `</defs>` +
       // everything is clipped to the H itself, so no look can ever make the outline bigger
       `<g class="hx-in" clip-path="url(#${id})">` +
@@ -2726,7 +2766,7 @@ body:not(.fun-mode) .galaxy-bg *{animation-play-state:paused!important}
     const st = wrap.firstChild.style;
     [["rough", "r"], ["gold", "gold"], ["alu", "alu"], ["colorful", "colorful"], ["sheen", "s"],
      ["sketch", "sketch"], ["pencil", "pencil"], ["hatch", "hatch"], ["term", "term"], ["basq", "basq"],
-     ["haring", "haring"], ["board", "board"]].forEach(([v, k]) => st.setProperty("--fx-" + v, `url(#${g}${k})`));
+     ["haring", "haring"], ["board", "board"], ["mondrian", "mondrian"], ["vangogh", "vangogh"], ["kusama", "kusama"], ["hokusai", "hokusai"], ["bauhaus", "bauhaus"], ["matisse", "matisse"], ["dots", "dots"], ["klimt", "klimt"], ["wash", "wash"], ["wc", "wc"], ["wash2", "wash2"], ["kandinsky", "kandinsky"]].forEach(([v, k]) => st.setProperty("--fx-" + v, `url(#${g}${k})`));
     return wrap.firstChild;
   }
 
@@ -2739,8 +2779,9 @@ body:not(.fun-mode) .galaxy-bg *{animation-play-state:paused!important}
   }
 
   const REDUCED = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-  const NAV_VARIANTS = ["gold", "sketchbook", "terminal", "colorful", "chalk", "basquiat", "apple", "pencil",
-    "haring", "ink", "boardroom"];
+  const NAV_VARIANTS = ["gold", "mondrian", "sketchbook", "vangogh", "terminal", "kusama", "colorful", "hokusai",
+    "chalk", "bauhaus", "basquiat", "matisse", "apple", "lichtenstein", "pencil", "klimt", "haring", "watercolor",
+    "ink", "kandinsky", "boardroom"];
   const NAV_EVERY = 10000, NAV_MS = 2400;
   const LOOK_MS = {};   // every look runs NAV_MS
 
