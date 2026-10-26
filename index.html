@@ -33,8 +33,8 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Jost:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400;1,500&family=Newsreader:ital,opsz,wght@0,6..72,400;1,6..72,400&display=swap">
-<!-- display faces for the logo's "type" variations; text=hydraco means only those letters are downloaded -->
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Abril+Fatface&family=Fredoka:wght@700&family=Great+Vibes&family=Monoton&family=Permanent+Marker&family=Space+Mono:wght@700&family=UnifrakturMaguntia&text=hydraco&display=swap">
+<!-- the logo's terminal look; text= means only these characters are downloaded -->
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@700&text=hydraco_01%20&display=swap">
 <style>*,*::before,*::after{box-sizing:border-box}body{margin:0}</style>
 <style>
 :root{
@@ -2576,47 +2576,8 @@ body:not(.fun-mode) .galaxy-bg *{animation-play-state:paused!important}
    ============================================================ */
 .hx{--fx-ink:var(--ink);--fx-paper:var(--paper);--fx-k:1;--fx-a:var(--teal);--fx-b:#ffbf00;--fx-sw:7;--fx-dur:1.4s;overflow:visible;display:block}
 .hx path{fill:var(--fx-ink);stroke:none}
-.hx .hx-c1,.hx .hx-c2,.hx .hx-liq{opacity:0}
+.hx .hx-c1,.hx .hx-c2{opacity:0}
 .hx .hx-c1 path{fill:var(--fx-a)}
-.hx .hx-liq{fill:var(--fx-a)}
-
-/* thin line: drawn on, then filled */
-.hx[data-v="line"] .hx-main path{
-  fill:var(--fx-ink);stroke:var(--fx-ink);stroke-width:var(--fx-sw);stroke-linejoin:round;
-  stroke-dasharray:1 1;animation:hx-draw var(--fx-dur) cubic-bezier(.6,0,.2,1) both}
-/* the ink thins to an outline, the outline un-draws, then draws back and fills */
-@keyframes hx-draw{
-  0%{stroke-dashoffset:0;fill-opacity:1;stroke-opacity:0}
-  18%{stroke-dashoffset:0;fill-opacity:0;stroke-opacity:1}
-  40%{stroke-dashoffset:-1;fill-opacity:0}
-  82%{stroke-dashoffset:-2;fill-opacity:0;stroke-opacity:1}
-  100%{stroke-dashoffset:-2;fill-opacity:1;stroke-opacity:0}}
-
-/* dotted stroke that runs around the outline */
-.hx[data-v="dots"] .hx-main path{
-  stroke:var(--fx-a);stroke-width:calc(var(--fx-sw) * 2.4);stroke-linecap:round;
-  stroke-dasharray:0 .022;animation:hx-dots var(--fx-dur) linear both}
-@keyframes hx-dots{
-  0%{stroke-dashoffset:0;fill-opacity:1;stroke-opacity:0}
-  15%{fill-opacity:0;stroke-opacity:1}
-  75%{stroke-dashoffset:-.12;fill-opacity:0;stroke-opacity:1}
-  100%{stroke-dashoffset:-.15;fill-opacity:1;stroke-opacity:0}}
-
-/* colour combo: teal body, gold cap and drop */
-.hx[data-v="duo"] .hx-b{animation:hx-duo-a var(--fx-dur) ease both}
-.hx[data-v="duo"] .hx-t,.hx[data-v="duo"] .hx-d{animation:hx-duo-b var(--fx-dur) ease both}
-@keyframes hx-duo-a{0%,100%{fill:var(--fx-ink)}14%,82%{fill:var(--fx-a)}}
-@keyframes hx-duo-b{0%,100%{fill:var(--fx-ink)}14%,82%{fill:var(--fx-b)}}
-
-/* water fill: teal rises through the outline, then settles to ink */
-.hx[data-v="fill"] .hx-main path{
-  stroke:var(--fx-ink);stroke-width:var(--fx-sw);animation:hx-fill-main var(--fx-dur) ease both}
-.hx[data-v="fill"] .hx-liq{animation:hx-fill-liq var(--fx-dur) cubic-bezier(.3,.1,.3,1) both}
-@keyframes hx-fill-main{0%{fill-opacity:1;stroke-opacity:0}15%,78%{fill-opacity:0;stroke-opacity:1}100%{fill-opacity:1;stroke-opacity:0}}
-@keyframes hx-fill-liq{
-  0%,15%{opacity:1;transform:translate(-350px,1120px)}
-  78%{opacity:1;transform:translate(0,-20px)}
-  100%{opacity:0;transform:translate(0,-20px)}}
 
 /* intro overlay */
 .hx-intro{
@@ -2643,201 +2604,54 @@ body:not(.fun-mode) .galaxy-bg *{animation-play-state:paused!important}
 }
 :root[data-theme="dark"] .brand .mark-fx{filter:drop-shadow(0 0 1px var(--ink)) drop-shadow(0 0 2px var(--ink))}
 
-/* --- more variations --- */
+/* ---------- the looks: one per dashboard style, all inside the H ----------
+   Each fades the ink away to a finish on .hx-c1 (and, where it has one, an outline drawn on
+   .hx-c2), holds it, then fades back to the plain mark. Everything is clipped to the H. */
+.hx{--fx-ease:cubic-bezier(.65,0,.35,1)}
 .hx .hx-shine{opacity:0;fill:var(--fx-sheen)}
-.hx-b,.hx-t,.hx-d{transform-box:fill-box;transform-origin:50% 50%}
-
-/* neon: the ink melts into a glowing teal tube, then settles back */
-.hx[data-v="neon"] .hx-in{animation:hx-neon-glow var(--fx-dur) var(--fx-ease) both}
-.hx[data-v="neon"] .hx-main path{
-  stroke:var(--fx-a);stroke-width:calc(var(--fx-sw) * 1.6);stroke-linejoin:round;
-  animation:hx-neon var(--fx-dur) var(--fx-ease) both}
-@keyframes hx-neon-glow{
-  0%,100%{filter:drop-shadow(0 0 0 rgba(0,0,0,0)) drop-shadow(0 0 0 rgba(0,0,0,0))}
-  24%,76%{filter:drop-shadow(0 0 calc(4px * var(--fx-k)) var(--fx-a)) drop-shadow(0 0 calc(12px * var(--fx-k)) var(--fx-a))}}
-@keyframes hx-neon{0%,100%{fill-opacity:1;stroke-opacity:0}24%,76%{fill-opacity:0;stroke-opacity:1}}
-
-/* sketch: wobbly pencil outline, scribbled twice, then inked */
-/* the ink fades while two rough pencil passes draw the outline (only the copies are roughened,
-   so the mark itself is untouched at the start and end) */
-.hx[data-v="sketch"] .hx-c1,.hx[data-v="sketch"] .hx-c2{filter:var(--fx-rough)}
-.hx[data-v="sketch"] .hx-c1 path,.hx[data-v="sketch"] .hx-c2 path{
-  fill:none;stroke:var(--fx-ink);stroke-width:var(--fx-sw);stroke-linecap:round;stroke-dasharray:1 1;
-  animation:hx-sk-draw var(--fx-dur) cubic-bezier(.4,0,.3,1) both}
-.hx[data-v="sketch"] .hx-c2 path{animation-delay:calc(var(--fx-dur) * -.1)}
-.hx[data-v="sketch"] .hx-main path{animation:hx-sk-main var(--fx-dur) var(--fx-ease) both}
-.hx[data-v="sketch"] .hx-c1{animation:hx-sk-show var(--fx-dur) linear both}
-.hx[data-v="sketch"] .hx-c2{animation:hx-sketch-2 var(--fx-dur) linear both}
-@keyframes hx-sk-draw{0%,12%{stroke-dashoffset:1}72%,100%{stroke-dashoffset:0}}
-@keyframes hx-sk-show{0%{opacity:0}12%,84%{opacity:1}100%{opacity:0}}
-@keyframes hx-sk-main{0%{fill-opacity:1}16%,80%{fill-opacity:0}100%{fill-opacity:1}}
-@keyframes hx-sketch-2{0%{opacity:0}20%,80%{opacity:.6}100%{opacity:0}}
-
-/* shine: an Apple-style sheen sweeps across the mark */
-.hx[data-v="shine"] .hx-shine{animation:hx-shine var(--fx-dur) cubic-bezier(.4,.1,.6,.9) both}
-@keyframes hx-shine{0%{opacity:1;transform:translateX(-220px)}88%{opacity:1;transform:translateX(1020px)}100%{opacity:0;transform:translateX(1020px)}}
-
-/* --- ten more --- */
-.hx .hx-scan{opacity:0}
-.hx .hx-scan{fill:var(--fx-a)}
-.hx .hx-c1,.hx .hx-c2{transform-box:fill-box;transform-origin:50% 50%}
-
-/* scan: a teal scanner line reveals the mark top to bottom */
-.hx[data-v="scan"]{animation:hx-scan-clip var(--fx-dur) linear both}
-.hx[data-v="scan"] .hx-scan{animation:hx-scan-bar var(--fx-dur) linear both}
-.hx[data-v="scan"] .hx-scan{filter:drop-shadow(0 0 calc(6px * var(--fx-k)) var(--fx-a))}
-/* the line sweeps up, folding the mark away, then down again revealing it */
-@keyframes hx-scan-clip{0%{clip-path:inset(0 0 0 0)}16%{clip-path:inset(0 0 97% 0)}84%,100%{clip-path:inset(0 0 0 0)}}
-@keyframes hx-scan-bar{
-  0%{opacity:0;transform:translateY(1098px)}3%{opacity:1}
-  16%{transform:translateY(0)}84%{opacity:1;transform:translateY(1098px)}100%{opacity:0;transform:translateY(1098px)}}
-
-/* hue: runs through pink, teal and gold */
-.hx[data-v="hue"] .hx-main path{animation:hx-hue var(--fx-dur) linear both}
-@keyframes hx-hue{0%{fill:var(--fx-ink)}18%{fill:var(--pink,#ec4fa8)}40%{fill:var(--fx-a)}62%{fill:var(--fx-b)}84%,100%{fill:var(--fx-ink)}}
-
-/* --- premium looks: slower, eased, material rather than effects --- */
-.hx{--fx-ease:cubic-bezier(.65,0,.35,1);--fx-out:cubic-bezier(.16,1,.3,1)}
-.hx .hx-bloom{opacity:0;fill:var(--fx-ink);transform-box:fill-box;transform-origin:50% 50%}
-
-/* foil / chrome / deep: the ink fades away to the material layer underneath (hx-c1), a soft
-   light passes over it, and the ink fades back */
-.hx[data-v="foil"] .hx-c1 path{fill:var(--fx-foil)}
-.hx[data-v="chrome"] .hx-c1 path{fill:var(--fx-chrome)}
-.hx[data-v="foil"] .hx-c1,.hx[data-v="chrome"] .hx-c1{animation:hx-xfade-in var(--fx-dur) var(--fx-ease) both}
-.hx[data-v="foil"] .hx-main path,.hx[data-v="chrome"] .hx-main path{animation:hx-xfade-out var(--fx-dur) var(--fx-ease) both}
-.hx[data-v="foil"] .hx-shine,.hx[data-v="chrome"] .hx-shine{animation:hx-sheen var(--fx-dur) cubic-bezier(.4,.1,.6,.9) both}
 @keyframes hx-xfade-in{0%{opacity:0}24%,76%{opacity:1}100%{opacity:0}}
 @keyframes hx-xfade-out{0%{fill-opacity:1}24%,76%{fill-opacity:0}100%{fill-opacity:1}}
 @keyframes hx-sheen{0%,20%{opacity:1;transform:translateX(-220px)}76%{opacity:1;transform:translateX(1020px)}100%{opacity:0;transform:translateX(1020px)}}
+@keyframes hx-pen{0%,10%{stroke-dashoffset:1}66%,100%{stroke-dashoffset:0}}
+.hx[data-v] .hx-c1,.hx[data-v] .hx-c2{animation:hx-xfade-in var(--fx-dur) var(--fx-ease) both}
+.hx[data-v] .hx-main path{animation:hx-xfade-out var(--fx-dur) var(--fx-ease) both}
+.hx[data-v] .hx-c2 path{fill:none;stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:1 1;animation:hx-pen var(--fx-dur) var(--fx-ease) both}
+.hx[data-v="gold"] .hx-shine,.hx[data-v="apple"] .hx-shine{animation:hx-sheen var(--fx-dur) cubic-bezier(.4,.1,.6,.9) both}
 
-/* emboss: the mark turns to paper, pressed in - the shading sits inside the edge, never outside it */
-.hx[data-v="emboss"] .hx-main path{animation:hx-xfade-out var(--fx-dur) var(--fx-ease) both}
-.hx[data-v="emboss"] .hx-c1 path{fill:var(--fx-paper);stroke:rgba(14,20,20,.3);stroke-width:calc(var(--fx-sw) * 4)}
-.hx[data-v="emboss"] .hx-c1{animation:hx-xfade-in var(--fx-dur) var(--fx-ease) both}
-
-/* bloom: settles to a hairline, then ink spreads out from the drop and fills it */
-.hx[data-v="bloom"] .hx-main path{stroke:var(--fx-ink);stroke-width:var(--fx-sw);animation:hx-bloom-main var(--fx-dur) var(--fx-ease) both}
-.hx[data-v="bloom"] .hx-bloom{animation:hx-bloom var(--fx-dur) cubic-bezier(.55,0,.25,1) both}
-@keyframes hx-bloom-main{
-  0%{fill-opacity:1;stroke-opacity:0}
-  16%,86%{fill-opacity:0;stroke-opacity:1}
-  100%{fill-opacity:1;stroke-opacity:0}}
-@keyframes hx-bloom{0%,20%{opacity:1;transform:scale(0)}86%{opacity:1;transform:scale(1)}100%{opacity:0;transform:scale(1)}}
-
-/* iris: a circular aperture closes on the mark and opens again */
-.hx[data-v="iris"]{animation:hx-iris var(--fx-dur) var(--fx-ease) both}
-@keyframes hx-iris{
-  0%{clip-path:circle(75% at 50% 56%)}
-  38%,42%{clip-path:circle(0% at 50% 56%)}
-  100%{clip-path:circle(75% at 50% 56%)}}
-
-/* trace: a hairline redraws the outline behind a small teal light, then the ink returns */
-.hx[data-v="trace"] .hx-main path{
-  stroke:var(--fx-ink);stroke-width:var(--fx-sw);stroke-dasharray:1 1;
-  animation:hx-trace var(--fx-dur) var(--fx-ease) both}
-.hx[data-v="trace"] .hx-c1{animation:hx-trace-glow var(--fx-dur) linear both}
-.hx[data-v="trace"] .hx-c1 path{
-  fill:none;stroke:var(--fx-a);stroke-width:calc(var(--fx-sw) * 2.2);stroke-linecap:round;stroke-dasharray:.05 .95;
-  animation:hx-trace-run var(--fx-dur) var(--fx-ease) both}
-@keyframes hx-trace{
-  0%{fill-opacity:1;stroke-opacity:0;stroke-dashoffset:0}
-  14%{fill-opacity:0;stroke-opacity:1;stroke-dashoffset:1}
-  78%{fill-opacity:0;stroke-opacity:1;stroke-dashoffset:0}
-  100%{fill-opacity:1;stroke-opacity:0;stroke-dashoffset:0}}
-@keyframes hx-trace-run{0%,14%{stroke-dashoffset:.05}78%,100%{stroke-dashoffset:-.95}}
-@keyframes hx-trace-glow{0%,12%{opacity:0}18%,72%{opacity:1}80%,100%{opacity:0}}
-
-/* rose gold / pearl / engraved: more materials, same cross-fade as foil */
-.hx[data-v="rosegold"] .hx-c1 path{fill:var(--fx-rose)}
-.hx[data-v="pearl"] .hx-c1 path{fill:var(--fx-pearl);stroke:rgba(14,20,20,.22);stroke-width:var(--fx-sw)}
-.hx[data-v="engrave"] .hx-c1 path{fill:var(--fx-engrave);stroke:var(--fx-ink);stroke-width:var(--fx-sw)}
-.hx[data-v="rosegold"] .hx-c1,.hx[data-v="pearl"] .hx-c1,.hx[data-v="engrave"] .hx-c1{animation:hx-xfade-in var(--fx-dur) var(--fx-ease) both}
-.hx[data-v="rosegold"] .hx-main path,.hx[data-v="pearl"] .hx-main path,.hx[data-v="engrave"] .hx-main path{animation:hx-xfade-out var(--fx-dur) var(--fx-ease) both}
-.hx[data-v="rosegold"] .hx-shine,.hx[data-v="pearl"] .hx-shine{animation:hx-sheen var(--fx-dur) cubic-bezier(.4,.1,.6,.9) both}
-
-/* wipe: a feathered curtain draws across, then pulls back */
-.hx[data-v="wipe"]{
-  -webkit-mask-image:linear-gradient(90deg,#000 40%,transparent 60%);mask-image:linear-gradient(90deg,#000 40%,transparent 60%);
-  -webkit-mask-size:250% 100%;mask-size:250% 100%;-webkit-mask-repeat:no-repeat;mask-repeat:no-repeat;
-  animation:hx-wipe var(--fx-dur) var(--fx-ease) both}
-@keyframes hx-wipe{
-  0%{-webkit-mask-position:0% 0;mask-position:0% 0}
-  45%,55%{-webkit-mask-position:100% 0;mask-position:100% 0}
-  100%{-webkit-mask-position:0% 0;mask-position:0% 0}}
-
-/* halo: a small gold light travels once around the edge */
-.hx[data-v="halo"] .hx-c1{animation:hx-trace-glow var(--fx-dur) linear both}
-.hx[data-v="halo"] .hx-c1 path{
-  fill:none;stroke:var(--fx-b);stroke-width:calc(var(--fx-sw) * 5);stroke-linecap:round;stroke-dasharray:.1 .9;
-  animation:hx-halo var(--fx-dur) var(--fx-ease) both}
-@keyframes hx-halo{0%,12%{stroke-dashoffset:.1}80%,100%{stroke-dashoffset:-.9}}
-
-/* --- finishes: glass, marble (same cross-fade as foil) --- */
-.hx[data-v="glass"] .hx-c1 path{fill:var(--fx-glass);stroke:rgba(0,118,122,.55);stroke-width:var(--fx-sw)}
-.hx[data-v="marble"] .hx-c1 path{fill:#fff;stroke:rgba(14,20,20,.25);stroke-width:var(--fx-sw)}
-.hx[data-v="marble"] .hx-c1{filter:var(--fx-marble)}
-.hx[data-v="glass"] .hx-c1,.hx[data-v="marble"] .hx-c1{animation:hx-xfade-in var(--fx-dur) var(--fx-ease) both}
-.hx[data-v="glass"] .hx-main path,.hx[data-v="marble"] .hx-main path{animation:hx-xfade-out var(--fx-dur) var(--fx-ease) both}
-.hx[data-v="glass"] .hx-shine{animation:hx-sheen var(--fx-dur) cubic-bezier(.4,.1,.6,.9) both}
-
-/* aurora: soft teal-to-lilac-to-blush light flows through the mark */
-.hx .hx-aurora{opacity:0;fill:var(--fx-aurora)}
-.hx[data-v="aurora"] .hx-aurora{animation:hx-aurora var(--fx-dur) linear both}
-.hx[data-v="aurora"] .hx-main path{animation:hx-xfade-out var(--fx-dur) var(--fx-ease) both}
-@keyframes hx-aurora{
-  0%{opacity:0;transform:translateX(0)}
-  24%,76%{opacity:1}
-  100%{opacity:0;transform:translateX(1400px)}}
-
-/* --- colour: gradient washes (same cross-fade as foil) and flat tri-colour combos --- */
-.hx[data-v="lemonade"] .hx-c1 path{fill:var(--fx-lemonade)}
-.hx[data-v="ocean"] .hx-c1 path{fill:var(--fx-ocean)}
-.hx[data-v="mint"] .hx-c1 path{fill:var(--fx-mint)}
-.hx[data-v="holo"] .hx-c1 path{fill:var(--fx-holo)}
-.hx[data-v="holo"] .hx-c1 path{stroke:rgba(14,20,20,.16);stroke-width:var(--fx-sw)}
-.hx[data-v="lemonade"] .hx-c1,.hx[data-v="ocean"] .hx-c1,.hx[data-v="mint"] .hx-c1,.hx[data-v="holo"] .hx-c1{animation:hx-xfade-in var(--fx-dur) var(--fx-ease) both}
-.hx[data-v="lemonade"] .hx-main path,.hx[data-v="ocean"] .hx-main path,.hx[data-v="mint"] .hx-main path,.hx[data-v="holo"] .hx-main path{animation:hx-xfade-out var(--fx-dur) var(--fx-ease) both}
-.hx[data-v="ocean"] .hx-shine,.hx[data-v="holo"] .hx-shine{animation:hx-sheen var(--fx-dur) cubic-bezier(.4,.1,.6,.9) both}
-/* tri-colour: each piece takes its own colour, then settles back to ink */
-.hx[data-v="tropic"]{--p1:#ff6f61;--p2:#ffbf00;--p3:#00a9ac}
-.hx[data-v="sorbet"]{--p1:#ff9ec7;--p2:#9fe6c8;--p3:#b9a6ff}
-.hx[data-v="tropic"] .hx-main .hx-b,.hx[data-v="sorbet"] .hx-main .hx-b{animation:hx-piece-1 var(--fx-dur) var(--fx-ease) both}
-.hx[data-v="tropic"] .hx-main .hx-t,.hx[data-v="sorbet"] .hx-main .hx-t{animation:hx-piece-2 var(--fx-dur) var(--fx-ease) both;animation-delay:calc(var(--fx-dur) * .04)}
-.hx[data-v="tropic"] .hx-main .hx-d,.hx[data-v="sorbet"] .hx-main .hx-d{animation:hx-piece-3 var(--fx-dur) var(--fx-ease) both;animation-delay:calc(var(--fx-dur) * .08)}
-@keyframes hx-piece-1{0%,100%{fill:var(--fx-ink)}18%,78%{fill:var(--p1)}}
-@keyframes hx-piece-2{0%,100%{fill:var(--fx-ink)}18%,74%{fill:var(--p2)}}
-@keyframes hx-piece-3{0%,100%{fill:var(--fx-ink)}18%,70%{fill:var(--p3)}}
-
-/* --- textures: the ink cross-fades into a printed surface (same cross-fade as foil) --- */
-.hx[data-v="candy"] .hx-c1 path{fill:var(--fx-candy)}
-.hx[data-v="pinstripe"] .hx-c1 path{fill:var(--fx-pin)}
-.hx[data-v="polka"] .hx-c1 path{fill:var(--fx-polka)}
-.hx[data-v="checker"] .hx-c1 path{fill:var(--fx-check)}
-.hx[data-v="halftone"] .hx-c1 path{fill:var(--fx-half)}
-.hx[data-v="terrazzo"] .hx-c1 path{fill:var(--fx-terra)}
-.hx[data-v="gingham"] .hx-c1 path{fill:var(--fx-ging)}
-.hx[data-v="waves"] .hx-c1 path{fill:var(--fx-wave)}
-.hx[data-v="rings"] .hx-c1 path{fill:var(--fx-rings)}
-.hx[data-v="denim"] .hx-c1 path{fill:#2c4f86}
-.hx[data-v="denim"] .hx-c1{filter:var(--fx-denim)}
-.hx[data-v="wood"] .hx-c1 path{fill:#000}
-.hx[data-v="wood"] .hx-c1{filter:var(--fx-wood)}
-.hx[data-v="glitter"] .hx-c1 path{fill:#2a1250}
-.hx[data-v="glitter"] .hx-c1{filter:var(--fx-glitter)}
-.hx[data-v="candy"] .hx-c1,.hx[data-v="pinstripe"] .hx-c1,.hx[data-v="polka"] .hx-c1,.hx[data-v="checker"] .hx-c1,.hx[data-v="halftone"] .hx-c1,.hx[data-v="terrazzo"] .hx-c1,.hx[data-v="gingham"] .hx-c1,.hx[data-v="waves"] .hx-c1,.hx[data-v="rings"] .hx-c1,.hx[data-v="denim"] .hx-c1,.hx[data-v="wood"] .hx-c1,.hx[data-v="glitter"] .hx-c1{animation:hx-xfade-in var(--fx-dur) var(--fx-ease) both}
-.hx[data-v="candy"] .hx-main path,.hx[data-v="pinstripe"] .hx-main path,.hx[data-v="polka"] .hx-main path,.hx[data-v="checker"] .hx-main path,.hx[data-v="halftone"] .hx-main path,.hx[data-v="terrazzo"] .hx-main path,.hx[data-v="gingham"] .hx-main path,.hx[data-v="waves"] .hx-main path,.hx[data-v="rings"] .hx-main path,.hx[data-v="denim"] .hx-main path,.hx[data-v="wood"] .hx-main path,.hx[data-v="glitter"] .hx-main path{animation:hx-xfade-out var(--fx-dur) var(--fx-ease) both}
-
-/* --- type: the H fills with "hydraco" set in a different face - same outline, new lettering --- */
-.hx[data-v="didone"] .hx-c1 path{fill:var(--fx-tdidone)}
-.hx[data-v="script"] .hx-c1 path{fill:var(--fx-tscript)}
-.hx[data-v="mono"] .hx-c1 path{fill:var(--fx-tmono)}
-.hx[data-v="gothic"] .hx-c1 path{fill:var(--fx-tgothic)}
-.hx[data-v="monoton"] .hx-c1 path{fill:var(--fx-tmonoton)}
-.hx[data-v="marker"] .hx-c1 path{fill:var(--fx-tmarker)}
-.hx[data-v="bubble"] .hx-c1 path{fill:var(--fx-tbubble)}
-.hx[data-v="didone"] .hx-c1,.hx[data-v="script"] .hx-c1,.hx[data-v="mono"] .hx-c1,.hx[data-v="gothic"] .hx-c1,.hx[data-v="monoton"] .hx-c1,.hx[data-v="marker"] .hx-c1,.hx[data-v="bubble"] .hx-c1{animation:hx-xfade-in var(--fx-dur) var(--fx-ease) both}
-.hx[data-v="didone"] .hx-main path,.hx[data-v="script"] .hx-main path,.hx[data-v="mono"] .hx-main path,.hx[data-v="gothic"] .hx-main path,.hx[data-v="monoton"] .hx-main path,.hx[data-v="marker"] .hx-main path,.hx[data-v="bubble"] .hx-main path{animation:hx-xfade-out var(--fx-dur) var(--fx-ease) both}
+/* gold: polished gold leaf */
+.hx[data-v="gold"] .hx-c1 path{fill:var(--fx-gold)}
+/* apple: brushed aluminium */
+.hx[data-v="apple"] .hx-c1 path{fill:var(--fx-alu)}
+/* sketchbook: warm paper, sepia hatching, a sepia pen outline (the Da Vinci notebook look) */
+.hx[data-v="sketchbook"] .hx-c1 path{fill:var(--fx-sketch)}
+.hx[data-v="sketchbook"] .hx-c2{filter:var(--fx-rough)}
+.hx[data-v="sketchbook"] .hx-c2 path{stroke:#6b4423;stroke-width:calc(var(--fx-sw) * 3)}
+/* pencil HB: graphite hatching on white with a soft pencil line */
+.hx[data-v="pencil"] .hx-c1 path{fill:var(--fx-pencil)}
+.hx[data-v="pencil"] .hx-c2{filter:var(--fx-rough)}
+.hx[data-v="pencil"] .hx-c2 path{stroke:#4a4a4a;stroke-width:calc(var(--fx-sw) * 2)}
+/* chalk: a blackboard with a white chalk line */
+.hx[data-v="chalk"] .hx-c1 path{fill:#22272a}
+.hx[data-v="chalk"] .hx-c2{filter:var(--fx-rough)}
+.hx[data-v="chalk"] .hx-c2 path{stroke:#f4f1ea;stroke-width:calc(var(--fx-sw) * 3.4);stroke-opacity:.92}
+/* ink: black pen cross-hatching on white, a crisp pen outline */
+.hx[data-v="ink"] .hx-c1 path{fill:var(--fx-hatch)}
+.hx[data-v="ink"] .hx-c2 path{stroke:#111;stroke-width:calc(var(--fx-sw) * 2.4)}
+/* terminal: green monospace on black */
+.hx[data-v="terminal"] .hx-c1 path{fill:var(--fx-term)}
+.hx[data-v="terminal"] .hx-c2 path{stroke:#19c37d;stroke-width:calc(var(--fx-sw) * 2)}
+/* basquiat: mustard ground, red and blue blocks, crowns and scrawls, a scratchy black outline */
+.hx[data-v="basquiat"] .hx-c1 path{fill:var(--fx-basq)}
+.hx[data-v="basquiat"] .hx-c2{filter:var(--fx-rough)}
+.hx[data-v="basquiat"] .hx-c2 path{stroke:#111;stroke-width:calc(var(--fx-sw) * 4)}
+/* haring: bright red with bold black motion marks and a heavy black outline */
+.hx[data-v="haring"] .hx-c1 path{fill:var(--fx-haring)}
+.hx[data-v="haring"] .hx-c2 path{stroke:#111;stroke-width:calc(var(--fx-sw) * 7)}
+/* colorful: the dashboard's colour sweep */
+.hx[data-v="colorful"] .hx-c1 path{fill:var(--fx-colorful)}
+/* boardroom: navy with a fine gold pinstripe and a gold edge */
+.hx[data-v="boardroom"] .hx-c1 path{fill:var(--fx-board)}
+.hx[data-v="boardroom"] .hx-c2 path{stroke:var(--fx-gold);stroke-width:calc(var(--fx-sw) * 2.6)}
 
 /* --- the same replay on the CSS packs and the packets in the photos --- */
 .fx-on > .mark,.fx-on > .pack-mark{opacity:0}
@@ -2866,147 +2680,56 @@ body:not(.fun-mode) .galaxy-bg *{animation-play-state:paused!important}
   const PAD = 20, MW = 700, MH = 1058;
   let uid = 0;
   function makeMark(cls){
-    const id = "hxClip" + (++uid), rough = "hxRough" + uid, gid = "hxG" + uid;
+    const id = "hxClip" + (++uid), g = "hxG" + uid;
     const set = (c) => `<g class="${c}">` + ["b","t","d"].map((k) => `<path class="hx-${k}" pathLength="1" d="${PATHS[k]}"/>`).join("") + "</g>";
+    const lin = (k, stops) => `<linearGradient id="${g}${k}" gradientUnits="userSpaceOnUse" x1="0" y1="0" x2="700" y2="1058">` +
+      stops.map(([o, c]) => `<stop offset="${o}" stop-color="${c}"/>`).join("") + "</linearGradient>";
+    // pattern shapes are styled inline: `.hx path{fill:ink}` would otherwise win over a fill attribute
+    const crown = (x, y) => `<path d="M${x} ${y + 46}l8-40 20 26 16-34 16 34 20-26 8 40z" style="fill:none;stroke:#111;stroke-width:6;stroke-linejoin:round"/>`;
     const wrap = document.createElement("div");
     wrap.innerHTML =
       `<svg class="hx ${cls}" viewBox="${-PAD} ${-PAD} ${MW + 2 * PAD} ${MH + 2 * PAD}" aria-hidden="true" focusable="false">` +
       `<defs><clipPath id="${id}"><path d="${PATHS.b} ${PATHS.t} ${PATHS.d}"/></clipPath>` +
-      `<filter id="${rough}" x="-10%" y="-10%" width="120%" height="120%"><feTurbulence type="fractalNoise" baseFrequency=".025" numOctaves="2" seed="7"/><feDisplacementMap in="SourceGraphic" scale="22"/></filter>` +
-      `<linearGradient id="${gid}f" gradientUnits="userSpaceOnUse" x1="0" y1="0" x2="700" y2="1058">` +
-        `<stop offset="0" stop-color="#7a5a22"/><stop offset=".22" stop-color="#c9a456"/><stop offset=".42" stop-color="#f7e7b4"/>` +
-        `<stop offset=".58" stop-color="#b8903f"/><stop offset=".8" stop-color="#e6c983"/><stop offset="1" stop-color="#6e5020"/></linearGradient>` +
-      `<linearGradient id="${gid}c" gradientUnits="userSpaceOnUse" x1="0" y1="0" x2="700" y2="1058">` +
-        `<stop offset="0" stop-color="#4d5761"/><stop offset=".25" stop-color="#e8edf1"/><stop offset=".45" stop-color="#8f9aa4"/>` +
-        `<stop offset=".6" stop-color="#ffffff"/><stop offset=".8" stop-color="#66717b"/><stop offset="1" stop-color="#c3cbd2"/></linearGradient>` +
-      `<linearGradient id="${gid}s" x1="0" y1="0" x2="1" y2="0">` +
-        `<stop offset="0" stop-color="#fff" stop-opacity="0"/><stop offset=".5" stop-color="#fff" stop-opacity=".85"/><stop offset="1" stop-color="#fff" stop-opacity="0"/></linearGradient>` +
-      `<linearGradient id="${gid}r" gradientUnits="userSpaceOnUse" x1="0" y1="0" x2="700" y2="1058">` +
-        `<stop offset="0" stop-color="#8e5249"/><stop offset=".24" stop-color="#d49a8e"/><stop offset=".44" stop-color="#fbe0d6"/>` +
-        `<stop offset=".6" stop-color="#c07f73"/><stop offset=".8" stop-color="#eebfb2"/><stop offset="1" stop-color="#7d443c"/></linearGradient>` +
-      `<linearGradient id="${gid}p" gradientUnits="userSpaceOnUse" x1="0" y1="0" x2="700" y2="1058">` +
-        `<stop offset="0" stop-color="#e9e4f4"/><stop offset=".3" stop-color="#cfeeea"/><stop offset=".52" stop-color="#fbe2ec"/>` +
-        `<stop offset=".7" stop-color="#ffffff"/><stop offset="1" stop-color="#d8e2f6"/></linearGradient>` +
-      `<pattern id="${gid}e" patternUnits="userSpaceOnUse" width="18" height="18" patternTransform="rotate(35)">` +
-        `<rect width="18" height="7" style="fill:var(--fx-ink)"/></pattern>` +
-      `<linearGradient id="${gid}g" gradientUnits="userSpaceOnUse" x1="0" y1="0" x2="700" y2="1058">` +
-        `<stop offset="0" stop-color="#00a9ac" stop-opacity=".22"/><stop offset=".45" stop-color="#6fe3e5" stop-opacity=".5"/>` +
-        `<stop offset="1" stop-color="#00767a" stop-opacity=".38"/></linearGradient>` +
-      `<linearGradient id="${gid}a" gradientUnits="userSpaceOnUse" x1="0" y1="0" x2="1400" y2="0" spreadMethod="repeat">` +
-        `<stop offset="0" stop-color="#00a9ac"/><stop offset=".25" stop-color="#7fe0c8"/><stop offset=".5" stop-color="#b9a6ff"/>` +
-        `<stop offset=".75" stop-color="#ff9ad5"/><stop offset="1" stop-color="#00a9ac"/></linearGradient>` +
-      `<filter id="${gid}m" x="0" y="0" width="1" height="1">` +
-        `<feTurbulence type="turbulence" baseFrequency=".0028 .0075" numOctaves="5" seed="9"/>` +
-        `<feColorMatrix type="matrix" values=".9 0 0 0 0 .9 0 0 0 0 .9 0 0 0 0 0 0 0 0 1"/>` +
-        `<feComponentTransfer><feFuncR type="table" tableValues=".42 .86 .97 1 1 1"/><feFuncG type="table" tableValues=".43 .86 .96 .99 1 1"/>` +
-        `<feFuncB type="table" tableValues=".45 .85 .94 .97 .98 .98"/></feComponentTransfer>` +
-        `<feComposite in2="SourceAlpha" operator="in"/></filter>` +
-      `<linearGradient id="${gid}-lemonade" gradientUnits="userSpaceOnUse" x1="0" y1="0" x2="700" y2="1058">` +
-        `<stop offset="0" stop-color="#ff5c8a"/><stop offset=".35" stop-color="#ff8fa3"/><stop offset=".7" stop-color="#ffd36b"/><stop offset="1" stop-color="#fff07a"/></linearGradient>` +
-      `<linearGradient id="${gid}-ocean" gradientUnits="userSpaceOnUse" x1="0" y1="0" x2="700" y2="1058">` +
-        `<stop offset="0" stop-color="#0a2a5e"/><stop offset=".4" stop-color="#0b5f8a"/><stop offset=".75" stop-color="#00a9ac"/><stop offset="1" stop-color="#7fe3e0"/></linearGradient>` +
-      `<linearGradient id="${gid}-mint" gradientUnits="userSpaceOnUse" x1="0" y1="0" x2="700" y2="1058">` +
-        `<stop offset="0" stop-color="#1f9c84"/><stop offset=".5" stop-color="#6fd8b7"/><stop offset="1" stop-color="#bff2e0"/></linearGradient>` +
-      `<linearGradient id="${gid}-holo" gradientUnits="userSpaceOnUse" x1="0" y1="0" x2="700" y2="1058">` +
-        `<stop offset="0" stop-color="#ffd1f2"/><stop offset=".2" stop-color="#c7b8ff"/><stop offset=".4" stop-color="#a8e9ff"/><stop offset=".6" stop-color="#b8ffd9"/><stop offset=".8" stop-color="#fff3b0"/><stop offset="1" stop-color="#ffc4d6"/></linearGradient>` +
-      `<pattern id="${gid}-candy" patternUnits="userSpaceOnUse" width="80" height="80" patternTransform="rotate(40)">` +
-        `<rect width="80" height="80" fill="#fff"/><rect width="40" height="80" fill="#ff4f8b"/></pattern>` +
-      `<pattern id="${gid}-pin" patternUnits="userSpaceOnUse" width="56" height="56">` +
-        `<rect width="56" height="56" fill="#1b2a4a"/><rect x="26" width="4" height="56" fill="#e8edf5" opacity=".8"/></pattern>` +
-      `<pattern id="${gid}-polka" patternUnits="userSpaceOnUse" width="90" height="90">` +
-        `<rect width="90" height="90" fill="#7fd8bd"/><circle cx="22" cy="22" r="15" fill="#fff"/><circle cx="67" cy="67" r="15" fill="#fff"/></pattern>` +
-      `<pattern id="${gid}-check" patternUnits="userSpaceOnUse" width="120" height="120">` +
-        `<rect width="120" height="120" fill="#141414"/><rect width="60" height="60" fill="#f4f1ea"/><rect x="60" y="60" width="60" height="60" fill="#f4f1ea"/></pattern>` +
-      `<pattern id="${gid}-half" patternUnits="userSpaceOnUse" width="34" height="34" patternTransform="rotate(20)">` +
-        `<rect width="34" height="34" fill="#ffd23f"/><circle cx="17" cy="17" r="10" fill="#f0503c"/></pattern>` +
-      `<pattern id="${gid}-terra" patternUnits="userSpaceOnUse" width="260" height="260" patternTransform="scale(1.9)">` +
-        `<rect width="260" height="260" fill="#f3eee6"/><path d="M22 30l18-6 6 15-16 8z" style="fill:#e76f51"/><path d="M120 18l14 4-4 16-15-6z" style="fill:#2a9d8f"/><path d="M200 60l22 3-5 18-20-8z" style="fill:#e9c46a"/><path d="M60 110l12-10 12 12-10 12z" style="fill:#264653"/><path d="M150 120l20 6-8 14-16-4z" style="fill:#f4a261"/><path d="M228 150l14-6 6 14-14 6z" style="fill:#e76f51"/><path d="M30 190l16 2-2 16-16-4z" style="fill:#e9c46a"/><path d="M110 200l10-12 14 10-10 12z" style="fill:#2a9d8f"/><path d="M190 220l18 4-6 16-14-8z" style="fill:#264653"/><path d="M84 60l6-4 5 6-6 4z" style="fill:#264653"/><path d="M240 98l6-3 4 6-6 3z" style="fill:#2a9d8f"/><path d="M176 178l6-4 5 6-6 4z" style="fill:#e76f51"/><path d="M14 140l5-3 4 5-5 3z" style="fill:#f4a261"/><path d="M66 238l6-3 4 6-6 3z" style="fill:#e76f51"/><path d="M140 70l5-3 4 5-5 3z" style="fill:#e9c46a"/></pattern>` +
-      `<pattern id="${gid}-ging" patternUnits="userSpaceOnUse" width="80" height="80">` +
-        `<rect width="80" height="80" fill="#fff"/><rect width="40" height="80" fill="#d62839" opacity=".45"/><rect width="80" height="40" fill="#d62839" opacity=".45"/></pattern>` +
-      `<pattern id="${gid}-wave" patternUnits="userSpaceOnUse" width="120" height="44">` +
-        `<rect width="120" height="44" fill="#0b3d91"/><path d="M0 22 Q15 6 30 22 T60 22 T90 22 T120 22" style="fill:none;stroke:#8fd3ff;stroke-width:7"/></pattern>` +
-      `<radialGradient id="${gid}-rings" gradientUnits="userSpaceOnUse" cx="520" cy="880" r="74" spreadMethod="repeat">` +
-        `<stop offset="0" stop-color="#f9dcc8"/><stop offset=".7" stop-color="#f9dcc8"/><stop offset=".72" stop-color="#c0563f"/>` +
-        `<stop offset=".9" stop-color="#c0563f"/><stop offset=".92" stop-color="#f9dcc8"/><stop offset="1" stop-color="#f9dcc8"/></radialGradient>` +
-      `<filter id="${gid}-denim" x="0" y="0" width="1" height="1">` +
-        `<feTurbulence type="fractalNoise" baseFrequency=".9 .045" numOctaves="2" seed="3"/>` +
-        `<feColorMatrix type="matrix" values="0 0 0 0 .86 0 0 0 0 .9 0 0 0 0 1 1.6 0 0 0 -.62"/>` +
-        `<feComposite in2="SourceGraphic" operator="atop"/></filter>` +
-      `<filter id="${gid}-wood" x="0" y="0" width="1" height="1">` +
-        `<feTurbulence type="fractalNoise" baseFrequency=".003 .06" numOctaves="4" seed="8"/>` +
-        `<feColorMatrix type="matrix" values="1 0 0 0 0 1 0 0 0 0 1 0 0 0 0 0 0 0 0 1"/>` +
-        `<feComponentTransfer><feFuncR type="table" tableValues=".38 .62 .46 .7 .5 .66"/><feFuncG type="table" tableValues=".2 .38 .27 .44 .3 .4"/>` +
-        `<feFuncB type="table" tableValues=".1 .2 .13 .24 .15 .21"/><feFuncA type="linear" slope="0" intercept="1"/></feComponentTransfer>` +
-        `<feComposite in2="SourceAlpha" operator="in"/></filter>` +
-      `<filter id="${gid}-glitter" x="0" y="0" width="1" height="1">` +
-        `<feTurbulence type="fractalNoise" baseFrequency=".16" numOctaves="2" seed="12" result="n"/>` +
-        `<feColorMatrix in="n" type="matrix" values="0 0 0 0 1 0 0 0 0 .86 0 0 0 0 .55 9 0 0 0 -5.7" result="spk"/>` +
-        `<feComposite in="spk" in2="SourceGraphic" operator="atop"/></filter>` +
-      `<pattern id="${gid}-tdidone" patternUnits="userSpaceOnUse" width="900" height="315">` +
-        `<rect width="900" height="315" style="fill:#b3122e"/><text x="0" y="127" style="font-family:'Abril Fatface';font-size:150px;fill:#fff4e6;font-weight:700">hydraco hydraco</text>` +
-        `<text x="-240" y="285" style="font-family:'Abril Fatface';font-size:150px;fill:#fff4e6;font-weight:700">hydraco hydraco</text></pattern>` +
-      `<pattern id="${gid}-tscript" patternUnits="userSpaceOnUse" width="900" height="357">` +
-        `<rect width="900" height="357" style="fill:#141414"/><text x="0" y="144" style="font-family:'Great Vibes';font-size:170px;fill:#d9b45a;font-weight:700">hydraco hydraco</text>` +
-        `<text x="-272" y="323" style="font-family:'Great Vibes';font-size:170px;fill:#d9b45a;font-weight:700">hydraco hydraco</text></pattern>` +
-      `<pattern id="${gid}-tmono" patternUnits="userSpaceOnUse" width="900" height="235">` +
-        `<rect width="900" height="235" style="fill:#0d1b14"/><text x="0" y="95" style="font-family:'Space Mono';font-size:112px;fill:#19c37d;font-weight:700">hydraco hydraco</text>` +
-        `<text x="-179" y="212" style="font-family:'Space Mono';font-size:112px;fill:#19c37d;font-weight:700">hydraco hydraco</text></pattern>` +
-      `<pattern id="${gid}-tgothic" patternUnits="userSpaceOnUse" width="900" height="294">` +
-        `<rect width="900" height="294" style="fill:#f2ead8"/><text x="0" y="119" style="font-family:'UnifrakturMaguntia';font-size:140px;fill:#1a1a1a;font-weight:700">hydraco hydraco</text>` +
-        `<text x="-224" y="266" style="font-family:'UnifrakturMaguntia';font-size:140px;fill:#1a1a1a;font-weight:700">hydraco hydraco</text></pattern>` +
-      `<pattern id="${gid}-tmonoton" patternUnits="userSpaceOnUse" width="900" height="243">` +
-        `<rect width="900" height="243" style="fill:#1a0b2e"/><text x="0" y="98" style="font-family:'Monoton';font-size:116px;fill:#ff3e9a;font-weight:700">hydraco hydraco</text>` +
-        `<text x="-185" y="220" style="font-family:'Monoton';font-size:116px;fill:#ff3e9a;font-weight:700">hydraco hydraco</text></pattern>` +
-      `<pattern id="${gid}-tmarker" patternUnits="userSpaceOnUse" width="900" height="256">` +
-        `<rect width="900" height="256" style="fill:#fff7c2"/><text x="0" y="103" style="font-family:'Permanent Marker';font-size:122px;fill:#2449d8;font-weight:700">hydraco hydraco</text>` +
-        `<text x="-195" y="231" style="font-family:'Permanent Marker';font-size:122px;fill:#2449d8;font-weight:700">hydraco hydraco</text></pattern>` +
-      `<pattern id="${gid}-tbubble" patternUnits="userSpaceOnUse" width="900" height="294">` +
-        `<rect width="900" height="294" style="fill:#c9b6ff"/><text x="0" y="119" style="font-family:'Fredoka';font-size:140px;fill:#ffffff;font-weight:700">hydraco hydraco</text>` +
-        `<text x="-224" y="266" style="font-family:'Fredoka';font-size:140px;fill:#ffffff;font-weight:700">hydraco hydraco</text></pattern>` +
+      `<filter id="${g}r" x="-10%" y="-10%" width="120%" height="120%"><feTurbulence type="fractalNoise" baseFrequency=".025" numOctaves="2" seed="7"/><feDisplacementMap in="SourceGraphic" scale="22"/></filter>` +
+      lin("gold", [[0, "#7a5a22"], [.22, "#c9a456"], [.42, "#f7e7b4"], [.58, "#b8903f"], [.8, "#e6c983"], [1, "#6e5020"]]) +
+      lin("alu", [[0, "#9aa3ab"], [.3, "#eef1f4"], [.5, "#c3cad1"], [.62, "#ffffff"], [.8, "#a7b0b8"], [1, "#d9dee3"]]) +
+      lin("colorful", [[0, "#ff4fa0"], [.3, "#ff9a3c"], [.5, "#ffd23f"], [.72, "#2fd4a7"], [1, "#2f8cff"]]) +
+      `<linearGradient id="${g}s" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#fff" stop-opacity="0"/>` +
+        `<stop offset=".5" stop-color="#fff" stop-opacity=".85"/><stop offset="1" stop-color="#fff" stop-opacity="0"/></linearGradient>` +
+      `<pattern id="${g}sketch" patternUnits="userSpaceOnUse" width="26" height="26" patternTransform="rotate(-35)">` +
+        `<rect width="26" height="26" fill="#efe3c8"/><rect width="26" height="3" fill="#7a5230" opacity=".5"/></pattern>` +
+      `<pattern id="${g}pencil" patternUnits="userSpaceOnUse" width="16" height="16" patternTransform="rotate(30)">` +
+        `<rect width="16" height="16" fill="#f3f2ef"/><rect width="16" height="1.8" fill="#4a4a4a" opacity=".45"/></pattern>` +
+      `<pattern id="${g}hatch" patternUnits="userSpaceOnUse" width="20" height="20" patternTransform="rotate(45)">` +
+        `<rect width="20" height="20" fill="#fbfaf7"/><rect width="20" height="2.6" fill="#111"/><rect width="2.6" height="20" fill="#111"/></pattern>` +
+      `<pattern id="${g}term" patternUnits="userSpaceOnUse" width="700" height="112">` +
+        `<rect width="700" height="112" fill="#050a07"/>` +
+        `<text x="0" y="44" style="font-family:'Space Mono',monospace;font-weight:700;font-size:40px;fill:#19c37d">hydraco_ 01101000 hydraco_</text>` +
+        `<text x="-120" y="100" style="font-family:'Space Mono',monospace;font-weight:700;font-size:40px;fill:#0f7a4b">01101000 hydraco_ 0110</text></pattern>` +
+      `<pattern id="${g}basq" patternUnits="userSpaceOnUse" width="320" height="320" patternTransform="scale(1.7)">` +
+        `<rect width="320" height="320" fill="#f2c230"/><rect x="18" y="196" width="96" height="58" fill="#d7263d"/>` +
+        `<rect x="196" y="36" width="78" height="54" fill="#1f4e9a"/><rect x="226" y="236" width="62" height="40" fill="#fafafa"/>` +
+        crown(110, 104) + crown(20, 20) +
+        `<path d="M150 230l34-12-24 22 40-10M30 140l48-6M240 150l30 30M270 150l-30 30" style="fill:none;stroke:#111;stroke-width:6;stroke-linecap:round"/></pattern>` +
+      `<pattern id="${g}haring" patternUnits="userSpaceOnUse" width="200" height="200">` +
+        `<rect width="200" height="200" fill="#e63022"/>` +
+        `<path d="M40 40l18 18M100 22v26M160 40l-18 18M40 160l18-18M100 178v-26M160 160l-18-18M22 100h26M178 100h-26" ` +
+          `style="fill:none;stroke:#111;stroke-width:10;stroke-linecap:round"/>` +
+        `<circle cx="100" cy="100" r="16" fill="#111"/></pattern>` +
+      `<pattern id="${g}board" patternUnits="userSpaceOnUse" width="60" height="60">` +
+        `<rect width="60" height="60" fill="#14213d"/><rect x="29" width="2" height="60" fill="#c9a456" opacity=".8"/></pattern>` +
       `</defs>` +
       // everything is clipped to the H itself, so no look can ever make the outline bigger
       `<g class="hx-in" clip-path="url(#${id})">` +
-      set("hx-c1") + set("hx-c2") +
-      `<g clip-path="url(#${id})"><path class="hx-liq" d="M-400 40 Q-225 -20 -50 40 T300 40 T650 40 T1000 40 T1350 40 V1200 H-400Z"/><circle class="hx-bloom" cx="520" cy="900" r="1150"/><rect class="hx-aurora" x="-1400" y="-40" width="2800" height="1140"/></g>` +
-      set("hx-main") +
-      `<g clip-path="url(#${id})"><path class="hx-shine" d="M-60 -40 H180 L-40 1120 H-280Z"/></g>` +
-      `<rect class="hx-scan" x="-80" y="-34" width="860" height="28" rx="14"/></g>` + "</svg>";
+      set("hx-c1") + set("hx-c2") + set("hx-main") +
+      `<path class="hx-shine" d="M-60 -40 H180 L-40 1120 H-280Z"/></g>` + "</svg>";
     const st = wrap.firstChild.style;
-    st.setProperty("--fx-rough", `url(#${rough})`);
-    st.setProperty("--fx-foil", `url(#${gid}f)`);
-    st.setProperty("--fx-chrome", `url(#${gid}c)`);
-    st.setProperty("--fx-sheen", `url(#${gid}s)`);
-    st.setProperty("--fx-rose", `url(#${gid}r)`);
-    st.setProperty("--fx-pearl", `url(#${gid}p)`);
-    st.setProperty("--fx-engrave", `url(#${gid}e)`);
-    st.setProperty("--fx-glass", `url(#${gid}g)`);
-    st.setProperty("--fx-aurora", `url(#${gid}a)`);
-    st.setProperty("--fx-marble", `url(#${gid}m)`);
-    st.setProperty("--fx-tdidone", `url(#${gid}-tdidone)`);
-    st.setProperty("--fx-tscript", `url(#${gid}-tscript)`);
-    st.setProperty("--fx-tmono", `url(#${gid}-tmono)`);
-    st.setProperty("--fx-tgothic", `url(#${gid}-tgothic)`);
-    st.setProperty("--fx-tmonoton", `url(#${gid}-tmonoton)`);
-    st.setProperty("--fx-tmarker", `url(#${gid}-tmarker)`);
-    st.setProperty("--fx-tbubble", `url(#${gid}-tbubble)`);
-    st.setProperty("--fx-candy", `url(#${gid}-candy)`);
-    st.setProperty("--fx-pin", `url(#${gid}-pin)`);
-    st.setProperty("--fx-polka", `url(#${gid}-polka)`);
-    st.setProperty("--fx-check", `url(#${gid}-check)`);
-    st.setProperty("--fx-half", `url(#${gid}-half)`);
-    st.setProperty("--fx-terra", `url(#${gid}-terra)`);
-    st.setProperty("--fx-ging", `url(#${gid}-ging)`);
-    st.setProperty("--fx-wave", `url(#${gid}-wave)`);
-    st.setProperty("--fx-rings", `url(#${gid}-rings)`);
-    st.setProperty("--fx-denim", `url(#${gid}-denim)`);
-    st.setProperty("--fx-wood", `url(#${gid}-wood)`);
-    st.setProperty("--fx-glitter", `url(#${gid}-glitter)`);
-    st.setProperty("--fx-lemonade", `url(#${gid}-lemonade)`);
-    st.setProperty("--fx-ocean", `url(#${gid}-ocean)`);
-    st.setProperty("--fx-mint", `url(#${gid}-mint)`);
-    st.setProperty("--fx-holo", `url(#${gid}-holo)`);
+    [["rough", "r"], ["gold", "gold"], ["alu", "alu"], ["colorful", "colorful"], ["sheen", "s"],
+     ["sketch", "sketch"], ["pencil", "pencil"], ["hatch", "hatch"], ["term", "term"], ["basq", "basq"],
+     ["haring", "haring"], ["board", "board"]].forEach(([v, k]) => st.setProperty("--fx-" + v, `url(#${g}${k})`));
     return wrap.firstChild;
   }
+
   // play one variation; restarting the same one needs the attribute cleared for a frame
   function play(svg, v, ms){
     svg.removeAttribute("data-v");
@@ -3016,22 +2739,10 @@ body:not(.fun-mode) .galaxy-bg *{animation-play-state:paused!important}
   }
 
   const REDUCED = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-  const NAV_VARIANTS = ["candy", "didone", "lemonade", "foil", "line", "pinstripe", "script", "ocean", "chrome", "dots", "polka",
-    "mono", "mint", "rosegold", "trace", "checker", "gothic", "holo", "pearl", "sketch", "halftone",
-    "monoton", "aurora", "glass", "wipe", "terrazzo", "marker", "tropic", "emboss", "iris", "denim", "bubble",
-    "sorbet", "neon", "scan", "wood", "duo", "bloom", "rings", "hue", "halo", "gingham",
-    "shine", "glitter", "fill", "waves", "engrave", "marble"];
-  const NAV_EVERY = 10000, NAV_MS = 1500;
-  const LOOK_MS = {
-    marble: 2600, aurora: 2600,
-    foil: 2400, chrome: 2400, rosegold: 2400, pearl: 2400, engrave: 2400, glass: 2400,
-    didone: 2400, script: 2400, mono: 2400, gothic: 2400, monoton: 2400, marker: 2400, bubble: 2400,
-    emboss: 2200, trace: 2200, halo: 2200, lemonade: 2200, ocean: 2200, tropic: 2200, mint: 2200,
-    sorbet: 2200, holo: 2200, candy: 2200, pinstripe: 2200, polka: 2200, checker: 2200, halftone: 2200,
-    terrazzo: 2200, gingham: 2200, waves: 2200, rings: 2200, denim: 2200, wood: 2200, glitter: 2200,
-    bloom: 2000, wipe: 2000,
-    iris: 1800, shine: 1800
-  };
+  const NAV_VARIANTS = ["gold", "sketchbook", "terminal", "colorful", "chalk", "basquiat", "apple", "pencil",
+    "haring", "ink", "boardroom"];
+  const NAV_EVERY = 10000, NAV_MS = 2400;
+  const LOOK_MS = {};   // every look runs NAV_MS
 
   /* ---------- intro (~5s, on every load) ---------- */
   const intro = document.getElementById("hxIntro");
@@ -3056,9 +2767,7 @@ body:not(.fun-mode) .galaxy-bg *{animation-play-state:paused!important}
     const layers = [0, 1, 2, 3].map(() => stack.appendChild(makeMark("hx-intro-mark")));
     holder.insertBefore(stack, holder.firstChild);
     // every look, cut fast: each one starts at its most recognisable moment and keeps moving for its slot
-    const PEAK = { line: .7, dots: .4, neon: .5, sketch: .6, shine: .45,
-      scan: .45, hue: .2, chrome: .45,
-      bloom: .55, iris: .7, trace: .45, wipe: .2, halo: .45 };
+    const PEAK = {};   // the middle (.5) of every look is its held finish
     // every reload in the same tab adds 1s, spread across the cuts; a fresh visit or new tab starts at ~4s again
     let reloads = 0;
     try {
