@@ -36,6 +36,16 @@ const PACKS = {
   },
 };
 
+// Jars: powder with a scoop (one scoop = one stick), priced per scoop at
+// $0.10-0.19 under the matching stick price. Mix jars are a pair of one
+// Restore and one Hydrapro jar, priced at the average of the two. Jars are
+// pre-orders that ship in January 2027.
+const JARS = {
+  restore:  { 45: 1.89, 95: 1.80, 195: 1.76 },
+  hydrapro: { 45: 2.39, 95: 2.05, 195: 2.00 },
+  mix:      { 90: 2.14, 190: 1.92, 390: 1.88 },
+};
+
 // These sizes aren't one-off purchases - they're the monthly membership
 // tiers, billed by Stripe every month until cancelled. Always exactly one
 // per checkout, whatever quantity the client sends.
@@ -60,13 +70,15 @@ module.exports = async (req, res) => {
 
   const product = ["restore", "hydrapro", "mix"].includes(body.product) ? body.product : "restore";
   const sticks = Number(body.sticks);
-  const member = MEMBERSHIP_STICKS[product].includes(sticks);
+  const jar    = body.format === "jar";
+  const member = !jar && MEMBERSHIP_STICKS[product].includes(sticks);
   const qty    = member ? 1 : Math.max(1, Math.min(20, Math.floor(Number(body.qty)) || 1));
   const orderRef = String(body.orderRef || "").slice(0, 40);
   const name   = String(body.name  || "").slice(0, 200);
   const email  = String(body.email || "").slice(0, 200);
 
-  const unit = Object.prototype.hasOwnProperty.call(PACKS[product], sticks) ? PACKS[product][sticks] : 0;
+  const table = jar ? JARS : PACKS;
+  const unit = Object.prototype.hasOwnProperty.call(table[product], sticks) ? table[product][sticks] : 0;
   if (!unit) {
     res.status(400).json({ error: "Unknown pack size" });
     return;
@@ -93,6 +105,9 @@ module.exports = async (req, res) => {
   params.set("line_items[0][price_data][unit_amount]", String(unitAmountCents));
   params.set("line_items[0][price_data][product_data][name]", member
     ? "Hydraco " + PRODUCT_NAME[product] + " Membership — " + sticks + " Strawberry Lemonade stick packs every month"
+    : jar
+    ? "Hydraco " + PRODUCT_NAME[product] + ", Strawberry Lemonade — " + sticks + "-scoop jar"
+      + (product === "mix" ? " pair" : "") + " (ships January 2027)"
     : "Hydraco " + PRODUCT_NAME[product] + ", Strawberry Lemonade — " + sticks + "-pack");
   if (member) {
     params.set("line_items[0][price_data][recurring][interval]", "month");
@@ -107,6 +122,7 @@ module.exports = async (req, res) => {
   params.set("metadata[name]", name);
   params.set("metadata[product]", product);
   params.set("metadata[sticks]", String(sticks));
+  params.set("metadata[format]", jar ? "jar" : "stick");
   params.set("metadata[qty]", String(qty));
 
   try {

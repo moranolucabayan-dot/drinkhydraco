@@ -4713,6 +4713,67 @@ body:not(.fun-mode) .galaxy-bg *{animation-play-state:paused!important}
         </button>
       </div>
 
+      <p class="member-head" id="jarHead">Jars &mdash; powder with a scoop, for bigger orders &middot; ships January 2027</p>
+      <div class="packs jar-packs" role="group" aria-label="Jars">
+        <button type="button" class="pack-opt" data-product="restore" data-format="jar" data-sticks="45" data-unit="1.89" aria-pressed="false">
+          <span class="size">45-scoop jar</span>
+          <span class="sticks">Restore powder, 45 scoops, scoop included</span>
+          <span class="price">$85.05</span>
+          <span class="unit">$1.89 per scoop</span>
+        </button>
+        <button type="button" class="pack-opt" data-product="restore" data-format="jar" data-sticks="95" data-unit="1.80" aria-pressed="false">
+          <span class="size">95-scoop jar</span>
+          <span class="sticks">Restore powder, 95 scoops, scoop included</span>
+          <span class="price">$171.00</span>
+          <span class="unit">$1.80 per scoop</span>
+        </button>
+        <button type="button" class="pack-opt" data-product="restore" data-format="jar" data-sticks="195" data-unit="1.76" aria-pressed="false">
+          <span class="flag">Team size</span>
+          <span class="size">195-scoop jar</span>
+          <span class="sticks">Restore powder, 195 scoops, scoop included</span>
+          <span class="price">$343.20</span>
+          <span class="unit">$1.76 per scoop</span>
+        </button>
+        <button type="button" class="pack-opt" data-product="hydrapro" data-format="jar" data-sticks="45" data-unit="2.39" aria-pressed="false" hidden>
+          <span class="size">45-scoop jar</span>
+          <span class="sticks">Hydrapro powder, 45 scoops, scoop included</span>
+          <span class="price">$107.55</span>
+          <span class="unit">$2.39 per scoop</span>
+        </button>
+        <button type="button" class="pack-opt" data-product="hydrapro" data-format="jar" data-sticks="95" data-unit="2.05" aria-pressed="false" hidden>
+          <span class="size">95-scoop jar</span>
+          <span class="sticks">Hydrapro powder, 95 scoops, scoop included</span>
+          <span class="price">$194.75</span>
+          <span class="unit">$2.05 per scoop</span>
+        </button>
+        <button type="button" class="pack-opt" data-product="hydrapro" data-format="jar" data-sticks="195" data-unit="2.00" aria-pressed="false" hidden>
+          <span class="flag">Team size</span>
+          <span class="size">195-scoop jar</span>
+          <span class="sticks">Hydrapro powder, 195 scoops, scoop included</span>
+          <span class="price">$390.00</span>
+          <span class="unit">$2.00 per scoop</span>
+        </button>
+        <button type="button" class="pack-opt" data-product="mix" data-format="jar" data-sticks="90" data-unit="2.14" aria-pressed="false" hidden>
+          <span class="size">90 scoops</span>
+          <span class="sticks">45-scoop Restore jar + 45-scoop Hydrapro jar</span>
+          <span class="price">$192.60</span>
+          <span class="unit">$2.14 per scoop</span>
+        </button>
+        <button type="button" class="pack-opt" data-product="mix" data-format="jar" data-sticks="190" data-unit="1.92" aria-pressed="false" hidden>
+          <span class="size">190 scoops</span>
+          <span class="sticks">95-scoop Restore jar + 95-scoop Hydrapro jar</span>
+          <span class="price">$364.80</span>
+          <span class="unit">$1.92 per scoop</span>
+        </button>
+        <button type="button" class="pack-opt" data-product="mix" data-format="jar" data-sticks="390" data-unit="1.88" aria-pressed="false" hidden>
+          <span class="flag">Team size</span>
+          <span class="size">390 scoops</span>
+          <span class="sticks">195-scoop Restore jar + 195-scoop Hydrapro jar</span>
+          <span class="price">$733.20</span>
+          <span class="unit">$1.88 per scoop</span>
+        </button>
+      </div>
+
       <form class='order-panel' id='orderForm' name='hydraco-order' novalidate>
         <p hidden><label>Leave this empty: <input name="company-website" tabindex="-1" autocomplete="off"></label></p>
         <input type="hidden" name="order_ref"  id="hOrderRef">
@@ -5044,6 +5105,10 @@ function newOrderCode(){
 
 /* ---------- state ---------- */
 let sticks = 19, unit = 2.09, qty = 1, payMethod = "zelle";
+/* "stick" or "jar": jars share sizes with stick packs (a 45 of each),
+   so the format is part of what is picked. Must match JARS in
+   /api/create-checkout-session.js. Jars are pre-orders shipping January 2027. */
+let format = "stick";
 
 /* Two products share the form. Hydrapro has its own pack sizes and prices
    (must match PACKS in /api/create-checkout-session.js) and no membership.
@@ -5060,7 +5125,7 @@ let mode = "restore";
    month), charged by Stripe every month until cancelled. Must match
    MEMBERSHIP_STICKS in /api/create-checkout-session.js. */
 const MEMBER_STICKS = { restore: [41, 59, 95], hydrapro: [41, 59, 95], mix: [60] };
-const isMember = () => MEMBER_STICKS[product].includes(sticks);
+const isMember = () => format === "stick" && MEMBER_STICKS[product].includes(sticks);
 /* Mix boxes are half and half, any odd stick being Hydrapro: a 19-pack is
    9 Restore + 10 Hydrapro */
 const mixParts = () => Math.floor(sticks / 2) + " Restore + " + Math.ceil(sticks / 2) + " Hydrapro";
@@ -5077,7 +5142,11 @@ function render(){
   const total = +(sub + ship).toFixed(2);
 
   const member    = isMember();
-  const packLabel = member
+  const packLabel = format === "jar"
+    ? PRODUCT_NAME[product] + " " + (product === "mix"
+        ? sticks + "-scoop jar pair (" + sticks / 2 + " Restore + " + sticks / 2 + " Hydrapro)"
+        : sticks + "-scoop jar") + ", ships Jan 2027"
+    : member
     ? (product === "restore" ? "" : PRODUCT_NAME[product] + " ") + "Membership (" + sticks + " sticks / month"
       + (product === "mix" ? ": " + mixParts() : "") + ")"
     : (product === "restore" ? "" : PRODUCT_NAME[product] + " ") + sticks + "-pack"
@@ -5131,7 +5200,8 @@ const heroPackBtns = document.querySelectorAll(".hero-pack-opt");
 
 function selectPack(newSticks){
   sticks = newSticks;
-  const chosen = (b) => (+b.dataset.sticks === sticks && b.dataset.product === product) ? "true" : "false";
+  const chosen = (b) => (+b.dataset.sticks === sticks && b.dataset.product === product
+    && (b.dataset.format || "stick") === format) ? "true" : "false";
   packOptBtns.forEach(b => b.setAttribute("aria-pressed", chosen(b)));
   heroPackBtns.forEach(b => b.setAttribute("aria-pressed", chosen(b)));
 
@@ -5145,6 +5215,7 @@ function selectPack(newSticks){
 packOptBtns.forEach((btn) => {
   btn.addEventListener("click", () => {
     unit = +btn.dataset.unit;
+    format = btn.dataset.format || "stick";
     selectPack(+btn.dataset.sticks);
   });
 });
@@ -5152,6 +5223,7 @@ packOptBtns.forEach((btn) => {
 heroPackBtns.forEach((btn) => {
   btn.addEventListener("click", () => {
     unit = +btn.dataset.unit;
+    format = "stick";
     selectPack(+btn.dataset.sticks);
   });
 });
@@ -5226,8 +5298,9 @@ function selectProduct(next){
     }
   });
   [packOptBtns, heroPackBtns].forEach(set => set.forEach(b => { b.hidden = b.dataset.product !== product; }));
-  const start = Array.from(packOptBtns).find(b => b.dataset.product === product && +b.dataset.sticks === START_PACK[product]);
+  const start = Array.from(packOptBtns).find(b => b.dataset.product === product && !b.dataset.format && +b.dataset.sticks === START_PACK[product]);
   unit = +start.dataset.unit;
+  format = "stick";
   selectPack(START_PACK[product]);
 }
 
@@ -5474,7 +5547,7 @@ $("#orderForm").addEventListener("submit", async (e) => {
         method:  "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
-          product, sticks, qty, orderRef: orderCode,
+          product, sticks, format, qty, orderRef: orderCode,
           name:  $("#fName").value.trim(),
           email: $("#fEmail").value.trim()
         })
