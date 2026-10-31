@@ -36,26 +36,6 @@ const PACKS = {
   },
 };
 
-// Jars: powder with a scoop (one scoop = one stick), priced per scoop at
-// $0.10-0.19 under the matching stick price. Mix jars are a pair of one
-// Restore and one Hydrapro jar, priced at the average of the two. Jars are
-// pre-orders that ship in January 2027.
-const JARS = {
-  restore:  { 45: 1.89, 95: 1.80, 195: 1.76 },
-  hydrapro: { 45: 2.39, 95: 2.05, 195: 2.00 },
-  mix:      { 90: 2.14, 190: 1.92, 390: 1.88 },
-};
-
-// Jar subscriptions: a jar every month at $0.10 a scoop under the one-off
-// jar. The card is saved now and first charged when jars ship (Stripe trial
-// until JAR_FIRST_CHARGE), then monthly.
-const JAR_SUBS = {
-  restore:  { 45: 1.79, 95: 1.70, 195: 1.66 },
-  hydrapro: { 45: 2.29, 95: 1.95, 195: 1.90 },
-  mix:      { 90: 2.04, 190: 1.82, 390: 1.78 },
-};
-const JAR_FIRST_CHARGE = Date.UTC(2027, 0, 4, 15) / 1000;   // Mon Jan 4, 2027, 10am ET
-
 // These sizes aren't one-off purchases - they're the monthly membership
 // tiers, billed by Stripe every month until cancelled. Always exactly one
 // per checkout, whatever quantity the client sends.
@@ -80,16 +60,13 @@ module.exports = async (req, res) => {
 
   const product = ["restore", "hydrapro", "mix"].includes(body.product) ? body.product : "restore";
   const sticks = Number(body.sticks);
-  const jarSub = body.format === "jarsub";
-  const jar    = body.format === "jar" || jarSub;
-  const member = jarSub || (!jar && MEMBERSHIP_STICKS[product].includes(sticks));
+  const member = MEMBERSHIP_STICKS[product].includes(sticks);
   const qty    = member ? 1 : Math.max(1, Math.min(20, Math.floor(Number(body.qty)) || 1));
   const orderRef = String(body.orderRef || "").slice(0, 40);
   const name   = String(body.name  || "").slice(0, 200);
   const email  = String(body.email || "").slice(0, 200);
 
-  const table = jarSub ? JAR_SUBS : jar ? JARS : PACKS;
-  const unit = Object.prototype.hasOwnProperty.call(table[product], sticks) ? table[product][sticks] : 0;
+  const unit = Object.prototype.hasOwnProperty.call(PACKS[product], sticks) ? PACKS[product][sticks] : 0;
   if (!unit) {
     res.status(400).json({ error: "Unknown pack size" });
     return;
@@ -114,14 +91,8 @@ module.exports = async (req, res) => {
   params.set("line_items[0][quantity]", String(qty));
   params.set("line_items[0][price_data][currency]", "usd");
   params.set("line_items[0][price_data][unit_amount]", String(unitAmountCents));
-  params.set("line_items[0][price_data][product_data][name]", jarSub
-    ? "Hydraco " + PRODUCT_NAME[product] + " jar subscription — one " + sticks + "-scoop jar"
-      + (product === "mix" ? " pair" : "") + " every month (first charge January 2027)"
-    : member
+  params.set("line_items[0][price_data][product_data][name]", member
     ? "Hydraco " + PRODUCT_NAME[product] + " Membership — " + sticks + " Strawberry Lemonade stick packs every month"
-    : jar
-    ? "Hydraco " + PRODUCT_NAME[product] + ", Strawberry Lemonade — " + sticks + "-scoop jar"
-      + (product === "mix" ? " pair" : "") + " (ships January 2027)"
     : "Hydraco " + PRODUCT_NAME[product] + ", Strawberry Lemonade — " + sticks + "-pack");
   if (member) {
     params.set("line_items[0][price_data][recurring][interval]", "month");
@@ -130,17 +101,12 @@ module.exports = async (req, res) => {
     params.set("subscription_data[metadata][order_ref]", orderRef);
     params.set("subscription_data[metadata][name]", name);
     params.set("subscription_data[metadata][product]", product);
-    // jars don't exist yet: no charge until they ship (Stripe needs the trial to end 48h+ from now)
-    if (jarSub && JAR_FIRST_CHARGE > Date.now() / 1000 + 2 * 86400) {
-      params.set("subscription_data[trial_end]", String(JAR_FIRST_CHARGE));
-    }
   }
   if (email) { params.set("customer_email", email); }
   params.set("metadata[order_ref]", orderRef);
   params.set("metadata[name]", name);
   params.set("metadata[product]", product);
   params.set("metadata[sticks]", String(sticks));
-  params.set("metadata[format]", jarSub ? "jarsub" : jar ? "jar" : "stick");
   params.set("metadata[qty]", String(qty));
 
   try {
