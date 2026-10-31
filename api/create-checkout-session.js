@@ -12,9 +12,13 @@ const PACKS = {
     9:  2.19,
     19: 2.09,
     45: 1.99,
+    15: 2.15,
+    30: 2.09,
     41: 2.05,
     59: 1.99,
     95: 1.95,
+    120: 1.92,
+    150: 1.89,
   },
   // Hydrapro: Restore with more electrolytes + Bacillus coagulans.
   hydrapro: {
@@ -22,9 +26,13 @@ const PACKS = {
     9:  2.79,
     19: 2.59,
     45: 2.49,
+    15: 2.69,
+    30: 2.55,
     41: 2.45,
     59: 2.38,
     95: 2.19,
+    120: 2.15,
+    150: 2.09,
   },
   // Mix: half Restore, half Hydrapro in one box, the odd stick being
   // Hydrapro (19 = 9 + 10). 60 is the monthly Mix membership (30 + 30).
@@ -32,7 +40,10 @@ const PACKS = {
     19: 2.39,
     45: 2.29,
     95: 2.19,
+    30: 2.25,
     60: 2.19,
+    90: 2.15,
+    120: 2.12,
   },
 };
 
@@ -40,9 +51,9 @@ const PACKS = {
 // tiers, billed by Stripe every month until cancelled. Always exactly one
 // per checkout, whatever quantity the client sends.
 const MEMBERSHIP_STICKS = {
-  restore:  [41, 59, 95],
-  hydrapro: [41, 59, 95],
-  mix:      [60],
+  restore:  [15, 30, 41, 59, 95, 120, 150],
+  hydrapro: [15, 30, 41, 59, 95, 120, 150],
+  mix:      [30, 60, 90, 120],
 };
 const PRODUCT_NAME = { restore: "Restore", hydrapro: "Hydrapro", mix: "Mix (half Restore, half Hydrapro)" };
 
