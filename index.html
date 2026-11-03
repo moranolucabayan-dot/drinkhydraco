@@ -1699,6 +1699,19 @@ i.na{background:var(--pink)} i.k{background:var(--ink)} i.glu{background:#f2b705
 .pro-x-fine p{margin:0}
 .exp-title{font-size:clamp(1.15rem,2.2vw,1.5rem);letter-spacing:.06em;text-transform:uppercase;font-weight:400;margin:0 0 18px}
 
+/* ---------- the packet ---------- */
+.packet{padding-top:clamp(40px,6vw,84px)}
+.packet-grid{display:grid;grid-template-columns:1fr 1fr 1.25fr;gap:clamp(18px,3vw,40px);align-items:end}
+.packet-grid figure{margin:0}
+.packet-card{background:#fff;border:1px solid var(--rule);border-radius:14px;padding:clamp(12px,1.6vw,20px);box-shadow:var(--shadow);transition:transform .35s ease,box-shadow .35s ease}
+.packet-card:hover{transform:translateY(-4px);box-shadow:var(--shadow-lift)}
+.packet-card img{width:100%;height:auto;display:block}
+.packet-grid figcaption{margin-top:14px;display:flex;flex-direction:column;gap:4px}
+.packet-grid figcaption b{font-size:.84rem;letter-spacing:.2em;text-transform:uppercase;font-weight:500;color:var(--ink)}
+.packet-grid figcaption span{font-size:.72rem;letter-spacing:.16em;text-transform:uppercase;color:var(--slate)}
+@media (max-width:760px){ .packet-grid{grid-template-columns:1fr 1fr} .packet-grid figure:last-child{grid-column:1 / -1;max-width:420px} }
+@media (prefers-reduced-motion:reduce){ .packet-card{transition:none} .packet-card:hover{transform:none} }
+
 /* ---------- Hydrapro mode ----------
    Picking Hydrapro stamps data-product="hydrapro" on <html>: the pink
    accent becomes Hydrapro's aqua (a softened #02D8E9) everywhere it is used, the
@@ -4102,6 +4115,29 @@ body:not(.fun-mode) .galaxy-bg *{animation-play-state:paused!important}
           </div>
         </div>
       </div>
+    </div>
+  </section>
+
+  <!-- ---------- the packet: current packaging artwork (fronts only) ---------- -->
+  <section id="packet" class="packet wrap rv">
+    <div class="sec-head">
+      <span class="tag" style="align-self:flex-start">The packet</span>
+      <h2>Simple on the outside, too</h2>
+      <p class="sec-lede">One stick, one serving. Restore in pink, Hydrapro in aqua, and a pouch for the shelf.</p>
+    </div>
+    <div class="packet-grid">
+      <figure>
+        <div class="packet-card"><img src="/images/packaging/restore-stick-front.webp?v=pk1" alt="Hydraco Restore stick pack front: pink brush band, post-workout electrolyte recovery mix, 3 g added sugar, no artificial sweeteners, net weight 14.4 grams" loading="lazy" decoding="async" width="897" height="1400"></div>
+        <figcaption><b>Restore</b><span>Stick pack &middot; 14.4 g</span></figcaption>
+      </figure>
+      <figure>
+        <div class="packet-card"><img src="/images/packaging/hydrapro-stick-front.webp?v=pk1" alt="Hydraco Hydrapro stick pack front: aqua brush band, electrolyte recovery mix plus probiotics, net weight 15.7 grams" loading="lazy" decoding="async" width="897" height="1400"></div>
+        <figcaption><b>Hydrapro</b><span>Stick pack &middot; 15.7 g</span></figcaption>
+      </figure>
+      <figure>
+        <div class="packet-card"><img src="/images/packaging/restore-pouch-front.webp?v=pk1" alt="Hydraco Restore pouch front: made with real tart cherry and pomegranate, designed for recovery, not stimulation" loading="lazy" decoding="async" width="900" height="1125"></div>
+        <figcaption><b>Restore</b><span>Pouch</span></figcaption>
+      </figure>
     </div>
   </section>
 
