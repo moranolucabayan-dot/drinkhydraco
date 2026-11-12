@@ -1093,7 +1093,7 @@ body.fun-mode .pack-hint.hidden{transform:rotate(-9deg) translateY(-6px)}
 .nf .med{border-top:3px solid var(--ink);margin:6px 0}
 .nf-row{display:flex;justify-content:space-between;gap:10px;padding:3px 0;border-top:1px solid var(--rule);transition:background .2s,box-shadow .2s}
 .nf-row[data-nutrient]{cursor:pointer;margin:0 -6px;padding-inline:6px;border-radius:3px}
-.nf-row[data-nutrient]:hover,.nf-row[data-nutrient].nn-active{background:var(--panel);box-shadow:inset 2px 0 0 var(--pink-ink)}
+.nf-row[data-nutrient]:hover,.nf-row[data-nutrient].nn-active,.nf-row[data-nutrient].nn-current{background:var(--panel);box-shadow:inset 2px 0 0 var(--pink-ink)}
 .nf-row.plain{border-top:none}
 .nf-row b{font-weight:600}
 .nf-row .in1{padding-left:14px;font-weight:400;color:var(--ink-soft)}
@@ -1116,6 +1116,14 @@ body.fun-mode .pack-hint.hidden{transform:rotate(-9deg) translateY(-6px)}
      with no margin of its own to carry the gap - it sat crammed right
      underneath, on both mobile and desktop */
   margin-top:clamp(72px,9vw,124px);
+}
+/* the label rides down beside the notes as you scroll and settles level
+   with the last one (sticky stops at the end of .nf-wrap). Only when the
+   two sit side by side and the screen is tall enough to show the whole
+   label - stacked on a phone it would cover the notes. */
+.nf-col{width:min(340px,100%)}
+@media (min-width:900px) and (min-height:720px){
+  .nf-col{position:sticky;top:96px}
 }
 .nutrient-notes{
   display:flex;flex-direction:column;gap:18px;
@@ -3983,7 +3991,7 @@ body:not(.fun-mode) .galaxy-bg *{animation-play-state:paused!important}
       </div>
 
       <div class="wrap rv nf-wrap">
-        <div style="width:min(340px,100%)">
+        <div class="nf-col">
           <div class="nf">
             <p class="nf-title">Nutrition Facts</p>
             <hr>
@@ -6818,6 +6826,19 @@ if (chgEl) { io.observe(chgEl); }   // the "in" class grows the bars
     note.addEventListener("mouseenter", () => { note.classList.add("nn-active"); row.classList.add("nn-active"); });
     note.addEventListener("mouseleave", () => { note.classList.remove("nn-active"); row.classList.remove("nn-active"); });
   });
+
+  // while the label rides alongside, light up the line for whichever note
+  // is passing the middle of the screen
+  const col = document.querySelector(".nf-col");
+  const currentIO = new IntersectionObserver((entries) => {
+    entries.forEach((en) => {
+      const row = document.querySelector('.nf-row[data-nutrient="' + en.target.dataset.nutrient + '"]');
+      if (!row) { return; }
+      const riding = col && getComputedStyle(col).position === "sticky";
+      row.classList.toggle("nn-current", riding && en.isIntersecting);
+    });
+  }, { rootMargin: "-45% 0px -45% 0px" });
+  notes.forEach((note) => { if (note.dataset.nutrient) { currentIO.observe(note); } });
 })();
 
 /* ---------- ingredient bars fill in once scrolled into view ---------- */
